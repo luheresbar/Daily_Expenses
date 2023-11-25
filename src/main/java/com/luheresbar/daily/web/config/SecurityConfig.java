@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 
 import org.springframework.security.config.Customizer;
 
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
@@ -18,6 +19,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -42,22 +44,22 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService memoryUsers() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN")
-                .build();
-
-        UserDetails customer = User.builder()
-                .username("customer")
-                .password(passwordEncoder().encode("customer123"))
-                .roles("CUSTOMER")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, customer);
-    }
+//    @Bean
+//    public UserDetailsService memoryUsers() {
+//        UserDetails admin = User.builder()
+//                .username("admin")
+//                .password(passwordEncoder().encode("admin"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        UserDetails customer = User.builder()
+//                .username("customer")
+//                .password(passwordEncoder().encode("customer123"))
+//                .roles("CUSTOMER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(admin, customer);
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
