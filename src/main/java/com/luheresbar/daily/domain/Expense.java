@@ -17,4 +17,6 @@ public class Expense {
     private Category category;
     private Account account;
 
+
+
 }

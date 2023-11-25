@@ -11,5 +11,4 @@ public class Category {
     private String userId;
     private User user;
 
-
 }
