@@ -29,7 +29,7 @@ public class UserEntity {
     @Column(length = 50)
     private String email;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user")
     private List<AccountEntity> accounts;
 
     @OneToMany(mappedBy = "user")
@@ -38,16 +38,4 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserRoleEntity> roles;
 
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "userId='" + userId + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", accounts=" + accounts +
-                ", categories=" + categories +
-                ", roles=" + roles +
-                '}';
-    }
 }
