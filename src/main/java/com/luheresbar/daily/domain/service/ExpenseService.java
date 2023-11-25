@@ -2,6 +2,7 @@ package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.repository.IExpenseRepository;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
