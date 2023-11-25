@@ -1,26 +1,35 @@
 package com.luheresbar.daily.web.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
+
+    private final JwtFilter jwtFilter;
+
+    @Autowired
+    public SecurityConfig(JwtFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,8 +38,10 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // mi aplicacion será un API STATELESS: no almacea estados, no almacena sessiones
                 .authorizeHttpRequests(customizeRequests -> {
                     customizeRequests
+                            .requestMatchers(HttpMethod.POST, "api/auth/**").permitAll()
                             .requestMatchers(HttpMethod.GET, "/api/**").hasRole("ADMIN") // los roles ADMIN y CUSTOMER puede ejecutar peticiones GET en esa direccion.
 //                            .requestMatchers(HttpMethod.POST, "/api/pizzas/**").hasRole("ADMIN") // solamente el rol ADMIN puede ejecutar peticiones POST en esa direccion.
 //                            .requestMatchers(HttpMethod.PUT).hasRole("ADMIN")
@@ -40,7 +51,7 @@ public class SecurityConfig {
                             .anyRequest()
                             .authenticated();
                 })
-                .httpBasic(Customizer.withDefaults());
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Indica que estamos incluyenbdo el friltro que creamos dentro de la cadena de seguridad de spring, antes del filtro basicauth
         return http.build();
     }
 
@@ -64,6 +75,13 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+
+    // Bean para implementar el controller de login: AuthController
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 }
 
