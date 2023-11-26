@@ -17,6 +17,7 @@ public class ExpenseController {
 
     private final JwtUtil jwtUtil;
     private final ExpenseService expenseService;
+    private String currentUser;
 
     @Autowired
     public ExpenseController(JwtUtil jwtUtil, ExpenseService expenseService) {
@@ -24,12 +25,15 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
+    // Filtro para extraer el usuario del token y almacenarlo en la variable de instancia
+    @ModelAttribute
+    public void extractUserFromToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwt) {
+        currentUser = jwtUtil.getUsername(jwt.split(" ")[1].trim());
+    }
 
     @GetMapping
-    public ResponseEntity<List<Expense>> gerUserExpenses(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwt) {
-        System.out.println("JWT: " + jwt);
-        String userId = jwtUtil.getUsername(jwt.split(" ")[1].trim());
-        return new ResponseEntity<>(expenseService.getUserExpenses(userId), HttpStatus.OK);
+    public ResponseEntity<List<Expense>> getUserExpenses(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwt) {
+        return new ResponseEntity<>(expenseService.getUserExpenses(currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/save")
