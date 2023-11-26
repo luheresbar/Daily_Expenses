@@ -23,8 +23,8 @@ public class ExpenseEntityRepository implements IExpenseRepository {
     }
 
     @Override
-    public List<Expense> getAll() {
-        List<ExpenseEntity> expenses = expenseCrudRepository.findAll();
+    public List<Expense> getUserExpenses(String userId) {
+        List<ExpenseEntity> expenses = expenseCrudRepository.findUserExpenses(userId);
         return expenseMapper.toExpenses(expenses);
     }
 

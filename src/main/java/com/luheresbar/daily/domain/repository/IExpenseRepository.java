@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IExpenseRepository {
 
-    List<Expense> getAll();
+    List<Expense> getUserExpenses(String userId);
 
     Expense save(Expense expense);
 

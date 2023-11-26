@@ -2,7 +2,6 @@ package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.repository.IExpenseRepository;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +15,8 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    public List<Expense> getAll() {
-        return expenseRepository.getAll();
+    public List<Expense> getUserExpenses(String userId) {
+        return expenseRepository.getUserExpenses(userId);
     }
 
     public Expense save(Expense expense) {
