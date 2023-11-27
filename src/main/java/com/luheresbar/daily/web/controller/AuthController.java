@@ -31,8 +31,8 @@ public class AuthController {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);
 
-        System.out.println(authentication.isAuthenticated()); // se imprime si efectivamente se autenticó : true or false.
-        System.out.println(authentication.getPrincipal()); // se imprime el usuario autenticado
+//        System.out.println(authentication.isAuthenticated()); // se imprime si efectivamente se autenticó : true or false.
+//        System.out.println(authentication.getPrincipal()); // se imprime el usuario autenticado
 
         String jwt = this.jwtUtil.create(loginDto.getUserId());
 

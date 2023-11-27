@@ -34,7 +34,7 @@ public class UserSecurityService implements UserDetailsService {
         String[] roles = userEntity.getRoles().stream().map(UserRoleEntity::getRole).toArray(String[]::new);
 
         return User.builder()
-                .username(userEntity.getUsername())
+                .username(userEntity.getUserId())
                 .password(userEntity.getPassword())
                 .authorities(this.grantedAuthorities(roles))
 //                .accountLocked(userEntity.getLocked())

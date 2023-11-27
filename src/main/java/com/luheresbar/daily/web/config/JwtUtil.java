@@ -18,7 +18,7 @@ public class JwtUtil {
                 .withSubject(userId)
                 .withIssuer("daily-expenses")
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(15)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(15))) // Expiracion del token 15 Dias
                 .sign(ALGORITHM);
     }
 

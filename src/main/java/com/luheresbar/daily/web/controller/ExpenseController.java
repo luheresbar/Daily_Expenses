@@ -4,9 +4,15 @@ import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.service.ExpenseService;
 import com.luheresbar.daily.web.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,15 +31,20 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
+
+
     // Filtro para extraer el usuario del token y almacenarlo en la variable de instancia
     @ModelAttribute
-    public void extractUserFromToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwt) {
-        currentUser = jwtUtil.getUsername(jwt.split(" ")[1].trim());
+    public void extractUserFromToken() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        this.currentUser = (String) authentication.getPrincipal();
     }
 
     @GetMapping
-    public ResponseEntity<List<Expense>> getUserExpenses(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwt) {
-        return new ResponseEntity<>(expenseService.getUserExpenses(currentUser), HttpStatus.OK);
+    public ResponseEntity<List<Expense>> getUserExpenses() {
+        return  ResponseEntity.ok(expenseService.getUserExpenses(currentUser));
+        //return new ResponseEntity<>(expenseService.getUserExpenses(currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/save")

@@ -32,16 +32,16 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // 1. Validar que sea un Header Authorization valido
-
+        // 1. Obtener el header que contiene el jwt
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
+        // 2. Validar que sea un Header Authorization valido
         if (authHeader == null || authHeader.isEmpty() || !authHeader.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. Valodar que el JWT sea valido
+        // 3. Validar que el JWT sea valido
         String jwt = authHeader.split(" ")[1].trim();
 
         if (!this.jwtUtil.isValid(jwt)) {
@@ -49,11 +49,11 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 3. Cargar el usuario del UserDetailsService
+        // 4. Cargar el usuario del UserDetailsService
         String userId = this.jwtUtil.getUsername(jwt);
         User user = (User) this.userDetailsService.loadUserByUsername(userId);
 
-        // 4. Cargar al usuario en el contexto de seguridad
+        // 5. Cargar al usuario en el contexto de seguridad
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user.getUsername(), user.getPassword(), user.getAuthorities()
         );
@@ -61,7 +61,6 @@ public class JwtFilter extends OncePerRequestFilter {
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // Añade los detalles. por ejemplo de la ip
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken); // Ser carga la autenticacion en el contexto de seguridad
-        System.out.println(authenticationToken);
         filterChain.doFilter(request, response);
     }
 }

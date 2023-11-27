@@ -36,14 +36,14 @@ public class ExpenseEntity {
     @Column(name = "category_id")
     private Integer categoryId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns ({
             @JoinColumn(name = "category_id", referencedColumnName = "category_id",insertable = false, updatable = false),
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false)
     })
     private CategoryEntity category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
             @JoinColumn(name = "account_name", referencedColumnName = "account_name", insertable = false, updatable = false)

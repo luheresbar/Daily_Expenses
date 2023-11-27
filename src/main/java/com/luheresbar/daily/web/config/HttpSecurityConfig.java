@@ -18,16 +18,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled = true)
-public class SecurityConfig {
+@EnableMethodSecurity(securedEnabled = true) // esta anotacion se usa para controlar la anotacion @Secured que esta sobre un metodo en un servicio.
+public class HttpSecurityConfig {
 
     private final JwtFilter jwtFilter;
 
     @Autowired
-    public SecurityConfig(JwtFilter jwtFilter) {
+    public HttpSecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
 
@@ -81,7 +80,7 @@ public class SecurityConfig {
     // Bean para implementar el controller de login: AuthController
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+        return configuration.getAuthenticationManager(); // Se creó el ProviderManager que implementa AuthenticationManager
     }
 }
 
