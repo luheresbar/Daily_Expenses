@@ -1,5 +1,7 @@
 package com.luheresbar.daily.domain;
 
+import com.luheresbar.daily.persistence.entity.AccountEntity;
+import com.luheresbar.daily.persistence.entity.CategoryEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,9 +16,5 @@ public class Expense {
     private String userId;
     private String accountName;
     private int categoryId;
-    private Category category;
-    private Account account;
-
-
 
 }

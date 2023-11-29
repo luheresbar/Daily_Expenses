@@ -21,7 +21,8 @@ public class UserRoleEntity {
     @Column(name = "user_id", nullable = false, length = 25)
     private String userId;
 
-    @Column(name = "granted_date", nullable = false)
+    @Column(name = "granted_date")
+    @org.hibernate.annotations.ColumnDefault(value = "CURRENT_DATE")
     private LocalDateTime grantedDate;
 
     @ManyToOne

@@ -31,8 +31,6 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-
-
     // Filtro para extraer el usuario del token y almacenarlo en la variable de instancia
     @ModelAttribute
     public void extractUserFromToken() {
@@ -44,7 +42,6 @@ public class ExpenseController {
     @GetMapping
     public ResponseEntity<List<Expense>> getUserExpenses() {
         return  ResponseEntity.ok(expenseService.getUserExpenses(currentUser));
-        //return new ResponseEntity<>(expenseService.getUserExpenses(currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/save")

@@ -1,5 +1,9 @@
 package com.luheresbar.daily.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "expenses")
 @Getter
 @Setter
+@JsonIgnoreProperties("category")
 public class ExpenseEntity {
 
     @Id
@@ -37,18 +42,21 @@ public class ExpenseEntity {
     private Integer categoryId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumns ({
-            @JoinColumn(name = "category_id", referencedColumnName = "category_id",insertable = false, updatable = false),
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false)
-    })
-    private CategoryEntity category;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
             @JoinColumn(name = "account_name", referencedColumnName = "account_name", insertable = false, updatable = false)
     })
+    @JsonIgnore
     private AccountEntity account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumns ({
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false),
+            @JoinColumn(name = "category_id", referencedColumnName = "category_id",insertable = false, updatable = false)
+    })
+    @JsonIgnore
+    private CategoryEntity category;
+
 
 
 }
