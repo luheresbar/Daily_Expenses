@@ -2,6 +2,7 @@ package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.repository.IUserRepository;
+import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Secured("ROLE_ADMIN")
-    // Nota: modificar esta funcionalidad a solamente poder acceder a la cantidada de usuarios y su fecha de creacion del usuario
-    public List<User> getAll() {
-        return userRepository.getAll();
+    public List<IUserSummary> viewUsersSummary() {
+        return userRepository.viewUsersSummary();
     }
 
     public User save(User user) {

@@ -1,13 +1,14 @@
 package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.persistence.projections.IUserSummary;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IUserRepository {
 
-    List<User> getAll();
+    List<IUserSummary> viewUsersSummary();
 
     User save(User user);
 

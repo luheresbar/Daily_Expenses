@@ -2,9 +2,11 @@ package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.service.UserService;
+import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,9 +34,11 @@ public class UserController {
         this.currentUser = (String) authentication.getPrincipal();
     }
 
+    // Listar los usuarios registrados solamente con su userId y su fecha de registro
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<IUserSummary>> viewUsersSummary() {
+        return new ResponseEntity<>(userService.viewUsersSummary(), HttpStatus.OK);
     }
 
     // Como usuario puedo visualizar mi informacion personal registrada en la app, para que pueda saber si debo actualizarla

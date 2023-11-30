@@ -5,6 +5,7 @@ import com.luheresbar.daily.domain.repository.IUserRepository;
 import com.luheresbar.daily.persistence.crud.IUserCrudRepository;
 import com.luheresbar.daily.persistence.entity.UserEntity;
 import com.luheresbar.daily.persistence.mapper.IUserMapper;
+import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,9 +26,8 @@ public class UserEntityRepository implements IUserRepository {
     }
 
 
-    public List<User> getAll() {
-        List<UserEntity> users = (List<UserEntity>) userCrudRepository.findAll();
-        return userMapper.toUsers(users);
+    public List<IUserSummary> viewUsersSummary() {
+        return this.userCrudRepository.viewUsersSummary();
     }
 
     @Override
