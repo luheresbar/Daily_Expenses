@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,9 @@ public class UserEntity {
 
     @Column(length = 50)
     private String email;
+
+    @Column(name = "register_date")
+    private LocalDateTime registerDate;
 
     @OneToMany(mappedBy = "user")
     private List<AccountEntity> accounts;
