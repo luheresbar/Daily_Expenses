@@ -49,4 +49,9 @@ public class UserEntityRepository implements IUserRepository {
         return userEntity.map(user -> this.userMapper.toUser(user));
     }
 
+    @Override
+    public void delete(String userId) {
+        this.userCrudRepository.deleteById(userId);
+    }
+
 }

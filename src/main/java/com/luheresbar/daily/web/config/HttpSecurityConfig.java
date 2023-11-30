@@ -41,7 +41,7 @@ public class HttpSecurityConfig {
                 .authorizeHttpRequests(customizeRequests -> {
                     customizeRequests
                             .requestMatchers(HttpMethod.POST, "api/auth/**").permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/**").hasRole("ADMIN") // los roles ADMIN y CUSTOMER puede ejecutar peticiones GET en esa direccion.
+//                            .requestMatchers(HttpMethod.GET, "/api/**").hasRole("ADMIN") // los roles ADMIN y CUSTOMER puede ejecutar peticiones GET en esa direccion.
 //                            .requestMatchers(HttpMethod.POST, "/api/pizzas/**").hasRole("ADMIN") // solamente el rol ADMIN puede ejecutar peticiones POST en esa direccion.
 //                            .requestMatchers(HttpMethod.PUT).hasRole("ADMIN")
 //                            .requestMatchers(HttpMethod.PATCH).hasRole("ADMIN")

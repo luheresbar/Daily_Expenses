@@ -51,12 +51,15 @@ public class AuthController {
     @Transactional
     public ResponseEntity<Void> register(@RequestBody User user) {
         if (user.getUserId() == null || !this.userService.exists(user.getUserId())) {
+
+            String currentDate = String.valueOf(LocalDateTime.now());
+            user.setRegisterDate(currentDate);
             this.userService.save(user);
 
             UserRole userRole = new UserRole();
             userRole.setUserId(user.getUserId());
             userRole.setRole("USER");
-            userRole.setGrantedDate(String.valueOf(LocalDateTime.now()));
+            userRole.setGrantedDate(currentDate);
             this.userRoleService.save(userRole);
 
             String jwt = this.jwtUtil.create(user.getUserId());

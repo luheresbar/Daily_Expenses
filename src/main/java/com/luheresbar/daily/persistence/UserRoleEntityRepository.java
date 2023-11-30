@@ -9,6 +9,8 @@ import com.luheresbar.daily.persistence.mapper.IUserRolMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserRoleEntityRepository implements IUserRoleRepository {
 
@@ -19,6 +21,12 @@ public class UserRoleEntityRepository implements IUserRoleRepository {
     public UserRoleEntityRepository(IUserRoleCrudRepository userRolCrudRepository, IUserRolMapper userRolMapper) {
         this.userRolCrudRepository = userRolCrudRepository;
         this.userRolMapper = userRolMapper;
+    }
+
+    @Override
+    public List<UserRole> getAll() {
+        List<UserRoleEntity> userRoleEntity = (List<UserRoleEntity>) this.userRolCrudRepository.findAll();
+        return this.userRolMapper.toUserRols(userRoleEntity);
     }
 
     @Override
@@ -40,5 +48,6 @@ public class UserRoleEntityRepository implements IUserRoleRepository {
         UserRolePK userRolePK = new UserRolePK(userRoleEntity.getRole(), userRoleEntity.getUserId());
         this.userRolCrudRepository.deleteById(userRolePK);
     }
+
 
 }

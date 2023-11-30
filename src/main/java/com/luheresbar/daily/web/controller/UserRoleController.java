@@ -8,6 +8,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -20,6 +21,12 @@ public class UserRoleController {
         this.userRoleService = userRoleService;
     }
 
+    // Como usuario con rol ADMIN puedo visualizar un listado de los UserRolEntity
+    @GetMapping
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<UserRole>> viewUserRoles() {
+        return ResponseEntity.ok(this.userRoleService.getAll());
+    }
     // Como usuario con Rol ADMIN puedo otorgar roles a otros usuarios para que dichos usuarios tengan acceso a funcionalidades adicionales en la app.
     @PostMapping("/user")
     @Secured("ROLE_ADMIN")

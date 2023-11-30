@@ -1,5 +1,6 @@
 package com.luheresbar.daily.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,11 +23,11 @@ public class UserRoleEntity {
     private String userId;
 
     @Column(name = "granted_date")
-    @org.hibernate.annotations.ColumnDefault(value = "CURRENT_DATE")
     private LocalDateTime grantedDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JsonIgnore
     private UserEntity user;
 
 }

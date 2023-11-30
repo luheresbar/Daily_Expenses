@@ -36,4 +36,8 @@ public class UserService {
     public Optional<User> getById(String userId) {
         return userRepository.getById(userId);
     }
+
+    public void delete(String userId) {
+        this.userRepository.delete(userId);
+    }
 }

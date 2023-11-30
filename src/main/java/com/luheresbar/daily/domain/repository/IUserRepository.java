@@ -15,4 +15,6 @@ public interface IUserRepository {
     boolean existsById(String idUser);
 
     Optional<User> getById(String userId);
+
+    void delete(String userId);
 }

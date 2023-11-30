@@ -5,6 +5,8 @@ import com.luheresbar.daily.domain.repository.IUserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserRoleService {
 
@@ -26,5 +28,9 @@ public class UserRoleService {
     public void delete(UserRole userRole) {
         this.userRolRepository.delete(userRole);
 
+    }
+
+    public List<UserRole> getAll() {
+        return this.userRolRepository.getAll();
     }
 }
