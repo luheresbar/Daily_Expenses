@@ -37,9 +37,28 @@ public class UserController {
         return new ResponseEntity<>(userService.getAll(), HttpStatus.OK);
     }
 
+    // Como usuario puedo visualizar mi informacion personal registrada en la app, para que pueda saber si debo actualizarla
     @GetMapping("/user")
     public ResponseEntity<Optional<User>> viewInformation() {
         return ResponseEntity.ok(userService.getById(currentUser));
+    }
+
+    // Como usuario puedo actualizar mi informacion personal registrada en la app para que pueda tener la informacion actualizada.
+    @PutMapping("/user")
+    public ResponseEntity<User> update(@RequestBody User user) {
+        user.setUserId(currentUser);
+        Optional<User> userInDb = this.userService.getById(currentUser);
+
+        if (user.getUsername() == null) {
+            user.setUserId(userInDb.get().getUserId());
+        }
+        if (user.getPassword() == null) {
+            user.setPassword(userInDb.get().getPassword());
+        }
+        if (user.getEmail() == null) {
+            user.setEmail(userInDb.get().getEmail());
+        }
+        return ResponseEntity.ok(this.userService.save(user));
     }
 
 }

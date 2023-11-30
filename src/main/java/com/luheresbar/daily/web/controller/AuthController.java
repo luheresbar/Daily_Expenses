@@ -1,9 +1,9 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.domain.UserRol;
+import com.luheresbar.daily.domain.UserRole;
 import com.luheresbar.daily.domain.dto.LoginDto;
-import com.luheresbar.daily.domain.service.UserRolService;
+import com.luheresbar.daily.domain.service.UserRoleService;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.web.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,14 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtUtil jwtUtil;
-    private final UserRolService userRolService;
+    private final UserRoleService userRoleService;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil, UserRolService userRolService) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil, UserRoleService userRoleService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
-        this.userRolService = userRolService;
+        this.userRoleService = userRoleService;
     }
 
     @PostMapping("/login")
@@ -50,14 +50,14 @@ public class AuthController {
     @PostMapping("/register")
     @Transactional
     public ResponseEntity<Void> register(@RequestBody User user) {
-        if (user.getUserId() == null || !this.userService.exist(user.getUserId())) {
+        if (user.getUserId() == null || !this.userService.exists(user.getUserId())) {
             this.userService.save(user);
 
-            UserRol userRol = new UserRol();
-            userRol.setUserId(user.getUserId());
-            userRol.setRole("USER");
-            userRol.setGrantedDate(String.valueOf(LocalDateTime.now()));
-            this.userRolService.save(userRol);
+            UserRole userRole = new UserRole();
+            userRole.setUserId(user.getUserId());
+            userRole.setRole("USER");
+            userRole.setGrantedDate(String.valueOf(LocalDateTime.now()));
+            this.userRoleService.save(userRole);
 
             String jwt = this.jwtUtil.create(user.getUserId());
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();

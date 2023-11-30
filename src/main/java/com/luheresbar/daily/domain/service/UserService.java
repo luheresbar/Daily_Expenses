@@ -21,19 +21,17 @@ public class UserService {
     }
 
     @Secured("ROLE_ADMIN")
+    // Nota: modificar esta funcionalidad a solamente poder acceder a la cantidada de usuarios y su fecha de creacion del usuario
     public List<User> getAll() {
         return userRepository.getAll();
     }
 
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 
-
-    public void save(User user) {
-        userRepository.save(user);
-    };
-
-
-    public boolean exist(String idUser) {
-        return this.userRepository.existById(idUser);
+    public boolean exists(String idUser) {
+        return this.userRepository.existsById(idUser);
     }
 
     public Optional<User> getById(String userId) {

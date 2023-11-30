@@ -31,15 +31,17 @@ public class UserEntityRepository implements IUserRepository {
     }
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         UserEntity userEntity = userMapper.toUserEntity(user);
         userMapper.toUser(userCrudRepository.save(userEntity));
+        return user;
     }
 
     @Override
-    public boolean existById(String idUser) {
+    public boolean existsById(String idUser) {
         return this.userCrudRepository.existsById(idUser);
     }
+
 
     @Override
     public Optional<User> getById(String userId) {

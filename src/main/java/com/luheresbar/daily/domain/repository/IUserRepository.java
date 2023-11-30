@@ -9,9 +9,9 @@ public interface IUserRepository {
 
     List<User> getAll();
 
-    void save(User user);
+    User save(User user);
 
-    boolean existById(String idUser);
+    boolean existsById(String idUser);
 
     Optional<User> getById(String userId);
 }

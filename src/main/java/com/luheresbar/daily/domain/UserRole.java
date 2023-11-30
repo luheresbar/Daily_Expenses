@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserRol {
+public class UserRole {
 
     private String role;
     private String userId;
