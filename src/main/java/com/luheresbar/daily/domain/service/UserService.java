@@ -40,4 +40,8 @@ public class UserService {
     public void delete(String userId) {
         this.userRepository.delete(userId);
     }
+
+    public Integer countUsers() {
+        return this.userRepository.countUsers();
+    }
 }

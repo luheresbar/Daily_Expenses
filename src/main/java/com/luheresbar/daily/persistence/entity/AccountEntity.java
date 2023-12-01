@@ -28,7 +28,7 @@ public class AccountEntity {
     @Column(columnDefinition = "boolean default true")
     private Boolean available;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private UserEntity user;
 

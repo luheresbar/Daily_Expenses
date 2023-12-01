@@ -54,4 +54,9 @@ public class UserEntityRepository implements IUserRepository {
         this.userCrudRepository.deleteById(userId);
     }
 
+    @Override
+    public Integer countUsers() {
+        return Math.toIntExact(this.userCrudRepository.count());
+    }
+
 }

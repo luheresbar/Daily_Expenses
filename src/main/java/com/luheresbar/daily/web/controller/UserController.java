@@ -41,6 +41,11 @@ public class UserController {
         return new ResponseEntity<>(userService.viewUsersSummary(), HttpStatus.OK);
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Integer> countUsers() {
+        return ResponseEntity.ok(this.userService.countUsers());
+    }
+
     // Como usuario puedo visualizar mi informacion personal registrada en la app, para que pueda saber si debo actualizarla
     @GetMapping("/user")
     public ResponseEntity<Optional<User>> viewInformation() {

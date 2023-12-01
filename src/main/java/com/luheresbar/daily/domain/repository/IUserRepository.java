@@ -17,4 +17,6 @@ public interface IUserRepository {
     Optional<User> getById(String userId);
 
     void delete(String userId);
+
+    Integer countUsers();
 }

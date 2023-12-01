@@ -17,8 +17,11 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public List<Account> getAll() {
-        return accountRepository.getAll();
+    public List<Account> getAccountsByUser(String userId) {
+        return this.accountRepository.getAccountsByUser(userId);
     }
 
+    public Double availableMoney(String userId) {
+        return this.accountRepository.availableMoney(userId);
+    }
 }

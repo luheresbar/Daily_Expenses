@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IAccountRepository {
 
-    List<Account> getAll();
+    List<Account> getAccountsByUser(String userId);
 
+    Double availableMoney(String userId);
 }

@@ -22,8 +22,13 @@ public class AccountEntityRepository implements IAccountRepository {
     }
 
     @Override
-    public List<Account> getAll() {
-        List<AccountEntity> accounts = accountCrudRepository.findAll();
+    public List<Account> getAccountsByUser(String userId) {
+        List<AccountEntity> accounts = (List<AccountEntity>) this.accountCrudRepository.findAllByUserIdOrderByAccountName(userId);
         return accountMapper.toAccounts(accounts);
+    }
+
+    @Override
+    public Double availableMoney(String userId) {
+        return this.accountCrudRepository.availableMoney(userId);
     }
 }

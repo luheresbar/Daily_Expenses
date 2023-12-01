@@ -17,10 +17,11 @@ public interface IAccountMapper {
     List<Account> toAccounts(List<AccountEntity> accountEntities);
 
     @Mappings({
-        @Mapping(target = "incomes", ignore = true),
-        @Mapping(target = "expenses", ignore = true),
-        @Mapping(target = "destinationAccounts", ignore = true),
-        @Mapping(target = "sourceAccounts", ignore = true)
+            @Mapping(target = "incomes", ignore = true),
+            @Mapping(target = "expenses", ignore = true),
+            @Mapping(target = "destinationAccounts", ignore = true),
+            @Mapping(target = "sourceAccounts", ignore = true),
+            @Mapping(target = "user", ignore = true)
     })
     AccountEntity toAccount(Account account);
 

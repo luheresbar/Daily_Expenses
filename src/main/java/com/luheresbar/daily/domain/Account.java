@@ -11,6 +11,5 @@ public class Account {
     private String userId;
     private double availableMoney;
     private boolean available;
-    private User user;
 
 }
