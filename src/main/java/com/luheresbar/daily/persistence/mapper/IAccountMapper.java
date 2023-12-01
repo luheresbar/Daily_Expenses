@@ -23,6 +23,6 @@ public interface IAccountMapper {
             @Mapping(target = "sourceAccounts", ignore = true),
             @Mapping(target = "user", ignore = true)
     })
-    AccountEntity toAccount(Account account);
+    AccountEntity toAccountEntity(Account account);
 
 }

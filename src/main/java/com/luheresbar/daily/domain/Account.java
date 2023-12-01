@@ -9,7 +9,7 @@ public class Account {
 
     private String accountName;
     private String userId;
-    private double availableMoney;
-    private boolean available;
+    private Double availableMoney;
+    private Boolean available;
 
 }
