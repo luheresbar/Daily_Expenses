@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -49,17 +50,17 @@ public class UserController {
     // Como usuario puedo visualizar mi informacion personal registrada en la app, para que pueda saber si debo actualizarla
     @GetMapping("/user")
     public ResponseEntity<Optional<User>> viewInformation() {
-        return ResponseEntity.ok(userService.getById(currentUser));
+        return ResponseEntity.ok(userService.getById(this.currentUser));
     }
 
     // Como usuario puedo actualizar mi informacion personal registrada en la app para que pueda tener la informacion actualizada.
     @PutMapping("/user")
     public ResponseEntity<User> update(@RequestBody User user) {
-        user.setUserId(currentUser);
-        Optional<User> userInDb = this.userService.getById(currentUser);
+        user.setUserId(this.currentUser);
+        Optional<User> userInDb = this.userService.getById(this.currentUser);
 
         if (user.getUsername() == null) {
-            user.setUserId(userInDb.get().getUserId());
+            user.setUsername(userInDb.get().getUsername());
         }
         if (user.getPassword() == null) {
             user.setPassword(userInDb.get().getPassword());
@@ -72,9 +73,11 @@ public class UserController {
 
     //  Unicamente un usuario puede eliminar su propia cuenta.
     @DeleteMapping("/user/delete")
-    public ResponseEntity<Void> deleteUser() {
-        this.userService.delete(currentUser);
-        return ResponseEntity.ok().build();
+    public ResponseEntity deleteUser() {
+        if (this.userService.delete(this.currentUser)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

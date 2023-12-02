@@ -50,8 +50,11 @@ public class UserEntityRepository implements IUserRepository {
     }
 
     @Override
-    public void delete(String userId) {
-        this.userCrudRepository.deleteById(userId);
+    public boolean delete(String userId) {
+        return this.userCrudRepository.findById(userId).map(user -> {
+            this.userCrudRepository.delete(user);
+            return true;
+        }).orElse(false);
     }
 
     @Override

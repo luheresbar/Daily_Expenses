@@ -1,6 +1,7 @@
 package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.UserRole;
+import com.luheresbar.daily.persistence.entity.UserRolePK;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface IUserRoleRepository {
 
     boolean existsById(UserRole userRole);
 
-    void delete(UserRole userRole);
+    boolean delete(UserRolePK userRolePK);
 
     List<UserRole> getAll();
 }

@@ -37,8 +37,8 @@ public class UserService {
         return userRepository.getById(userId);
     }
 
-    public void delete(String userId) {
-        this.userRepository.delete(userId);
+    public boolean delete(String userId) {
+        return  this.userRepository.delete(userId);
     }
 
     public Integer countUsers() {

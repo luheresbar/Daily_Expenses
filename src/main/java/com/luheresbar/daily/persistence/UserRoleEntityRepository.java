@@ -43,10 +43,11 @@ public class UserRoleEntityRepository implements IUserRoleRepository {
     }
 
     @Override
-    public void delete(UserRole userRole) {
-        UserRoleEntity userRoleEntity = this.userRolMapper.toUserRoleEntity(userRole);
-        UserRolePK userRolePK = new UserRolePK(userRoleEntity.getRole(), userRoleEntity.getUserId());
-        this.userRolCrudRepository.deleteById(userRolePK);
+    public boolean delete(UserRolePK userRolePK) {
+        return this.userRolCrudRepository.findById(userRolePK).map(rol -> {
+            this.userRolCrudRepository.delete(rol);
+            return true;
+        }).orElse(false);
     }
 
 

@@ -1,8 +1,10 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.dto.UpdateAccountIdDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
+import lombok.experimental.PackagePrivate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,20 +45,15 @@ public class AccountController {
         return ResponseEntity.ok(this.accountService.availableMoney(currentUser));
     }
 
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public ResponseEntity<Account> updateAccount(@RequestBody Account account){
         account.setUserId(currentUser);
-        if(!this.accountService.exists(account)) {
-            return ResponseEntity.badRequest().build();
+        if(!this.accountService.exists(new AccountPK(account.getAccountName(), account.getUserId()))) {
+            return ResponseEntity.notFound().build();
         }
-        AccountPK accountPK = new AccountPK(account.getAccountName(), account.getUserId());
-        Optional<Account> accountInDb = this.accountService.getById(accountPK);
+        Optional<Account> accountInDb = this.accountService.getById(account.getAccountName(), currentUser);
 
-        if (account.getAccountName() == null) {
-            account.setUserId(accountInDb.get().getAccountName());
-        }
-
-        if (account.getAvailableMoney() == null) {
+        if (account.getAvailableMoney() == null && accountInDb.get().getAvailable()) {
             account.setAvailableMoney(accountInDb.get().getAvailableMoney());
         }
         if (account.getAvailable() == null) {
@@ -65,5 +62,43 @@ public class AccountController {
 
         return ResponseEntity.ok(this.accountService.save(account));
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<Account> add(@RequestBody Account account) {
+        account.setUserId(this.currentUser);
+        if(account.getAvailableMoney() == null) {
+        account.setAvailableMoney(0.0);
+        }
+        if(account.getAvailable() == null) {
+        account.setAvailable(true);
+        }
+        AccountPK accountPK = new AccountPK(account.getAccountName(), account.getUserId());
+        if(!this.accountService.exists(accountPK)) {
+            return ResponseEntity.ok(this.accountService.save(account));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    // Actualizar el AccountName de una cuenta.
+//    @PatchMapping("/update/accountname")
+//    public ResponseEntity<Account> updateAccountName(@RequestBody UpdateAccountIdDto updateAccountIdDto) {
+//        updateAccountIdDto.setUserId(this.currentUser);
+//        AccountPK accountPK = new AccountPK(updateAccountIdDto.getCurrentAccountName(), updateAccountIdDto.getUserId());
+//        if (this.accountService.exists(accountPK)) {
+//            this.accountService.updateAccountName(updateAccountIdDto);
+//            return ResponseEntity.ok().build();
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteAccount(@RequestBody AccountPK accountPK) {
+        accountPK.setUserId(currentUser);
+        if(this.accountService.delete(accountPK)) {
+            return ResponseEntity.ok().build();
+        };
+        return ResponseEntity.notFound().build();
+    }
+
 
 }

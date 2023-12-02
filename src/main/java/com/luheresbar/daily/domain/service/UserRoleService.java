@@ -2,6 +2,7 @@ package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.UserRole;
 import com.luheresbar.daily.domain.repository.IUserRoleRepository;
+import com.luheresbar.daily.persistence.entity.UserRolePK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,8 @@ public class UserRoleService {
         return userRolRepository.existsById(userRole);
     }
 
-    public void delete(UserRole userRole) {
-        this.userRolRepository.delete(userRole);
+    public boolean delete(UserRolePK userRolePK) {
+        return this.userRolRepository.delete(userRolePK);
 
     }
 

@@ -2,6 +2,7 @@ package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.UserRole;
 import com.luheresbar.daily.domain.service.UserRoleService;
+import com.luheresbar.daily.persistence.entity.UserRolePK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -40,15 +41,16 @@ public class UserRoleController {
     }
 
     // Como usuario con rol ADMIN puedo quitar a otros usuarios sus roles que permiten acceder a funcionalidades adicionales en la app.
-    @DeleteMapping
+    @DeleteMapping("/user")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity<Void> removeRole(UserRole userRole) {
-        if(!this.userRoleService.exists(userRole) || userRole.getRole().equals("USER")) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity removeRole(@RequestBody UserRolePK userRolePK) {
+        if(!userRolePK.getRole().equals("USER")) {
+            if(this.userRoleService.delete(userRolePK)) {
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.notFound().build();
         }
-        this.userRoleService.delete(userRole);
-        return ResponseEntity.ok().build();
-
+        return ResponseEntity.badRequest().build();
     }
 
 }

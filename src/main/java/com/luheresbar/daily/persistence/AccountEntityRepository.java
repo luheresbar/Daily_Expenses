@@ -1,6 +1,7 @@
 package com.luheresbar.daily.persistence;
 
 import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.dto.UpdateAccountIdDto;
 import com.luheresbar.daily.domain.repository.IAccountRepository;
 import com.luheresbar.daily.persistence.crud.IAccountCrudRepository;
 import com.luheresbar.daily.persistence.entity.AccountEntity;
@@ -8,6 +9,7 @@ import com.luheresbar.daily.persistence.entity.AccountPK;
 import com.luheresbar.daily.persistence.mapper.IAccountMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,16 +37,15 @@ public class AccountEntityRepository implements IAccountRepository {
         return this.accountCrudRepository.availableMoney(userId);
     }
 
-    public boolean exists(Account account) {
-        AccountEntity accountEntity = this.accountMapper.toAccountEntity(account);
-        AccountPK accountPK = new AccountPK(accountEntity.getAccountName(), accountEntity.getUserId());
+    public boolean exists(AccountPK accountPK) {
         return this.accountCrudRepository.existsById(accountPK);
     }
 
     @Override
-    public Optional<Account> getById(AccountPK accountPK) {
-        Optional<AccountEntity> accountEntity1 = this.accountCrudRepository.findById(accountPK);
-        return accountEntity1.map(acc -> this.accountMapper.toAccount(acc));
+    public Optional<Account> getById(String accountName, String userId) {
+        AccountPK accountPK = new AccountPK(accountName, userId );
+        Optional<AccountEntity> accountEntity = this.accountCrudRepository.findById(accountPK);
+        return accountEntity.map(acc -> this.accountMapper.toAccount(acc));
     }
 
     @Override
@@ -52,4 +53,22 @@ public class AccountEntityRepository implements IAccountRepository {
         AccountEntity accountEntity = this.accountMapper.toAccountEntity(account);
         return this.accountMapper.toAccount(this.accountCrudRepository.save(accountEntity));
     }
+
+    @Override
+    public boolean delete(AccountPK accountPK) {
+        return this.accountCrudRepository.findById(accountPK).map(acc -> {
+            this.accountCrudRepository.delete(acc);
+            return true;
+        }).orElse(false);
+    }
+
+//    @Override
+//    @Transactional
+//    public Optional<Account> updateAccountName(UpdateAccountIdDto updateAccountIdDto) {
+//        this.accountCrudRepository.updateAccountName(updateAccountIdDto);
+//        Optional<Account> account = this.getById(updateAccountIdDto.getNewAccountName(), updateAccountIdDto.getUserId());
+//        return account;
+//    }
+
+
 }

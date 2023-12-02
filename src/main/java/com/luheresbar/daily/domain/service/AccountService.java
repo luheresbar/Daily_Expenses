@@ -1,6 +1,7 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.dto.UpdateAccountIdDto;
 import com.luheresbar.daily.domain.repository.IAccountRepository;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +28,22 @@ public class AccountService {
         return this.accountRepository.availableMoney(userId);
     }
 
-    public boolean exists(Account account) {
-        return this.accountRepository.exists(account);
+    public boolean exists(AccountPK accountPK) {
+        return this.accountRepository.exists(accountPK);
     }
 
-    public Optional<Account> getById(AccountPK accountPK) {
-        return this.accountRepository.getById(accountPK);
+    public Optional<Account> getById(String accountName, String userId) {
+        return this.accountRepository.getById(accountName, userId);
     }
-
     public Account save(Account account) {
         return this.accountRepository.save(account);
     }
+
+    public boolean delete(AccountPK accountPK) {
+        return this.accountRepository.delete(accountPK);
+    }
+
+//    public Optional<Account> updateAccountName(UpdateAccountIdDto updateAccountIdDto) {
+//        return this.accountRepository.updateAccountName(updateAccountIdDto);
+//    }
 }
