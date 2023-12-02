@@ -17,8 +17,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getAll() {
-        return categoryRepository.getAll();
+    public List<Category> getByUser(String userId) {
+        return this.categoryRepository.getByUser(userId);
     }
-
 }

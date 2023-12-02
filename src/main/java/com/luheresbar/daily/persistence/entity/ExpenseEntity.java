@@ -38,8 +38,8 @@ public class ExpenseEntity {
     @Column(name = "account_name", nullable = false, length = 30)
     private String accountName;
 
-    @Column(name = "category_id")
-    private Integer categoryId;
+    @Column(name = "category_name")
+    private String categoryName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
@@ -52,7 +52,7 @@ public class ExpenseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns ({
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false),
-            @JoinColumn(name = "category_id", referencedColumnName = "category_id",insertable = false, updatable = false)
+            @JoinColumn(name = "category_name", referencedColumnName = "category_name",insertable = false, updatable = false)
     })
     @JsonIgnore
     private CategoryEntity category;

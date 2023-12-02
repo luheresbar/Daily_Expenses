@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface ICategoryRepository {
 
-    List<Category> getAll();
-
+    List<Category> getByUser(String userId);
 }

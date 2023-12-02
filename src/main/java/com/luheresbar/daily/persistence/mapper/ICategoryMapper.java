@@ -14,6 +14,7 @@ public interface ICategoryMapper {
 
     List<Category> toCategories(List<CategoryEntity> categoryEntities);
 
+    @Mapping(target = "user", ignore = true)
     @Mapping(target = "expenses", ignore = true)
     CategoryEntity toCategoryEntity(Category category);
 
