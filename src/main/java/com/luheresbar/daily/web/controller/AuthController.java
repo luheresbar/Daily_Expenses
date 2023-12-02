@@ -1,8 +1,12 @@
 package com.luheresbar.daily.web.controller;
 
+import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.Category;
 import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.UserRole;
 import com.luheresbar.daily.domain.dto.LoginDto;
+import com.luheresbar.daily.domain.service.AccountService;
+import com.luheresbar.daily.domain.service.CategoryService;
 import com.luheresbar.daily.domain.service.UserRoleService;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.web.config.JwtUtil;
@@ -26,15 +30,19 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
-    private final JwtUtil jwtUtil;
     private final UserRoleService userRoleService;
+    private final CategoryService categoryService;
+    private final AccountService accountService;
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil, UserRoleService userRoleService) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil, UserRoleService userRoleService, CategoryService categoryService, AccountService accountService) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.userRoleService = userRoleService;
+        this.categoryService = categoryService;
+        this.accountService = accountService;
     }
 
     @PostMapping("/login")
@@ -61,6 +69,18 @@ public class AuthController {
             userRole.setRole("USER");
             userRole.setGrantedDate(currentDate);
             this.userRoleService.save(userRole);
+
+            Category category = new Category();
+            category.setUserId(user.getUserId());
+            category.setCategoryName("Others");
+            this.categoryService.save(category);
+
+            Account account = new Account();
+            account.setUserId(user.getUserId());
+            account.setAccountName("Cash");
+            account.setAvailableMoney(0.0);
+            account.setAvailable(true);
+            this.accountService.save(account);
 
             String jwt = this.jwtUtil.create(user.getUserId());
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
