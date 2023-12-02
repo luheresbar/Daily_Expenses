@@ -55,11 +55,8 @@ public class AccountEntityRepository implements IAccountRepository {
     }
 
     @Override
-    public boolean delete(AccountPK accountPK) {
-        return this.accountCrudRepository.findById(accountPK).map(acc -> {
-            this.accountCrudRepository.delete(acc);
-            return true;
-        }).orElse(false);
+    public void delete(AccountPK accountPK) {
+        this.accountCrudRepository.deleteById(accountPK);
     }
 
 //    @Override

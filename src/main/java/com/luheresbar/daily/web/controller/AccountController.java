@@ -94,7 +94,8 @@ public class AccountController {
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteAccount(@RequestBody AccountPK accountPK) {
         accountPK.setUserId(currentUser);
-        if(this.accountService.delete(accountPK)) {
+        if(this.accountService.exists(accountPK)) {
+            this.accountService.delete(accountPK);
             return ResponseEntity.ok().build();
         };
         return ResponseEntity.notFound().build();

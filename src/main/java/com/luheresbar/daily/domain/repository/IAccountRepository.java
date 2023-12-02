@@ -19,7 +19,7 @@ public interface IAccountRepository {
 
     Account save(Account account);
 
-    boolean delete(AccountPK accountPK);
+    void delete(AccountPK accountPK);
 
 //    Optional<Account> updateAccountName(UpdateAccountIdDto updateAccountIdDto);
 }

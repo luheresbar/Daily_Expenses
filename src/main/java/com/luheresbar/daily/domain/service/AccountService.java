@@ -39,8 +39,8 @@ public class AccountService {
         return this.accountRepository.save(account);
     }
 
-    public boolean delete(AccountPK accountPK) {
-        return this.accountRepository.delete(accountPK);
+    public void delete(AccountPK accountPK) {
+        this.accountRepository.delete(accountPK);
     }
 
 //    public Optional<Account> updateAccountName(UpdateAccountIdDto updateAccountIdDto) {
