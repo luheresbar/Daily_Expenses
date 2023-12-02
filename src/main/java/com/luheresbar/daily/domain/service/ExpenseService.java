@@ -5,6 +5,7 @@ import com.luheresbar.daily.domain.repository.IExpenseRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -19,8 +20,18 @@ public class ExpenseService {
         return expenseRepository.getUserExpenses(userId);
     }
 
+    public Optional<Expense> getById(int expenseId) {
+        return this.expenseRepository.getById(expenseId);
+    }
+
     public Expense save(Expense expense) {
         return expenseRepository.save(expense);
     }
+    public boolean delete(int expenseId, String userId) {
+        return this.expenseRepository.delete(expenseId, userId);
+    }
 
+    public List<Expense> getAccountExpenses(String accountName, String userId) {
+        return this.expenseRepository.getAccountExpenses(accountName, userId);
+    }
 }

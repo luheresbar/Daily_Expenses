@@ -10,11 +10,11 @@ import lombok.Setter;
 public class Expense {
 
     private int expenseId;
-    private double expense;
+    private Double expense;
     private String description;
     private String expenseDate;
     private String userId;
     private String accountName;
-    private int categoryId;
+    private String categoryName;
 
 }

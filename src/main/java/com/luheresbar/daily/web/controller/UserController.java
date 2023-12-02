@@ -82,7 +82,7 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
-    
+
 
     //  Unicamente un usuario puede eliminar su propia cuenta.
     @DeleteMapping("/user/delete")

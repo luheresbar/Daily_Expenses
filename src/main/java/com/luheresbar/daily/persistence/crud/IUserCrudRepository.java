@@ -17,10 +17,18 @@ public interface IUserCrudRepository extends CrudRepository<UserEntity, String> 
     @Query("SELECT u.userId as userId, u.registerDate as registerDate FROM UserEntity u")
     List<IUserSummary> viewUsersSummary();
 
-    @Query(value =  "UPDATE users " +
-            "SET user_id = :#{#updateUserId.newUserId} " +
-            "WHERE user_id = :#{#updateUserId.currentUserId}", nativeQuery = true)
+    // Query JPQL
+    @Query("UPDATE UserEntity u " +
+            "SET u.userId = :#{#updateUserId.newUserId} " +
+            "WHERE u.userId = :#{#updateUserId.currentUserId}")
     @Modifying
     void updateUserId(@Param("updateUserId") UpdateUserIdDto updateUserIdDto);
+
+    // Query Nativo
+//    @Query(value =  "UPDATE users " +
+//            "SET user_id = :#{#updateUserId.newUserId} " +
+//            "WHERE user_id = :#{#updateUserId.currentUserId}", nativeQuery = true)
+//    @Modifying
+//    void updateUserId(@Param("updateUserId") UpdateUserIdDto updateUserIdDto);
 
 }
