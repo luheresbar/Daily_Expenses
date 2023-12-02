@@ -1,6 +1,7 @@
 package com.luheresbar.daily.persistence;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.repository.IUserRepository;
 import com.luheresbar.daily.persistence.crud.IUserCrudRepository;
 import com.luheresbar.daily.persistence.entity.UserEntity;
@@ -8,6 +9,7 @@ import com.luheresbar.daily.persistence.mapper.IUserMapper;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +62,12 @@ public class UserEntityRepository implements IUserRepository {
     @Override
     public Integer countUsers() {
         return Math.toIntExact(this.userCrudRepository.count());
+    }
+
+    @Override
+    @Transactional
+    public void updateUserId(UpdateUserIdDto updateUserIdDto) {
+        this.userCrudRepository.updateUserId(updateUserIdDto);
     }
 
 }

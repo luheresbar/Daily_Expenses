@@ -1,7 +1,6 @@
 package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.Account;
-import com.luheresbar.daily.domain.dto.UpdateAccountIdDto;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 
 import java.util.List;

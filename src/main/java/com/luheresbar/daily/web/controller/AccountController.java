@@ -1,12 +1,9 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Account;
-import com.luheresbar.daily.domain.dto.UpdateAccountIdDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
-import lombok.experimental.PackagePrivate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -78,18 +75,6 @@ public class AccountController {
         }
         return ResponseEntity.badRequest().build();
     }
-
-    // Actualizar el AccountName de una cuenta.
-//    @PatchMapping("/update/accountname")
-//    public ResponseEntity<Account> updateAccountName(@RequestBody UpdateAccountIdDto updateAccountIdDto) {
-//        updateAccountIdDto.setUserId(this.currentUser);
-//        AccountPK accountPK = new AccountPK(updateAccountIdDto.getCurrentAccountName(), updateAccountIdDto.getUserId());
-//        if (this.accountService.exists(accountPK)) {
-//            this.accountService.updateAccountName(updateAccountIdDto);
-//            return ResponseEntity.ok().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteAccount(@RequestBody AccountPK accountPK) {

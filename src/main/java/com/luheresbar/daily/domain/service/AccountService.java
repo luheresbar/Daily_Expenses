@@ -1,7 +1,6 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.Account;
-import com.luheresbar.daily.domain.dto.UpdateAccountIdDto;
 import com.luheresbar.daily.domain.repository.IAccountRepository;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,4 @@ public class AccountService {
         this.accountRepository.delete(accountPK);
     }
 
-//    public Optional<Account> updateAccountName(UpdateAccountIdDto updateAccountIdDto) {
-//        return this.accountRepository.updateAccountName(updateAccountIdDto);
-//    }
 }

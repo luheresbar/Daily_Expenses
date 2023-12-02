@@ -1,6 +1,7 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.repository.IUserRepository;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,4 +45,10 @@ public class UserService {
     public Integer countUsers() {
         return this.userRepository.countUsers();
     }
+
+    public void updateUserId(UpdateUserIdDto updateUserIdDto) {
+        this.userRepository.updateUserId(updateUserIdDto);
+
+    }
+
 }

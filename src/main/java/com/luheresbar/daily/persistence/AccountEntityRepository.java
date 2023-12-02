@@ -1,7 +1,6 @@
 package com.luheresbar.daily.persistence;
 
 import com.luheresbar.daily.domain.Account;
-import com.luheresbar.daily.domain.dto.UpdateAccountIdDto;
 import com.luheresbar.daily.domain.repository.IAccountRepository;
 import com.luheresbar.daily.persistence.crud.IAccountCrudRepository;
 import com.luheresbar.daily.persistence.entity.AccountEntity;
@@ -9,7 +8,6 @@ import com.luheresbar.daily.persistence.entity.AccountPK;
 import com.luheresbar.daily.persistence.mapper.IAccountMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,14 +56,6 @@ public class AccountEntityRepository implements IAccountRepository {
     public void delete(AccountPK accountPK) {
         this.accountCrudRepository.deleteById(accountPK);
     }
-
-//    @Override
-//    @Transactional
-//    public Optional<Account> updateAccountName(UpdateAccountIdDto updateAccountIdDto) {
-//        this.accountCrudRepository.updateAccountName(updateAccountIdDto);
-//        Optional<Account> account = this.getById(updateAccountIdDto.getNewAccountName(), updateAccountIdDto.getUserId());
-//        return account;
-//    }
 
 
 }
