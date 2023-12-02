@@ -19,23 +19,23 @@ public class IncomeService {
         this.incomeRepository = incomeRepository;
     }
 
-    public List<Expense> getUserExpenses(String userId) {
-        return expenseRepository.getUserExpenses(userId);
+    public List<Income> getUserIncomes(String userId) {
+        return incomeRepository.getUserIncomes(userId);
     }
 
-//    public Optional<Expense> getById(int expenseId) {
-//        return this.expenseRepository.getById(expenseId);
-//    }
-//
-//    public Expense save(Expense expense) {
-//        return expenseRepository.save(expense);
-//    }
-//    public boolean delete(int expenseId, String userId) {
-//        return this.expenseRepository.delete(expenseId, userId);
-//    }
-//
-//    public List<Expense> getAccountExpenses(String accountName, String userId) {
-//        return this.expenseRepository.getAccountExpenses(accountName, userId);
+    public Optional<Income> getById(int incomeId) {
+        return this.incomeRepository.getById(incomeId);
+    }
+
+    public Income save(Income income) {
+        return incomeRepository.save(income);
+    }
+    public boolean delete(int incomeId, String userId) {
+        return this.incomeRepository.delete(incomeId, userId);
+    }
+
+    public List<Income> getAccountIncomes(String accountName, String userId) {
+        return this.incomeRepository.getAccountIncomes(accountName, userId);
     }
 
 }

@@ -3,6 +3,7 @@ package com.luheresbar.daily.persistence.mapper;
 import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.persistence.entity.IncomeEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public interface IIncomeMapper {
 
     List<Income> toIncomes(List<IncomeEntity> incomeEntities);
 
+    @Mapping(target = "account", ignore = true)
     IncomeEntity toIncomeEntity(Income income);
 
 }

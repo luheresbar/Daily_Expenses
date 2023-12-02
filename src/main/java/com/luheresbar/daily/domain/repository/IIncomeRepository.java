@@ -8,14 +8,14 @@ import java.util.Optional;
 
 public interface IIncomeRepository {
 
-    List<Expense> getUserExpenses(String userId);
+    List<Income> getUserIncomes(String userId);
 
-//    Expense save(Expense expense);
-//
-//    boolean delete(int expenseId, String userId);
-//
-//    Optional<Expense> getById(int expenseId);
-//
-//    List<Expense> getAccountExpenses(String accountName, String userId);
+    Income save(Income income);
+
+    boolean delete(int incomeId, String userId);
+
+    Optional<Income> getById(int incomeId);
+
+    List<Income> getAccountIncomes(String accountName, String userId);
 
 }

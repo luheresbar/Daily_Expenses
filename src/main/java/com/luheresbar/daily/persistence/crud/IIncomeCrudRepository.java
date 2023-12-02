@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface IIncomeCrudRepository extends ListCrudRepository<IncomeEntity, Integer> {
 
-//    @Query(value = "SELECT e " +
-//            "FROM ExpenseEntity e " +
-//            "WHERE userId = :userId AND accountName = :accountName " +
-//            "ORDER BY expenseDate DESC")
-//    List<ExpenseEntity> getAccountExpenses(@Param("accountName") String accountName, @Param("userId") String userId);
+    @Query(value = "SELECT i " +
+            "FROM IncomeEntity i " +
+            "WHERE userId = :userId AND accountName = :accountName " +
+            "ORDER BY incomeDate DESC")
+    List<IncomeEntity> getAccountIncomes(@Param("accountName") String accountName, @Param("userId") String userId);
 
 }

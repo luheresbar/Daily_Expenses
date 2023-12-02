@@ -1,5 +1,6 @@
 package com.luheresbar.daily.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,11 +34,12 @@ public class IncomeEntity {
     @Column(name = "account_name", nullable = false, length = 30)
     private String accountName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
             @JoinColumn(name = "account_name", referencedColumnName = "account_name", insertable = false, updatable = false)
     })
+    @JsonIgnore
     private AccountEntity account;
 
 

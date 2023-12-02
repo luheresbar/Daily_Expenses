@@ -1,6 +1,7 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Income;
+import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.IncomeService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ import java.util.Optional;
 public class IncomeController {
 
     private final IncomeService incomeService;
+    private final AccountService accountService;
     private String currentUser;
 
     @Autowired
-    public IncomeController(IncomeService incomeService) {
+    public IncomeController(IncomeService incomeService, AccountService accountService) {
         this.incomeService = incomeService;
+        this.accountService = accountService;
     }
 
     @ModelAttribute
@@ -36,63 +39,55 @@ public class IncomeController {
 
 
     @GetMapping
-    public ResponseEntity<List<Income>> getUserIncome() {
-        return  ResponseEntity.ok(incomeService.getUserIncome(currentUser));
+    public ResponseEntity<List<Income>> getUserIncomes() {
+        return  ResponseEntity.ok(incomeService.getUserIncomes(currentUser));
     }
-//    @GetMapping("/{account}")
-//    public ResponseEntity<List<Income>> getAccountIncomes(@PathVariable String account) {
-//        AccountPK accountPK = new AccountPK(account, this.currentUser);
-//        if(this.accountService.exists(accountPK)) {
-//            return ResponseEntity.ok(this.incomeService.getAccountIncomes(account, this.currentUser));
-//        }
-//        return ResponseEntity.notFound().build();
-//
-//    }
-//
-//    @PostMapping("/add")
-//    public ResponseEntity<Income> add(@RequestBody Income expense) {
-//        expense.setUserId(this.currentUser);
-//        if(expense.getCategoryName() == null) {
-//            expense.setCategoryName("Others");
-//        }
-//        if(expense.getIncomeDate() == null) {
-//            expense.setIncomeDate(String.valueOf(LocalDateTime.now()));
-//        }
-//        return new ResponseEntity<>(incomeService.save(expense), HttpStatus.CREATED);
-//    }
-//
-//    @PatchMapping("/update")
-//    public ResponseEntity<Income> update(@RequestBody Income expense) {
-//        Optional<Income> expenseDb = this.incomeService.getById(expense.getIncomeId());
-//        expense.setUserId(this.currentUser);
-//
-//        if(expense.getIncome() == null) {
-//            expense.setIncome(expenseDb.get().getIncome());
-//        }
-//        if(expense.getDescription() == null) {
-//            expense.setDescription(expenseDb.get().getDescription());
-//        }
-//        if(expense.getIncomeDate() == null) {
-//            expense.setIncomeDate(expenseDb.get().getIncomeDate());
-//        }
-//        if(expense.getAccountName() == null) {
-//            expense.setAccountName(expenseDb.get().getAccountName());
-//        }
-//        if(expense.getCategoryName() == null) {
-//            expense.setCategoryName(expenseDb.get().getCategoryName());
-//        }
-//
-//        return ResponseEntity.ok(this.incomeService.save(expense));
-//
-//    }
-//
-//    @DeleteMapping("/delete/{expenseId}")
-//    public ResponseEntity<Void> delete(@PathVariable int expenseId) {
-//        if(this.incomeService.delete(expenseId, this.currentUser)) {
-//            return ResponseEntity.ok().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
+    @GetMapping("/{account}")
+    public ResponseEntity<List<Income>> getAccountIncomes(@PathVariable String account) {
+        AccountPK accountPK = new AccountPK(account, this.currentUser);
+        if(this.accountService.exists(accountPK)) {
+            return ResponseEntity.ok(this.incomeService.getAccountIncomes(account, this.currentUser));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Income> add(@RequestBody Income income) {
+        income.setUserId(this.currentUser);
+
+        if(income.getIncomeDate() == null) {
+            income.setIncomeDate(String.valueOf(LocalDateTime.now()));
+        }
+        return new ResponseEntity<>(incomeService.save(income), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<Income> update(@RequestBody Income income) {
+        Optional<Income> incomeDb = this.incomeService.getById(income.getIncomeId());
+        income.setUserId(this.currentUser);
+
+        if(income.getIncome() == null) {
+            income.setIncome(incomeDb.get().getIncome());
+        }
+        if(income.getDescription() == null) {
+            income.setDescription(incomeDb.get().getDescription());
+        }
+        if(income.getIncomeDate() == null) {
+            income.setIncomeDate(incomeDb.get().getIncomeDate());
+        }
+        if(income.getAccountName() == null) {
+            income.setAccountName(incomeDb.get().getAccountName());
+        }
+        return ResponseEntity.ok(this.incomeService.save(income));
+    }
+
+    @DeleteMapping("/delete/{incomeId}")
+    public ResponseEntity<Void> delete(@PathVariable int incomeId) {
+        if(this.incomeService.delete(incomeId, this.currentUser)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 
 }

@@ -7,13 +7,12 @@ import lombok.Setter;
 @Setter
 public class Income {
 
-    private int incomeId;
-    private double income;
+    private Integer incomeId;
+    private Double income;
     private String description;
     private String incomeDate;
     private String userId;
     private String accountName;
-    private Account account;
 
 
 }
