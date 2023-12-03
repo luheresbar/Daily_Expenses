@@ -8,7 +8,7 @@ import lombok.Setter;
 public class Transaction {
 
     private int transactionId;
-    private double transactionValue;
+    private Double transactionValue;
     private String transactionDate;
     private String userId;
     private String sourceAccountName;

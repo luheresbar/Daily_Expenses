@@ -69,27 +69,30 @@ public class ExpenseController {
 
     @PatchMapping("/update")
     public ResponseEntity<Expense> update(@RequestBody Expense expense) {
-        Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
         expense.setUserId(this.currentUser);
+        Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
 
-        if(expense.getExpense() == null) {
-            expense.setExpense(expenseDb.get().getExpense());
-        }
-        if(expense.getDescription() == null) {
-            expense.setDescription(expenseDb.get().getDescription());
-        }
-        if(expense.getExpenseDate() == null) {
-            expense.setExpenseDate(expenseDb.get().getExpenseDate());
-        }
-        if(expense.getAccountName() == null) {
-            expense.setAccountName(expenseDb.get().getAccountName());
-        }
-        if(expense.getCategoryName() == null) {
-            expense.setCategoryName(expenseDb.get().getCategoryName());
-        }
+        if(expenseDb.get().getUserId().equals(this.currentUser)) {
 
-        return ResponseEntity.ok(this.expenseService.save(expense));
+            if(expense.getExpense() == null) {
+                expense.setExpense(expenseDb.get().getExpense());
+            }
+            if(expense.getDescription() == null) {
+                expense.setDescription(expenseDb.get().getDescription());
+            }
+            if(expense.getExpenseDate() == null) {
+                expense.setExpenseDate(expenseDb.get().getExpenseDate());
+            }
+            if(expense.getAccountName() == null) {
+                expense.setAccountName(expenseDb.get().getAccountName());
+            }
+            if(expense.getCategoryName() == null) {
+                expense.setCategoryName(expenseDb.get().getCategoryName());
+            }
 
+            return ResponseEntity.ok(this.expenseService.save(expense));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{expenseId}")

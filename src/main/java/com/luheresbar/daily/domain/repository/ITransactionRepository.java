@@ -3,6 +3,7 @@ package com.luheresbar.daily.domain.repository;
 import com.luheresbar.daily.domain.Transaction;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ITransactionRepository {
 
@@ -13,5 +14,7 @@ public interface ITransactionRepository {
     boolean delete(int transactionId, String userId);
 
     List<Transaction> getUserTransactions(String userId);
+
+    Optional<Transaction> getById(int transactionId);
 
 }

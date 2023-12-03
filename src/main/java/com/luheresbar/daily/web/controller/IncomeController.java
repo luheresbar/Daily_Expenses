@@ -63,22 +63,25 @@ public class IncomeController {
 
     @PatchMapping("/update")
     public ResponseEntity<Income> update(@RequestBody Income income) {
-        Optional<Income> incomeDb = this.incomeService.getById(income.getIncomeId());
         income.setUserId(this.currentUser);
+        Optional<Income> incomeDb = this.incomeService.getById(income.getIncomeId());
+        if(incomeDb.get().getUserId().equals(this.currentUser)) {
 
-        if(income.getIncome() == null) {
-            income.setIncome(incomeDb.get().getIncome());
+            if(income.getIncome() == null) {
+                income.setIncome(incomeDb.get().getIncome());
+            }
+            if(income.getDescription() == null) {
+                income.setDescription(incomeDb.get().getDescription());
+            }
+            if(income.getIncomeDate() == null) {
+                income.setIncomeDate(incomeDb.get().getIncomeDate());
+            }
+            if(income.getAccountName() == null) {
+                income.setAccountName(incomeDb.get().getAccountName());
+            }
+            return ResponseEntity.ok(this.incomeService.save(income));
         }
-        if(income.getDescription() == null) {
-            income.setDescription(incomeDb.get().getDescription());
-        }
-        if(income.getIncomeDate() == null) {
-            income.setIncomeDate(incomeDb.get().getIncomeDate());
-        }
-        if(income.getAccountName() == null) {
-            income.setAccountName(incomeDb.get().getAccountName());
-        }
-        return ResponseEntity.ok(this.incomeService.save(income));
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{incomeId}")

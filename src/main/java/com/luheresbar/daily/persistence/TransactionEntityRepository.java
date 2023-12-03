@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TransactionEntityRepository implements ITransactionRepository {
@@ -32,6 +33,12 @@ public class TransactionEntityRepository implements ITransactionRepository {
     public List<Transaction> getAll() {
         List<TransactionEntity> transactions = transactionCrudRepository.findAll();
         return transactionMapper.toTransactions(transactions);
+    }
+
+    @Override
+    public Optional<Transaction> getById(int transactionId) {
+        Optional<TransactionEntity> transactionEntity = this.transactionCrudRepository.findById(transactionId);
+        return transactionEntity.map(trn -> this.transactionMapper.toTransaction(trn));
     }
 
     @Override
@@ -57,4 +64,5 @@ public class TransactionEntityRepository implements ITransactionRepository {
         List<TransactionEntity> transactionEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(TransactionEntity.class));
         return this.transactionMapper.toTransactions(transactionEntities);
     }
+
 }

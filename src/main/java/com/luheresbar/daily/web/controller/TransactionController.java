@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -45,18 +46,47 @@ public class TransactionController {
             if(transaction.getTransactionDate() == null) {
                 transaction.setTransactionDate(String.valueOf(LocalDateTime.now()));
             }
-            if(transaction.getDestinationAccountName().equals("Cash")) {
-                transaction.setType("Withdrawal");
-            }
-            if(transaction.getSourceAccountName().equals("Cash")) {
-                transaction.setType("Deposit");
-            }
-            if(!transaction.getDestinationAccountName().equals("Cash") && !transaction.getSourceAccountName().equals("Cash")) {
-                transaction.setType("Transfer");
-            }
+            extractedTypeTransaction(transaction);
+
             return ResponseEntity.ok(this.transactionService.save(transaction));
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    private static void extractedTypeTransaction(Transaction transaction) {
+        if(transaction.getDestinationAccountName().equals("Cash")) {
+            transaction.setType("Withdrawal");
+        }
+        if(transaction.getSourceAccountName().equals("Cash")) {
+            transaction.setType("Deposit");
+        }
+        if(!transaction.getDestinationAccountName().equals("Cash") && !transaction.getSourceAccountName().equals("Cash")) {
+            transaction.setType("Transfer");
+        }
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<Transaction> update(@RequestBody Transaction transaction) {
+        transaction.setUserId(this.currentUser);
+        Optional<Transaction> transactionDb = this.transactionService.getById(transaction.getTransactionId());
+
+        if(transactionDb.get().getUserId().equals(this.currentUser)) {
+            if(transaction.getTransactionValue() == null) {
+                transaction.setTransactionValue(transactionDb.get().getTransactionValue());
+            }
+            if(transaction.getTransactionDate() == null) {
+                transaction.setTransactionDate(transactionDb.get().getTransactionDate());
+            }
+            if(transaction.getSourceAccountName() == null) {
+                transaction.setSourceAccountName(transactionDb.get().getSourceAccountName());
+            }
+            if(transaction.getDestinationAccountName() == null) {
+                transaction.setDestinationAccountName(transactionDb.get().getDestinationAccountName());
+            }
+            extractedTypeTransaction(transaction);
+            return ResponseEntity.ok(this.transactionService.save(transaction));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{transactionId}")

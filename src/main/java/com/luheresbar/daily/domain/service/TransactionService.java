@@ -1,11 +1,13 @@
 package com.luheresbar.daily.domain.service;
 
+import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.Transaction;
 import com.luheresbar.daily.domain.repository.ITransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -19,6 +21,10 @@ public class TransactionService {
 
     public List<Transaction> getAll() {
         return transactionRepository.getAll();
+    }
+
+    public Optional<Transaction> getById(int transactionId) {
+        return this.transactionRepository.getById(transactionId);
     }
 
     public Transaction save(Transaction transaction) {
