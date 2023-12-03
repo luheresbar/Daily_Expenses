@@ -13,9 +13,6 @@ public class Transaction {
     private String userId;
     private String sourceAccountName;
     private String destinationAccountName;
-    private Account sourceAccount;
-    private Account destinationAccount;
-
-
+    private String type;
 
 }

@@ -8,4 +8,10 @@ public interface ITransactionRepository {
 
     List<Transaction> getAll();
 
+    Transaction save(Transaction transaction);
+
+    boolean delete(int transactionId, String userId);
+
+    List<Transaction> getUserTransactions(String userId);
+
 }

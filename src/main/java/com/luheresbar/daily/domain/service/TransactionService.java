@@ -21,4 +21,15 @@ public class TransactionService {
         return transactionRepository.getAll();
     }
 
+    public Transaction save(Transaction transaction) {
+        return this.transactionRepository.save(transaction);
+    }
+
+    public boolean delete(int transactionId, String userId) {
+        return this.transactionRepository.delete(transactionId, userId);
+    }
+
+    public List<Transaction> getUserTransactions(String userId) {
+        return this.transactionRepository.getUserTransactions(userId);
+    }
 }

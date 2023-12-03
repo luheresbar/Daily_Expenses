@@ -33,6 +33,9 @@ public class TransactionEntity {
     @Column(name = "destination_account_name", nullable = false, length = 30)
     private String destinationAccountName;
 
+    @Column(name = "type")
+    private String type;
+
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
