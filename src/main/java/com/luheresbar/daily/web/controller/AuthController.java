@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,16 +34,18 @@ public class AuthController {
     private final UserRoleService userRoleService;
     private final CategoryService categoryService;
     private final AccountService accountService;
+    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil, UserRoleService userRoleService, CategoryService categoryService, AccountService accountService) {
+    public AuthController(AuthenticationManager authenticationManager, UserService userService, JwtUtil jwtUtil, UserRoleService userRoleService, CategoryService categoryService, AccountService accountService, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.userRoleService = userRoleService;
         this.categoryService = categoryService;
         this.accountService = accountService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -62,6 +65,8 @@ public class AuthController {
 
             String currentDate = String.valueOf(LocalDateTime.now());
             user.setRegisterDate(currentDate);
+            String encodedPassword = this.passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
             this.userService.save(user);
 
             UserRole userRole = new UserRole();

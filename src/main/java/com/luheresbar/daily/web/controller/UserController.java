@@ -11,10 +11,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -22,11 +22,13 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
     private String currentUser;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @ModelAttribute
@@ -65,6 +67,9 @@ public class UserController {
         }
         if (user.getPassword() == null) {
             user.setPassword(userInDb.get().getPassword());
+        } else if (!user.getPassword().equals(userInDb.get().getPassword())) {
+            String encodedPassword = this.passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
         }
         if (user.getEmail() == null) {
             user.setEmail(userInDb.get().getEmail());
