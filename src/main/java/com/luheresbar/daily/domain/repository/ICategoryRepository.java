@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ICategoryRepository {
 
-    List<Category> getByUser(String userId);
+    List<Category> getByUser(Integer userId);
 
     boolean exists(CategoryPK categoryPK);
 

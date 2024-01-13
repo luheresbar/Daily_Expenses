@@ -19,7 +19,7 @@ import java.util.Optional;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    private String currentUser;
+    private Integer currentUser;
 
     @Autowired
     public TransactionController(TransactionService transactionService) {
@@ -30,7 +30,7 @@ public class TransactionController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (String) authentication.getPrincipal();
+        this.currentUser = (Integer) authentication.getPrincipal();
     }
 
     @GetMapping

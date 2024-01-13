@@ -9,10 +9,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IAccountCrudRepository extends CrudRepository<AccountEntity, AccountPK> {
-    List<AccountEntity> findAllByUserIdOrderByAccountName(String userId);
+    List<AccountEntity> findAllByUserIdOrderByAccountName(Integer userId);
 
     @Query(value = "SELECT SUM(available_money) FROM accounts WHERE user_id = :userId", nativeQuery = true)
-    Double availableMoney(@Param("userId") String userId);
+    Double availableMoney(@Param("userId") Integer userId);
 
 
 }

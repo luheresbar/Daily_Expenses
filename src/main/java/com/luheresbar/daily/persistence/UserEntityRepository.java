@@ -40,19 +40,27 @@ public class UserEntityRepository implements IUserRepository {
     }
 
     @Override
-    public boolean existsById(String idUser) {
-        return this.userCrudRepository.existsById(idUser);
+    public boolean existsByEmail(String email) {
+        return this.userCrudRepository.existsByEmail(email);
+    }
+    @Override
+    public boolean existsById(Integer userId) {
+        return this.userCrudRepository.existsById(userId);
     }
 
+    public Optional<User> findUserByEmail(String email) {
+        Optional<UserEntity> userEntity =  this.userCrudRepository.findUserByEmail(email);
+        return userEntity.map(user -> this.userMapper.toUser(user));
+    }
 
     @Override
-    public Optional<User> getById(String userId) {
+    public Optional<User> getById(Integer userId) {
         Optional<UserEntity> userEntity = this.userCrudRepository.findById(userId);
         return userEntity.map(user -> this.userMapper.toUser(user));
     }
 
     @Override
-    public boolean delete(String userId) {
+    public boolean delete(Integer userId) {
         return this.userCrudRepository.findById(userId).map(user -> {
             this.userCrudRepository.delete(user);
             return true;

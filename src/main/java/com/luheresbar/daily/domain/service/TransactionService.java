@@ -31,11 +31,11 @@ public class TransactionService {
         return this.transactionRepository.save(transaction);
     }
 
-    public boolean delete(int transactionId, String userId) {
+    public boolean delete(int transactionId, Integer userId) {
         return this.transactionRepository.delete(transactionId, userId);
     }
 
-    public List<Transaction> getUserTransactions(String userId) {
+    public List<Transaction> getUserTransactions(Integer userId) {
         return this.transactionRepository.getUserTransactions(userId);
     }
 }

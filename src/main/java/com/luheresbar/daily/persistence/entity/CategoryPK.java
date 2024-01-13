@@ -11,7 +11,7 @@ import java.util.Objects;
 public class CategoryPK {
 
     private String categoryName;
-    private String userId;
+    private Integer userId;
 
     @Override
     public boolean equals(Object o) {

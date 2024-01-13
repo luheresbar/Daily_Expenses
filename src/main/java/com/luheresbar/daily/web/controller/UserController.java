@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private String currentUser;
+    Integer userToken;
 
     @Autowired
     public UserController(UserService userService, PasswordEncoder passwordEncoder) {
@@ -35,7 +35,9 @@ public class UserController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (String) authentication.getPrincipal();
+        String emailToken = (String) authentication.getPrincipal();
+        Optional<User> userDb = this.userService.findUserByEmail(emailToken);
+        this.userToken = userDb.get().getUserId();
     }
 
     // Listar los usuarios registrados solamente con su userId y su fecha de registro
@@ -53,14 +55,14 @@ public class UserController {
     // Como usuario puedo visualizar mi informacion personal registrada en la app, para que pueda saber si debo actualizarla
     @GetMapping("/user")
     public ResponseEntity<Optional<User>> viewInformation() {
-        return ResponseEntity.ok(userService.getById(this.currentUser));
+        return ResponseEntity.ok(userService.getById(this.userToken));
     }
 
     // Como usuario puedo actualizar mi informacion personal registrada en la app para que pueda tener la informacion actualizada.
     @PutMapping("/user")
     public ResponseEntity<User> update(@RequestBody User user) {
-        user.setUserId(this.currentUser);
-        Optional<User> userInDb = this.userService.getById(this.currentUser);
+        user.setUserId(this.userToken);
+        Optional<User> userInDb = this.userService.getById(this.userToken);
 
         if (user.getUsername() == null) {
             user.setUsername(userInDb.get().getUsername());
@@ -80,8 +82,8 @@ public class UserController {
      // Actualizar el userId de un usuario.
     @PatchMapping("/update/userid")
     public ResponseEntity<Optional<User>> updateUserId(@RequestBody UpdateUserIdDto updateUserIdDto) {
-        updateUserIdDto.setCurrentUserId(this.currentUser);
-        if (this.userService.exists(currentUser)) {
+        updateUserIdDto.setCurrentUserId(this.userToken);
+        if (this.userService.exists(userToken)) {
             this.userService.updateUserId(updateUserIdDto);
             return ResponseEntity.ok(this.userService.getById(updateUserIdDto.getNewUserId()));
         }
@@ -92,7 +94,7 @@ public class UserController {
     //  Unicamente un usuario puede eliminar su propia cuenta.
     @DeleteMapping("/user/delete")
     public ResponseEntity deleteUser() {
-        if (this.userService.delete(this.currentUser)) {
+        if (this.userService.delete(this.userToken)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

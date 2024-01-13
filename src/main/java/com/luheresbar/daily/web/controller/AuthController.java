@@ -1,10 +1,8 @@
 package com.luheresbar.daily.web.controller;
 
-import com.luheresbar.daily.domain.Account;
-import com.luheresbar.daily.domain.Category;
-import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.domain.UserRole;
+import com.luheresbar.daily.domain.*;
 import com.luheresbar.daily.domain.dto.LoginDto;
+import com.luheresbar.daily.domain.dto.TokenDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.CategoryService;
 import com.luheresbar.daily.domain.service.UserRoleService;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -49,19 +48,18 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginDto loginDto){
-        UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUserId(), loginDto.getPassword());
+    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto){
+        UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);
 
-        String jwt = this.jwtUtil.create(loginDto.getUserId());
-
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+        String jwt = this.jwtUtil.create(loginDto.getEmail());
+        return ResponseEntity.ok(new TokenDto(jwt));
     }
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity<Void> register(@RequestBody User user) {
-        if (user.getUserId() == null || !this.userService.exists(user.getUserId())) {
+    public ResponseEntity<TokenDto> register(@RequestBody User user) {
+        if (user.getEmail() == null || !this.userService.existsByEmail(user.getEmail())) {
 
             String currentDate = String.valueOf(LocalDateTime.now());
             user.setRegisterDate(currentDate);
@@ -69,26 +67,28 @@ public class AuthController {
             user.setPassword(encodedPassword);
             this.userService.save(user);
 
+            Optional<User> userDb = this.userService.findUserByEmail(user.getEmail());
+
             UserRole userRole = new UserRole();
-            userRole.setUserId(user.getUserId());
+            userRole.setUserId(userDb.get().getUserId());
             userRole.setRole("USER");
             userRole.setGrantedDate(currentDate);
             this.userRoleService.save(userRole);
 
             Category category = new Category();
-            category.setUserId(user.getUserId());
+            category.setUserId(userDb.get().getUserId());
             category.setCategoryName("Others");
             this.categoryService.save(category);
 
             Account account = new Account();
-            account.setUserId(user.getUserId());
+            account.setUserId(userDb.get().getUserId());
             account.setAccountName("Cash");
             account.setAvailableMoney(0.0);
             account.setAvailable(true);
             this.accountService.save(account);
 
-            String jwt = this.jwtUtil.create(user.getUserId());
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+            String jwt = this.jwtUtil.create(user.getEmail());
+            return ResponseEntity.ok(new TokenDto(jwt));
         }
         return ResponseEntity.badRequest().build();
 

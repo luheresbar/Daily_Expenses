@@ -11,9 +11,9 @@ public interface ITransactionRepository {
 
     Transaction save(Transaction transaction);
 
-    boolean delete(int transactionId, String userId);
+    boolean delete(int transactionId, Integer userId);
 
-    List<Transaction> getUserTransactions(String userId);
+    List<Transaction> getUserTransactions(Integer userId);
 
     Optional<Transaction> getById(int transactionId);
 

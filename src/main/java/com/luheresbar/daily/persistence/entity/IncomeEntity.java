@@ -29,7 +29,7 @@ public class IncomeEntity {
     private LocalDateTime incomeDate;
 
     @Column(name = "user_id", nullable = false, length = 25)
-    private String userId;
+    private Integer userId;
 
     @Column(name = "account_name", nullable = false, length = 30)
     private String accountName;

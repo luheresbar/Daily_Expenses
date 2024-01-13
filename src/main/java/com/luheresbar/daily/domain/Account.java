@@ -8,7 +8,7 @@ import lombok.Setter;
 public class Account {
 
     private String accountName;
-    private String userId;
+    private Integer userId;
     private Double availableMoney;
     private Boolean available;
 

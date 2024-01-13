@@ -29,7 +29,7 @@ public class IncomeEntityRepository implements IIncomeRepository {
 
 
     @Override
-    public List<Income> getUserIncomes(String userId) {
+    public List<Income> getUserIncomes(Integer userId) {
 
         // Metodo usando JdbcTemplate
         String sql = "SELECT * FROM incomes WHERE user_id = ? ORDER BY income_date DESC";
@@ -39,7 +39,7 @@ public class IncomeEntityRepository implements IIncomeRepository {
     }
 
     @Override
-    public List<Income> getAccountIncomes(String accountName, String userId) {
+    public List<Income> getAccountIncomes(String accountName, Integer userId) {
         return this.incomeMapper.toIncomes(this.incomeCrudRepository.getAccountIncomes(accountName, userId));
     }
 
@@ -57,7 +57,7 @@ public class IncomeEntityRepository implements IIncomeRepository {
 
 
     @Override
-    public boolean delete(int incomeId, String userId) {
+    public boolean delete(int incomeId, Integer userId) {
         IncomeEntity incomeEntity = this.incomeCrudRepository.findById(incomeId).orElse(null);
         if(incomeEntity != null && incomeEntity.getUserId().equals(userId)) {
             this.incomeCrudRepository.delete(incomeEntity);

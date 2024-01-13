@@ -28,7 +28,7 @@ public class ExpenseEntityRepository implements IExpenseRepository {
     }
 
     @Override
-    public List<Expense> getUserExpenses(String userId) {
+    public List<Expense> getUserExpenses(Integer userId) {
 
         // Metodo usando JdbcTemplate
         String sql = "SELECT * FROM expenses WHERE user_id = ? ORDER BY expense_date DESC";
@@ -38,7 +38,7 @@ public class ExpenseEntityRepository implements IExpenseRepository {
     }
 
     @Override
-    public List<Expense> getAccountExpenses(String accountName, String userId) {
+    public List<Expense> getAccountExpenses(String accountName, Integer userId) {
         return this.expenseMapper.toExpenses(this.expenseCrudRepository.getAccountExpenses(accountName, userId));
     }
 
@@ -56,7 +56,7 @@ public class ExpenseEntityRepository implements IExpenseRepository {
 
 
     @Override
-    public boolean delete(int expenseId, String userId) {
+    public boolean delete(int expenseId, Integer userId) {
         ExpenseEntity expenseEntity = this.expenseCrudRepository.findById(expenseId).orElse(null);
         if(expenseEntity != null && expenseEntity.getUserId().equals(userId)) {
             this.expenseCrudRepository.delete(expenseEntity);

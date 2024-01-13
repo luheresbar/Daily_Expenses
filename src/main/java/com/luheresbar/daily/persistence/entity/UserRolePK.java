@@ -15,7 +15,7 @@ import java.util.Objects;
 public class UserRolePK implements Serializable {
 
     private String role;
-    private String userId;
+    private Integer userId;
 
     @Override
     public boolean equals(Object o) {

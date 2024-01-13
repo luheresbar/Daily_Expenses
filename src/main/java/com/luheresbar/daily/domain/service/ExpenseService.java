@@ -16,7 +16,7 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
     }
 
-    public List<Expense> getUserExpenses(String userId) {
+    public List<Expense> getUserExpenses(Integer userId) {
         return expenseRepository.getUserExpenses(userId);
     }
 
@@ -27,11 +27,11 @@ public class ExpenseService {
     public Expense save(Expense expense) {
         return expenseRepository.save(expense);
     }
-    public boolean delete(int expenseId, String userId) {
+    public boolean delete(int expenseId, Integer userId) {
         return this.expenseRepository.delete(expenseId, userId);
     }
 
-    public List<Expense> getAccountExpenses(String accountName, String userId) {
+    public List<Expense> getAccountExpenses(String accountName, Integer userId) {
         return this.expenseRepository.getAccountExpenses(accountName, userId);
     }
 }

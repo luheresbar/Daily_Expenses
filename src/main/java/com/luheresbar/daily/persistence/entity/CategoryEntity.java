@@ -21,7 +21,7 @@ public class CategoryEntity {
 
     @Id
     @Column(name = "user_id", nullable = false, length = 25)
-    private String userId;
+    private Integer userId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

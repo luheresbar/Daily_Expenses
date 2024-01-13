@@ -8,13 +8,13 @@ import java.util.Optional;
 
 public interface IAccountRepository {
 
-    List<Account> getAccountsByUser(String userId);
+    List<Account> getAccountsByUser(Integer userId);
 
-    Double availableMoney(String userId);
+    Double availableMoney(Integer userId);
 
     boolean exists(AccountPK accountPK);
 
-    Optional<Account> getById(String accountName, String userId);
+    Optional<Account> getById(String accountName, Integer userId);
 
     Account save(Account account);
 

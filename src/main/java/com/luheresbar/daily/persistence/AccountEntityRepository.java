@@ -25,13 +25,13 @@ public class AccountEntityRepository implements IAccountRepository {
     }
 
     @Override
-    public List<Account> getAccountsByUser(String userId) {
+    public List<Account> getAccountsByUser(Integer userId) {
         List<AccountEntity> accounts = this.accountCrudRepository.findAllByUserIdOrderByAccountName(userId);
         return accountMapper.toAccounts(accounts);
     }
 
     @Override
-    public Double availableMoney(String userId) {
+    public Double availableMoney(Integer userId) {
         return this.accountCrudRepository.availableMoney(userId);
     }
 
@@ -40,7 +40,7 @@ public class AccountEntityRepository implements IAccountRepository {
     }
 
     @Override
-    public Optional<Account> getById(String accountName, String userId) {
+    public Optional<Account> getById(String accountName, Integer userId) {
         AccountPK accountPK = new AccountPK(accountName, userId );
         Optional<AccountEntity> accountEntity = this.accountCrudRepository.findById(accountPK);
         return accountEntity.map(acc -> this.accountMapper.toAccount(acc));

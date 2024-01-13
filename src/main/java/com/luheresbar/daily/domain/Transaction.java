@@ -10,7 +10,7 @@ public class Transaction {
     private int transactionId;
     private Double transactionValue;
     private String transactionDate;
-    private String userId;
+    private Integer userId;
     private String sourceAccountName;
     private String destinationAccountName;
     private String type;

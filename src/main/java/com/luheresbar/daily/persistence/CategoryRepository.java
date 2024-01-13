@@ -24,7 +24,7 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public List<Category> getByUser(String userId) {
+    public List<Category> getByUser(Integer userId) {
         List<CategoryEntity> categoryEntity =  this.categoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
         return categoryMapper.toCategories(categoryEntity);
     }

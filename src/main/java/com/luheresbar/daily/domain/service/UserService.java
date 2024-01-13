@@ -30,15 +30,23 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean exists(String idUser) {
-        return this.userRepository.existsById(idUser);
+    public boolean existsByEmail(String email) {
+        return this.userRepository.existsByEmail(email);
     }
 
-    public Optional<User> getById(String userId) {
+    public Optional<User> findUserByEmail(String email) {
+        return this.userRepository.findUserByEmail(email);
+    }
+
+    public boolean exists(Integer userId) {
+        return this.userRepository.existsById(userId);
+    }
+
+    public Optional<User> getById(Integer userId) {
         return userRepository.getById(userId);
     }
 
-    public boolean delete(String userId) {
+    public boolean delete(Integer userId) {
         return  this.userRepository.delete(userId);
     }
 

@@ -20,7 +20,7 @@ public class UserRoleEntity {
 
     @Id
     @Column(name = "user_id", nullable = false, length = 25)
-    private String userId;
+    private Integer userId;
 
     @Column(name = "granted_date")
     private LocalDateTime grantedDate;

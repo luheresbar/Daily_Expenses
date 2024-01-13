@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface ICategoryCrudRepository extends CrudRepository<CategoryEntity, CategoryPK> {
 
-    List<CategoryEntity> findAllByUserIdOrderByCategoryName(String userId);
+    List<CategoryEntity> findAllByUserIdOrderByCategoryName(Integer userId);
 
 }

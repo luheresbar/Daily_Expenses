@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class UpdateUserIdDto {
 
-    private String currentUserId;
-    private String newUserId;
+    private Integer currentUserId;
+    private Integer newUserId;
 
 }

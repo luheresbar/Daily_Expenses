@@ -1,8 +1,10 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Expense;
+import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.ExpenseService;
+import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import com.luheresbar.daily.web.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,15 @@ public class ExpenseController {
     private final JwtUtil jwtUtil;
     private final ExpenseService expenseService;
     private final AccountService accountService;
-    private String currentUser;
+    private final UserService userService;
+    Integer userToken;
 
     @Autowired
-    public ExpenseController(JwtUtil jwtUtil, ExpenseService expenseService, AccountService accountService) {
+    public ExpenseController(JwtUtil jwtUtil, ExpenseService expenseService, AccountService accountService, UserService userService) {
         this.jwtUtil = jwtUtil;
         this.expenseService = expenseService;
         this.accountService = accountService;
+        this.userService = userService;
     }
 
     // Filtro para extraer el usuario del token y almacenarlo en la variable de instancia
@@ -38,18 +42,20 @@ public class ExpenseController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (String) authentication.getPrincipal();
+        String emailToken = (String) authentication.getPrincipal();
+        Optional<User> userDb = this.userService.findUserByEmail(emailToken);
+        this.userToken = userDb.get().getUserId();
     }
 
     @GetMapping
     public ResponseEntity<List<Expense>> getUserExpenses() {
-        return  ResponseEntity.ok(expenseService.getUserExpenses(currentUser));
+        return  ResponseEntity.ok(expenseService.getUserExpenses(userToken));
     }
     @GetMapping("/{account}")
     public ResponseEntity<List<Expense>> getAccountExpenses(@PathVariable String account) {
-        AccountPK accountPK = new AccountPK(account, this.currentUser);
+        AccountPK accountPK = new AccountPK(account, this.userToken);
         if(this.accountService.exists(accountPK)) {
-            return ResponseEntity.ok(this.expenseService.getAccountExpenses(account, this.currentUser));
+            return ResponseEntity.ok(this.expenseService.getAccountExpenses(account, this.userToken));
         }
         return ResponseEntity.notFound().build();
 
@@ -57,7 +63,7 @@ public class ExpenseController {
 
     @PostMapping("/add")
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
-        expense.setUserId(this.currentUser);
+        expense.setUserId(this.userToken);
         if(expense.getCategoryName() == null) {
             expense.setCategoryName("Others");
         }
@@ -69,10 +75,10 @@ public class ExpenseController {
 
     @PatchMapping("/update")
     public ResponseEntity<Expense> update(@RequestBody Expense expense) {
-        expense.setUserId(this.currentUser);
+        expense.setUserId(this.userToken);
         Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
 
-        if(expenseDb.get().getUserId().equals(this.currentUser)) {
+        if(expenseDb.get().getUserId().equals(this.userToken)) {
 
             if(expense.getExpense() == null) {
                 expense.setExpense(expenseDb.get().getExpense());
@@ -97,7 +103,7 @@ public class ExpenseController {
 
     @DeleteMapping("/delete/{expenseId}")
     public ResponseEntity<Void> delete(@PathVariable int expenseId) {
-        if(this.expenseService.delete(expenseId, this.currentUser)) {
+        if(this.expenseService.delete(expenseId, this.userToken)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

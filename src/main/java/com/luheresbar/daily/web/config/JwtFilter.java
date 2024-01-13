@@ -50,8 +50,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         // 4. Cargar el usuario del UserDetailsService
-        String userId = this.jwtUtil.getUsername(jwt);
-        User user = (User) this.userDetailsService.loadUserByUsername(userId);
+        String userEmail = this.jwtUtil.getUsername(jwt);
+        User user = (User) this.userDetailsService.loadUserByUsername(userEmail);
 
         // 5. Cargar al usuario en el contexto de seguridad
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

@@ -13,7 +13,7 @@ public class Expense {
     private Double expense;
     private String description;
     private String expenseDate;
-    private String userId;
+    private Integer userId;
     private String accountName;
     private String categoryName;
 

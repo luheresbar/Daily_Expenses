@@ -9,7 +9,7 @@ import lombok.Setter;
 public class UserRole {
 
     private String role;
-    private String userId;
+    private Integer userId;
     private String grantedDate;
 
 }

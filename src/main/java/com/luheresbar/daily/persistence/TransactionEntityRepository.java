@@ -48,7 +48,7 @@ public class TransactionEntityRepository implements ITransactionRepository {
     }
 
     @Override
-    public boolean delete(int transactionId, String userId) {
+    public boolean delete(int transactionId, Integer userId) {
         TransactionEntity transactionEntity = this.transactionCrudRepository.findById(transactionId).orElse(null);
         if(transactionEntity != null && transactionEntity.getUserId().equals(userId)) {
             this.transactionCrudRepository.delete(transactionEntity);
@@ -58,7 +58,7 @@ public class TransactionEntityRepository implements ITransactionRepository {
     }
 
     @Override
-    public List<Transaction> getUserTransactions(String userId) {
+    public List<Transaction> getUserTransactions(Integer userId) {
         // Metodo usando JdbcTemplate
         String sql = "SELECT * FROM transactions WHERE user_id = ? ORDER BY transaction_date DESC";
         List<TransactionEntity> transactionEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(TransactionEntity.class));

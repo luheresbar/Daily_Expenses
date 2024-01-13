@@ -14,6 +14,6 @@ public interface IIncomeCrudRepository extends ListCrudRepository<IncomeEntity, 
             "FROM IncomeEntity i " +
             "WHERE userId = :userId AND accountName = :accountName " +
             "ORDER BY incomeDate DESC")
-    List<IncomeEntity> getAccountIncomes(@Param("accountName") String accountName, @Param("userId") String userId);
+    List<IncomeEntity> getAccountIncomes(@Param("accountName") String accountName, @Param("userId") Integer userId);
 
 }

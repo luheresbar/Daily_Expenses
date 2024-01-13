@@ -19,7 +19,7 @@ public class IncomeService {
         this.incomeRepository = incomeRepository;
     }
 
-    public List<Income> getUserIncomes(String userId) {
+    public List<Income> getUserIncomes(Integer userId) {
         return incomeRepository.getUserIncomes(userId);
     }
 
@@ -30,11 +30,11 @@ public class IncomeService {
     public Income save(Income income) {
         return incomeRepository.save(income);
     }
-    public boolean delete(int incomeId, String userId) {
+    public boolean delete(int incomeId, Integer userId) {
         return this.incomeRepository.delete(incomeId, userId);
     }
 
-    public List<Income> getAccountIncomes(String accountName, String userId) {
+    public List<Income> getAccountIncomes(String accountName, Integer userId) {
         return this.incomeRepository.getAccountIncomes(accountName, userId);
     }
 

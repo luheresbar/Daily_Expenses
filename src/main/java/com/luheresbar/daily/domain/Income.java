@@ -11,7 +11,7 @@ public class Income {
     private Double income;
     private String description;
     private String incomeDate;
-    private String userId;
+    private Integer userId;
     private String accountName;
 
 

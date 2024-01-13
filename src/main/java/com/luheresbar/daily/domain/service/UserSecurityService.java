@@ -25,16 +25,16 @@ public class UserSecurityService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        UserEntity userEntity = this.userCrudRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User " + userId + " not found."));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = this.userCrudRepository.findUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User " + email + " not found."));
 
 //        System.out.println(userEntity);
 
         String[] roles = userEntity.getRoles().stream().map(UserRoleEntity::getRole).toArray(String[]::new);
 
         return User.builder()
-                .username(userEntity.getUserId())
+                .username(userEntity.getEmail()) //Todo (se convirtio user id a string)
                 .password(userEntity.getPassword())
                 .authorities(this.grantedAuthorities(roles))
 //                .accountLocked(userEntity.getLocked())

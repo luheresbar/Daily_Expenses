@@ -1,7 +1,9 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Category;
+import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.service.CategoryService;
+import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.entity.CategoryPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,34 +14,40 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
-    String currentUser;
+    private final UserService userService;
+    Integer userToken;
 
     @ModelAttribute
     private void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (String) authentication.getPrincipal();
+        String emailToken = (String) authentication.getPrincipal();
+        Optional<User> userDb = this.userService.findUserByEmail(emailToken);
+        this.userToken = userDb.get().getUserId();
     }
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, UserService userService) {
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @GetMapping
     public ResponseEntity<List<Category>> getAll() {
-        return new ResponseEntity<>(categoryService.getByUser(currentUser), HttpStatus.OK);
+
+        return new ResponseEntity<>(categoryService.getByUser(this.userToken), HttpStatus.OK);
     }
 
     @PostMapping("/add")
     public ResponseEntity<Category> add(@RequestBody Category category) {
-        category.setUserId(this.currentUser);
+        category.setUserId(this.userToken);
         CategoryPK categoryPK = new CategoryPK(category.getCategoryName(), category.getUserId());
 
         if(!this.categoryService.exists(categoryPK)) {
@@ -50,7 +58,7 @@ public class CategoryController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestBody CategoryPK categoryPK) {
-        categoryPK.setUserId(this.currentUser);
+        categoryPK.setUserId(this.userToken);
         if (this.categoryService.exists(categoryPK)) {
             if (!categoryPK.getCategoryName().equals("Others")) {
             this.categoryService.delete(categoryPK);

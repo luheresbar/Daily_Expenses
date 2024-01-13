@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface IExpenseRepository {
 
-    List<Expense> getUserExpenses(String userId);
+    List<Expense> getUserExpenses(Integer userId);
 
     Expense save(Expense expense);
 
-    boolean delete(int expenseId, String userId);
+    boolean delete(int expenseId, Integer userId);
 
     Optional<Expense> getById(int expenseId);
 
-    List<Expense> getAccountExpenses(String accountName, String userId);
+    List<Expense> getAccountExpenses(String accountName, Integer userId);
 }

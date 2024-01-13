@@ -14,5 +14,5 @@ public interface IExpenseCrudRepository extends ListCrudRepository<ExpenseEntity
             "FROM ExpenseEntity e " +
             "WHERE userId = :userId AND accountName = :accountName " +
             "ORDER BY expenseDate DESC")
-    List<ExpenseEntity> getAccountExpenses(@Param("accountName") String accountName, @Param("userId") String userId);
+    List<ExpenseEntity> getAccountExpenses(@Param("accountName") String accountName, @Param("userId") Integer userId);
 }

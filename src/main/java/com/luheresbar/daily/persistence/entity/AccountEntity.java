@@ -20,7 +20,7 @@ public class AccountEntity {
 
     @Id
     @Column(name = "user_id", nullable = false, length = 25)
-    private String userId;
+    private Integer userId;
 
     @Column(name = "available_money", columnDefinition = "default 0")
     private Double availableMoney;

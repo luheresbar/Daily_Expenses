@@ -22,7 +22,7 @@ public class IncomeController {
 
     private final IncomeService incomeService;
     private final AccountService accountService;
-    private String currentUser;
+    private Integer currentUser;
 
     @Autowired
     public IncomeController(IncomeService incomeService, AccountService accountService) {
@@ -34,7 +34,7 @@ public class IncomeController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (String) authentication.getPrincipal();
+        this.currentUser = (Integer) authentication.getPrincipal();
     }
 
 

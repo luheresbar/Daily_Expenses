@@ -13,11 +13,15 @@ public interface IUserRepository {
 
     User save(User user);
 
-    boolean existsById(String idUser);
+    boolean existsByEmail(String email);
 
-    Optional<User> getById(String userId);
+    Optional<User> findUserByEmail(String email);
 
-    boolean delete(String userId);
+    boolean existsById(Integer userId);
+
+    Optional<User> getById(Integer userId);
+
+    boolean delete(Integer userId);
 
     Integer countUsers();
 

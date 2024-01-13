@@ -16,7 +16,7 @@ public class AccountPK implements Serializable {
 
     private String accountName;
 
-    private String userId;
+    private Integer userId;
 
     @Override
     public boolean equals(Object o) {

@@ -8,6 +8,6 @@ import lombok.Setter;
 public class Category {
 
     private String categoryName;
-    private String userId;
+    private Integer userId;
 
 }

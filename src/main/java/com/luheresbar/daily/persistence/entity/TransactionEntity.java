@@ -25,7 +25,7 @@ public class TransactionEntity {
     private LocalDateTime transactionDate;
 
     @Column(name = "user_id", nullable = false, length = 25)
-    private String userId;
+    private Integer userId;
 
     @Column(name = "source_account_name", nullable = false, length = 30)
     private String sourceAccountName;

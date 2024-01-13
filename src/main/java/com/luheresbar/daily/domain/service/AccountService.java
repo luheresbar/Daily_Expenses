@@ -19,11 +19,11 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public List<Account> getAccountsByUser(String userId) {
+    public List<Account> getAccountsByUser(Integer userId) {
         return this.accountRepository.getAccountsByUser(userId);
     }
 
-    public Double availableMoney(String userId) {
+    public Double availableMoney(Integer userId) {
         return this.accountRepository.availableMoney(userId);
     }
 
@@ -31,7 +31,7 @@ public class AccountService {
         return this.accountRepository.exists(accountPK);
     }
 
-    public Optional<Account> getById(String accountName, String userId) {
+    public Optional<Account> getById(String accountName, Integer userId) {
         return this.accountRepository.getById(accountName, userId);
     }
     public Account save(Account account) {

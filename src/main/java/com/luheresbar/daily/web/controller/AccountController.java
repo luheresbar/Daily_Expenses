@@ -18,7 +18,7 @@ import java.util.Optional;
 public class AccountController {
 
     private final AccountService accountService;
-    private String currentUser;
+    private Integer currentUser;
 
     @Autowired
     public AccountController(AccountService accountService) {
@@ -29,7 +29,7 @@ public class AccountController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (String) authentication.getPrincipal();
+        this.currentUser = (Integer) authentication.getPrincipal();
     }
 
     @GetMapping
