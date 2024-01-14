@@ -1,7 +1,9 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.*;
+import com.luheresbar.daily.domain.dto.RequestIsAvailable;
 import com.luheresbar.daily.domain.dto.LoginDto;
+import com.luheresbar.daily.domain.dto.ResponseIsAvailable;
 import com.luheresbar.daily.domain.dto.TokenDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.CategoryService;
@@ -9,7 +11,6 @@ import com.luheresbar.daily.domain.service.UserRoleService;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.web.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,7 +49,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto){
+    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);
 
@@ -58,7 +59,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity<TokenDto> register(@RequestBody User user) {
+    public ResponseEntity<Optional<User>> register(@RequestBody User user) {
         if (user.getEmail() == null || !this.userService.existsByEmail(user.getEmail())) {
 
             String currentDate = String.valueOf(LocalDateTime.now());
@@ -88,10 +89,20 @@ public class AuthController {
             this.accountService.save(account);
 
             String jwt = this.jwtUtil.create(user.getEmail());
-            return ResponseEntity.ok(new TokenDto(jwt));
+            return ResponseEntity.ok(userDb);
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().build(); //TODO (Es necesario hace configurar la respuesta para que no se regrese la contraseña en la respuesta)
 
     }
+
+    @PostMapping("is-available")
+    public ResponseEntity<ResponseIsAvailable> isAvailable(@RequestBody RequestIsAvailable email) {
+        if (!this.userService.existsByEmail(email.email())) {
+            return ResponseEntity.ok(new ResponseIsAvailable(true));
+        } else {
+            return ResponseEntity.ok(new ResponseIsAvailable(false));
+        }
+    }
+
 
 }
