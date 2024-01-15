@@ -13,12 +13,21 @@ public class JwtUtil {
 
     private static final String SECRET_KEY = "d41ly_3xp3ns3";
     private static final Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY);
-    public String create(String email) {
+    public String createJwt(String email) {  //TODO (Configurar para que el token se cree con el user id y no con el correo)
+        return JWT.create()
+                .withSubject(email)
+//                .withIssuer("daily-expenses")
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(15))) // Expiracion del token 15 Dias
+                .sign(ALGORITHM);
+    }
+
+    public String createJwtRecovery(String email) {
         return JWT.create()
                 .withSubject(email)
                 .withIssuer("daily-expenses")
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(15))) // Expiracion del token 15 Dias
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15))) // Expiracion del token 15 minutos
                 .sign(ALGORITHM);
     }
 

@@ -1,6 +1,7 @@
 package com.luheresbar.daily.persistence;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.ChangePasswordDto;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.repository.IUserRepository;
 import com.luheresbar.daily.persistence.crud.IUserCrudRepository;
@@ -76,6 +77,15 @@ public class UserEntityRepository implements IUserRepository {
     @Transactional
     public void updateUserId(UpdateUserIdDto updateUserIdDto) {
         this.userCrudRepository.updateUserId(updateUserIdDto);
+    }
+
+    @Override
+    public boolean changePassword(String email, String newPassword) {
+        if (this.userCrudRepository.changePassword(email, newPassword) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

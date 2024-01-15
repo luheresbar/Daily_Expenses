@@ -1,6 +1,7 @@
 package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.ChangePasswordDto;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 
@@ -26,4 +27,5 @@ public interface IUserRepository {
     Integer countUsers();
 
     void updateUserId(UpdateUserIdDto updateUserIdDto);
+    boolean changePassword(String email, String newPassword);
 }

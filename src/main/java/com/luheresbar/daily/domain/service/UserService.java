@@ -1,6 +1,7 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.ChangePasswordDto;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.repository.IUserRepository;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
@@ -58,5 +59,7 @@ public class UserService {
         this.userRepository.updateUserId(updateUserIdDto);
 
     }
-
+    public boolean changePassword(String email, String newPassword) {
+        return this.userRepository.changePassword(email, newPassword);
+    }
 }
