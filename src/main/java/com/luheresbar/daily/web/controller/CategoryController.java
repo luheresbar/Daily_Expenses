@@ -20,7 +20,6 @@ public class CategoryController {
     private final CategoryService categoryService;
     private Integer currentUser;
 
-
     @ModelAttribute
     private void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();

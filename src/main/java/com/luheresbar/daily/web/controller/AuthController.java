@@ -65,10 +65,11 @@ public class AuthController {
             UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(userId, loginDto.getPassword());
             Authentication authentication = this.authenticationManager.authenticate(login);
 
-            String jwt = this.jwtUtil.createJwt(userId);
-            return ResponseEntity.ok(new TokenDto(jwt));
+            String access_token = this.jwtUtil.createJwt(userId);
+            String refresh_token = this.jwtUtil.createJwtRefresh(userId);
+            return ResponseEntity.ok(new TokenDto(access_token, refresh_token));
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/register")
@@ -122,10 +123,21 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/refresh-token")
+    public ResponseEntity<TokenDto> refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
+        int userId = Integer.parseInt(this.jwtUtil.getUsername(refreshTokenDto.refresh_token()));
+        String access_token = this.jwtUtil.createJwt(userId);
+        String refresh_token = this.jwtUtil.createJwtRefresh(userId);
+        return ResponseEntity.ok(new TokenDto(access_token, refresh_token));
+    }
+
+
     @PostMapping("/recovery")
     public ResponseEntity<RecoveryResponseDto> recovery(@RequestBody RequestEmailDto email) throws MessagingException {
         if (this.userService.existsByEmail(email.email())) {
-            String token = this.jwtUtil.createJwtRecovery(email.email());
+            Optional<User> userDb = this.userService.findUserByEmail(email.email());
+            int userId = userDb.get().getUserId();
+            String token = this.jwtUtil.createJwtRecovery(userId);
             String link = "http://localhost:4200/recovery?token=" + token;
 
             // Envío del correo electrónico
@@ -150,8 +162,6 @@ public class AuthController {
         } else {
             return ResponseEntity.ok((new MessageDto(false)));
         }
-
-
     }
 
 
