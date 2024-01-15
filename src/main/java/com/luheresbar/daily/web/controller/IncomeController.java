@@ -34,7 +34,8 @@ public class IncomeController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (Integer) authentication.getPrincipal();
+        String userToken = (String) authentication.getPrincipal();
+        this.currentUser = Integer.valueOf(userToken);
     }
 
 

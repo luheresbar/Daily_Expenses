@@ -2,6 +2,7 @@ package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
+import com.luheresbar.daily.domain.dto.UserProfileDto;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    Integer userToken;
+    private Integer currentUser;
 
     @Autowired
     public UserController(UserService userService, PasswordEncoder passwordEncoder) {
@@ -35,9 +36,8 @@ public class UserController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        String emailToken = (String) authentication.getPrincipal();
-        Optional<User> userDb = this.userService.findUserByEmail(emailToken);
-        this.userToken = userDb.get().getUserId();
+        String userToken = (String) authentication.getPrincipal();
+        this.currentUser = Integer.valueOf(userToken);
     }
 
     // Listar los usuarios registrados solamente con su userId y su fecha de registro
@@ -54,15 +54,22 @@ public class UserController {
 
     // Como usuario puedo visualizar mi informacion personal registrada en la app, para que pueda saber si debo actualizarla
     @GetMapping("/user")
-    public ResponseEntity<Optional<User>> viewInformation() {
-        return ResponseEntity.ok(userService.getById(this.userToken));
+    public ResponseEntity<Optional<UserProfileDto>> viewInformation() {
+        Optional<User> userDB = userService.getById(this.currentUser);
+        return ResponseEntity.ok(Optional.of(new UserProfileDto(
+                userDB.get().getUserId(),
+                userDB.get().getUsername(),
+                userDB.get().getEmail(),
+                userDB.get().getRegisterDate()
+                ))
+        );
     }
 
     // Como usuario puedo actualizar mi informacion personal registrada en la app para que pueda tener la informacion actualizada.
     @PutMapping("/user")
     public ResponseEntity<User> update(@RequestBody User user) {
-        user.setUserId(this.userToken);
-        Optional<User> userInDb = this.userService.getById(this.userToken);
+        user.setUserId(this.currentUser);
+        Optional<User> userInDb = this.userService.getById(this.currentUser);
 
         if (user.getUsername() == null) {
             user.setUsername(userInDb.get().getUsername());
@@ -82,8 +89,8 @@ public class UserController {
      // Actualizar el userId de un usuario.
     @PatchMapping("/update/userid")
     public ResponseEntity<Optional<User>> updateUserId(@RequestBody UpdateUserIdDto updateUserIdDto) {
-        updateUserIdDto.setCurrentUserId(this.userToken);
-        if (this.userService.exists(userToken)) {
+        updateUserIdDto.setCurrentUserId(this.currentUser);
+        if (this.userService.exists(currentUser)) {
             this.userService.updateUserId(updateUserIdDto);
             return ResponseEntity.ok(this.userService.getById(updateUserIdDto.getNewUserId()));
         }
@@ -94,7 +101,7 @@ public class UserController {
     //  Unicamente un usuario puede eliminar su propia cuenta.
     @DeleteMapping("/user/delete")
     public ResponseEntity deleteUser() {
-        if (this.userService.delete(this.userToken)) {
+        if (this.userService.delete(this.currentUser)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

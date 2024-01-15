@@ -1,7 +1,6 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Expense;
-import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.ExpenseService;
 import com.luheresbar.daily.domain.service.UserService;
@@ -23,18 +22,14 @@ import java.util.Optional;
 @RequestMapping("/api/expenses")
 public class ExpenseController {
 
-    private final JwtUtil jwtUtil;
     private final ExpenseService expenseService;
     private final AccountService accountService;
-    private final UserService userService;
-    Integer userToken;
+    private Integer currentUser;
 
     @Autowired
-    public ExpenseController(JwtUtil jwtUtil, ExpenseService expenseService, AccountService accountService, UserService userService) {
-        this.jwtUtil = jwtUtil;
+    public ExpenseController(ExpenseService expenseService, AccountService accountService) {
         this.expenseService = expenseService;
         this.accountService = accountService;
-        this.userService = userService;
     }
 
     // Filtro para extraer el usuario del token y almacenarlo en la variable de instancia
@@ -42,20 +37,19 @@ public class ExpenseController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        String emailToken = (String) authentication.getPrincipal();
-        Optional<User> userDb = this.userService.findUserByEmail(emailToken);
-        this.userToken = userDb.get().getUserId();
+        String userToken = (String) authentication.getPrincipal();
+        this.currentUser = Integer.valueOf(userToken);
     }
 
     @GetMapping
     public ResponseEntity<List<Expense>> getUserExpenses() {
-        return  ResponseEntity.ok(expenseService.getUserExpenses(userToken));
+        return  ResponseEntity.ok(expenseService.getUserExpenses(currentUser));
     }
     @GetMapping("/{account}")
     public ResponseEntity<List<Expense>> getAccountExpenses(@PathVariable String account) {
-        AccountPK accountPK = new AccountPK(account, this.userToken);
+        AccountPK accountPK = new AccountPK(account, this.currentUser);
         if(this.accountService.exists(accountPK)) {
-            return ResponseEntity.ok(this.expenseService.getAccountExpenses(account, this.userToken));
+            return ResponseEntity.ok(this.expenseService.getAccountExpenses(account, this.currentUser));
         }
         return ResponseEntity.notFound().build();
 
@@ -63,7 +57,7 @@ public class ExpenseController {
 
     @PostMapping("/add")
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
-        expense.setUserId(this.userToken);
+        expense.setUserId(this.currentUser);
         if(expense.getCategoryName() == null) {
             expense.setCategoryName("Others");
         }
@@ -75,10 +69,10 @@ public class ExpenseController {
 
     @PatchMapping("/update")
     public ResponseEntity<Expense> update(@RequestBody Expense expense) {
-        expense.setUserId(this.userToken);
+        expense.setUserId(this.currentUser);
         Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
 
-        if(expenseDb.get().getUserId().equals(this.userToken)) {
+        if(expenseDb.get().getUserId().equals(this.currentUser)) {
 
             if(expense.getExpense() == null) {
                 expense.setExpense(expenseDb.get().getExpense());
@@ -103,7 +97,7 @@ public class ExpenseController {
 
     @DeleteMapping("/delete/{expenseId}")
     public ResponseEntity<Void> delete(@PathVariable int expenseId) {
-        if(this.expenseService.delete(expenseId, this.userToken)) {
+        if(this.expenseService.delete(expenseId, this.currentUser)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
