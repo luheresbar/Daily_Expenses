@@ -1,6 +1,10 @@
 package com.luheresbar.daily.domain.service;
 
+import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.Category;
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.AccountDto;
+import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.dto.ChangePasswordDto;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.repository.IUserRepository;
@@ -11,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -61,5 +66,21 @@ public class UserService {
     }
     public boolean changePassword(String email, String newPassword) {
         return this.userRepository.changePassword(email, newPassword);
+    }
+
+    public List<CategoryDto> getCategoryNames(Optional<User> userDB) {
+        List<Category> categories = userDB.get().getCategories();
+        List<CategoryDto> categoryNames = categories.stream()
+                .map(category -> new CategoryDto(category.getCategoryName()))
+                .collect(Collectors.toList());
+        return categoryNames;
+    }
+
+    public List<AccountDto> getAccountNames(Optional<User> userDB) {
+        List<Account> accounts = userDB.get().getAccounts();
+        List<AccountDto> accountNames = accounts.stream()
+                .map(account -> new AccountDto(account.getAccountName(), account.getAvailable()))
+                .collect(Collectors.toList());
+        return accountNames;
     }
 }

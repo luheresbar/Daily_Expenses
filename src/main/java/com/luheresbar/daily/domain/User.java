@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -14,5 +16,7 @@ public class User {
     private String password;
     private String email;
     private String registerDate;
+    private List<Category> categories;
+    private List<Account> accounts;
 
 }

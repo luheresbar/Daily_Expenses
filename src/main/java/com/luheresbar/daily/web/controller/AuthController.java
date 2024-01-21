@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -83,31 +84,37 @@ public class AuthController {
             user.setPassword(encodedPassword);
             this.userService.save(user);
 
-            Optional<User> userDb = this.userService.findUserByEmail(user.getEmail());
+            Optional<User> userDB = this.userService.findUserByEmail(user.getEmail());
 
             UserRole userRole = new UserRole();
-            userRole.setUserId(userDb.get().getUserId());
+            userRole.setUserId(userDB.get().getUserId());
             userRole.setRole("USER");
             userRole.setGrantedDate(currentDate);
             this.userRoleService.save(userRole);
 
             Category category = new Category();
-            category.setUserId(userDb.get().getUserId());
+            category.setUserId(userDB.get().getUserId());
             category.setCategoryName("Others");
             this.categoryService.save(category);
 
             Account account = new Account();
-            account.setUserId(userDb.get().getUserId());
+            account.setUserId(userDB.get().getUserId());
             account.setAccountName("Cash");
             account.setAvailableMoney(0.0);
             account.setAvailable(true);
             this.accountService.save(account);
 
+            List<CategoryDto> categoryNames = this.userService.getCategoryNames(userDB);
+            List<AccountDto> accountNames = this.userService.getAccountNames(userDB);
+
             return ResponseEntity.ok(Optional.of(new UserProfileDto(
-                    userDb.get().getUserId(),
-                    userDb.get().getUsername(),
-                    userDb.get().getEmail(),
-                    userDb.get().getRegisterDate()))
+                            userDB.get().getUserId(),
+                            userDB.get().getUsername(),
+                            userDB.get().getEmail(),
+                            userDB.get().getRegisterDate(),
+                            accountNames,
+                            categoryNames
+                    ))
             );
         }
         return ResponseEntity.badRequest().build(); //TODO (Es necesario hace configurar la respuesta para que no se regrese la contraseña en la respuesta)
