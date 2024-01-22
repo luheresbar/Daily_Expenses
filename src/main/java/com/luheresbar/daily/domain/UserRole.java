@@ -3,6 +3,8 @@ package com.luheresbar.daily.domain;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter

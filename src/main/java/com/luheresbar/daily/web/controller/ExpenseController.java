@@ -14,7 +14,9 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +57,7 @@ public class ExpenseController {
 
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
         expense.setUserId(this.currentUser);
         if(expense.getCategoryName() == null) {
@@ -64,10 +66,11 @@ public class ExpenseController {
         if(expense.getExpenseDate() == null) {
             expense.setExpenseDate(String.valueOf(LocalDateTime.now()));
         }
+        System.out.println("Cracion de expense " + expense.toString());
         return new ResponseEntity<>(expenseService.save(expense), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<Expense> update(@RequestBody Expense expense) {
         expense.setUserId(this.currentUser);
         Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());

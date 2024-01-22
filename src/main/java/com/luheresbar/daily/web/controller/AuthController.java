@@ -104,16 +104,14 @@ public class AuthController {
             account.setAvailable(true);
             this.accountService.save(account);
 
-            List<CategoryDto> categoryNames = this.userService.getCategoryNames(userDB);
-            List<AccountDto> accountNames = this.userService.getAccountNames(userDB);
 
             return ResponseEntity.ok(Optional.of(new UserProfileDto(
                             userDB.get().getUserId(),
                             userDB.get().getUsername(),
                             userDB.get().getEmail(),
                             userDB.get().getRegisterDate(),
-                            accountNames,
-                            categoryNames
+                            userDB.get().getRoles()
+
                     ))
             );
         }

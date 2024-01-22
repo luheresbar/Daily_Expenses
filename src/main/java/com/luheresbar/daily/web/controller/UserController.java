@@ -1,7 +1,5 @@
 package com.luheresbar.daily.web.controller;
 
-import com.luheresbar.daily.domain.Account;
-import com.luheresbar.daily.domain.Category;
 import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.dto.AccountDto;
 import com.luheresbar.daily.domain.dto.CategoryDto;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -61,17 +58,14 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity<Optional<UserProfileDto>> viewInformation() {
         Optional<User> userDB = userService.getById(this.currentUser);
-        List<CategoryDto> categoryNames = this.userService.getCategoryNames(userDB);
-        List<AccountDto> accountNames = this.userService.getAccountNames(userDB);
 
         return ResponseEntity.ok(Optional.of(new UserProfileDto(
-                                userDB.get().getUserId(),
-                                userDB.get().getUsername(),
-                                userDB.get().getEmail(),
-                                userDB.get().getRegisterDate(),
-                accountNames,
-                categoryNames
-                        ))
+                        userDB.get().getUserId(),
+                        userDB.get().getUsername(),
+                        userDB.get().getEmail(),
+                        userDB.get().getRegisterDate(),
+                        userDB.get().getRoles()
+                ))
         );
     }
 

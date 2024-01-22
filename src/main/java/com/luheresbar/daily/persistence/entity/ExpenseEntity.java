@@ -1,15 +1,14 @@
 package com.luheresbar.daily.persistence.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "expenses")
@@ -57,6 +56,16 @@ public class ExpenseEntity {
     @JsonIgnore
     private CategoryEntity category;
 
-
-
+    @Override
+    public String toString() {
+        return "ExpenseEntity{" +
+                "expenseId=" + expenseId +
+                ", expense=" + expense +
+                ", description='" + description + '\'' +
+                ", expenseDate=" + expenseDate +
+                ", userId=" + userId +
+                ", accountName='" + accountName + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
+    }
 }

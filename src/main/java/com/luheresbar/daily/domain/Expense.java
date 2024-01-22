@@ -5,6 +5,9 @@ import com.luheresbar.daily.persistence.entity.CategoryEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Getter
 @Setter
 public class Expense {
@@ -17,4 +20,16 @@ public class Expense {
     private String accountName;
     private String categoryName;
 
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "expenseId=" + expenseId +
+                ", expense=" + expense +
+                ", description='" + description + '\'' +
+                ", expenseDate='" + expenseDate + '\'' +
+                ", userId=" + userId +
+                ", accountName='" + accountName + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                '}';
+    }
 }

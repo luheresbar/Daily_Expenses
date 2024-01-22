@@ -36,10 +36,10 @@ public class UserEntity {
     @Column(name = "register_date")
     private LocalDateTime registerDate;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<AccountEntity> accounts;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<CategoryEntity> categories;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)

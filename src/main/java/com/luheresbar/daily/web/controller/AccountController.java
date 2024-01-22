@@ -1,6 +1,7 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.dto.AccountDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +30,20 @@ public class AccountController {
     public void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
-        this.currentUser = (Integer) authentication.getPrincipal();
+        String userToken = (String) authentication.getPrincipal();
+        this.currentUser = Integer.valueOf(userToken);
     }
 
     @GetMapping
-    public ResponseEntity<List<Account>> viewAccountsUser() {
-        return ResponseEntity.ok(this.accountService.getAccountsByUser(this.currentUser));
+    public ResponseEntity<AccountDto> viewAccountsUser() {
+        List<Account> accounts = this.accountService.getAccountsByUser(this.currentUser);
+        Double availableMoney = this.accountService.availableMoney(this.currentUser);
+        return ResponseEntity.ok(new AccountDto(accounts, availableMoney));
     }
 
-    @GetMapping("/money")
+    @GetMapping("/available-money")
     public ResponseEntity<Double> availableMoney() {
-        return ResponseEntity.ok(this.accountService.availableMoney(currentUser));
+        return ResponseEntity.ok(this.accountService.availableMoney(this.currentUser));
     }
 
     @PatchMapping("/update")
@@ -48,7 +52,7 @@ public class AccountController {
         if(!this.accountService.exists(new AccountPK(account.getAccountName(), account.getUserId()))) {
             return ResponseEntity.notFound().build();
         }
-        Optional<Account> accountInDb = this.accountService.getById(account.getAccountName(), currentUser);
+        Optional<Account> accountInDb = this.accountService.getById(account.getAccountName(), this.currentUser);
 
         if (account.getAvailableMoney() == null && accountInDb.get().getAvailable()) {
             account.setAvailableMoney(accountInDb.get().getAvailableMoney());
@@ -78,7 +82,7 @@ public class AccountController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteAccount(@RequestBody AccountPK accountPK) {
-        accountPK.setUserId(currentUser);
+        accountPK.setUserId(this.currentUser);
         if(this.accountService.exists(accountPK)) {
             this.accountService.delete(accountPK);
             return ResponseEntity.ok().build();
