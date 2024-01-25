@@ -39,9 +39,9 @@ public class AccountEntity {
     private List<IncomeEntity> incomes;
 
     @OneToMany(mappedBy = "sourceAccount")
-    private List<TransactionEntity> sourceAccounts;
+    private List<TransferEntity> sourceAccounts;
 
     @OneToMany(mappedBy = "destinationAccount")
-    private List<TransactionEntity> destinationAccounts;
+    private List<TransferEntity> destinationAccounts;
 
 }

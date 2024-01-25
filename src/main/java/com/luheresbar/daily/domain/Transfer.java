@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Transaction {
+public class Transfer {
 
-    private int transactionId;
-    private Double transactionValue;
-    private String transactionDate;
+    private int transferId;
+    private Double transferValue;
+    private String transferDate;
     private Integer userId;
     private String sourceAccountName;
     private String destinationAccountName;

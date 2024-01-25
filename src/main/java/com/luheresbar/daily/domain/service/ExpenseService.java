@@ -27,6 +27,7 @@ public class ExpenseService {
     public Expense save(Expense expense) {
         return expenseRepository.save(expense);
     }
+
     public boolean delete(int expenseId, Integer userId) {
         return this.expenseRepository.delete(expenseId, userId);
     }
@@ -34,4 +35,13 @@ public class ExpenseService {
     public List<Expense> getAccountExpenses(String accountName, Integer userId) {
         return this.expenseRepository.getAccountExpenses(accountName, userId);
     }
+
+    public Double getTotalExpense(List<Expense> expenses) {
+        Double totalExpense = 0.0;
+        for (int i = 0; i < expenses.size(); i++) {
+            totalExpense += expenses.get(i).getExpense();
+        }
+        return totalExpense;
+    }
+
 }

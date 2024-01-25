@@ -8,21 +8,21 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "transfers")
 @Getter
 @Setter
-public class TransactionEntity {
+public class TransferEntity {
 
     @Id
-    @Column(name = "transaction_id")
+    @Column(name = "transfer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer transactionId;
+    private Integer transferId;
 
-    @Column(name = "transaction_value",nullable = false)
-    private Double transactionValue;
+    @Column(name = "transfer_value",nullable = false)
+    private Double transferValue;
 
-    @Column(name = "transaction_date")
-    private LocalDateTime transactionDate;
+    @Column(name = "transfer_date")
+    private LocalDateTime transferDate;
 
     @Column(name = "user_id", nullable = false, length = 25)
     private Integer userId;

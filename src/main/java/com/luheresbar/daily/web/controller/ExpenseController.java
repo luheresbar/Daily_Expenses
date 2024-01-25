@@ -1,6 +1,7 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Expense;
+import com.luheresbar.daily.domain.dto.ExpenseDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.ExpenseService;
 import com.luheresbar.daily.domain.service.UserService;
@@ -44,26 +45,30 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Expense>> getUserExpenses() {
-        return  ResponseEntity.ok(expenseService.getUserExpenses(currentUser));
-    }
-    @GetMapping("/{account}")
-    public ResponseEntity<List<Expense>> getAccountExpenses(@PathVariable String account) {
-        AccountPK accountPK = new AccountPK(account, this.currentUser);
-        if(this.accountService.exists(accountPK)) {
-            return ResponseEntity.ok(this.expenseService.getAccountExpenses(account, this.currentUser));
+    public ResponseEntity<ExpenseDto> getUserExpenses(@RequestParam(required = false) String account_name) {
+        if (account_name != null) {
+            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
+            if (this.accountService.exists(accountPK)) {
+                List<Expense> expenses = this.expenseService.getAccountExpenses(account_name, this.currentUser);
+                Double totalExpense = this.expenseService.getTotalExpense(expenses);
+                return ResponseEntity.ok(new ExpenseDto(expenses, totalExpense));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            List<Expense> expenses = this.expenseService.getUserExpenses(currentUser);
+            Double totalExpense = this.expenseService.getTotalExpense(expenses);
+            return ResponseEntity.ok(new ExpenseDto(expenses, totalExpense));
         }
-        return ResponseEntity.notFound().build();
-
     }
 
     @PostMapping("/create")
     public ResponseEntity<Expense> add(@RequestBody Expense expense) {
         expense.setUserId(this.currentUser);
-        if(expense.getCategoryName() == null) {
+        if (expense.getCategoryName() == null) {
             expense.setCategoryName("Others");
         }
-        if(expense.getExpenseDate() == null) {
+        if (expense.getExpenseDate() == null) {
             expense.setExpenseDate(String.valueOf(LocalDateTime.now()));
         }
         System.out.println("Cracion de expense " + expense.toString());
@@ -75,21 +80,21 @@ public class ExpenseController {
         expense.setUserId(this.currentUser);
         Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
 
-        if(expenseDb.get().getUserId().equals(this.currentUser)) {
+        if (expenseDb.get().getUserId().equals(this.currentUser)) {
 
-            if(expense.getExpense() == null) {
+            if (expense.getExpense() == null) {
                 expense.setExpense(expenseDb.get().getExpense());
             }
-            if(expense.getDescription() == null) {
+            if (expense.getDescription() == null) {
                 expense.setDescription(expenseDb.get().getDescription());
             }
-            if(expense.getExpenseDate() == null) {
+            if (expense.getExpenseDate() == null) {
                 expense.setExpenseDate(expenseDb.get().getExpenseDate());
             }
-            if(expense.getAccountName() == null) {
+            if (expense.getAccountName() == null) {
                 expense.setAccountName(expenseDb.get().getAccountName());
             }
-            if(expense.getCategoryName() == null) {
+            if (expense.getCategoryName() == null) {
                 expense.setCategoryName(expenseDb.get().getCategoryName());
             }
 
@@ -100,7 +105,7 @@ public class ExpenseController {
 
     @DeleteMapping("/delete/{expenseId}")
     public ResponseEntity<Void> delete(@PathVariable int expenseId) {
-        if(this.expenseService.delete(expenseId, this.currentUser)) {
+        if (this.expenseService.delete(expenseId, this.currentUser)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
