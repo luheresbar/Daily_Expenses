@@ -143,7 +143,7 @@ public class AuthController {
             Optional<User> userDb = this.userService.findUserByEmail(email.email());
             int userId = userDb.get().getUserId();
             String token = this.jwtUtil.createJwtRecovery(userId);
-            String link = "http://localhost:4200/recovery?token=" + token;
+            String link = "http://localhost:4200/auth/recovery?token=" + token;
 
             // Envío del correo electrónico
             this.mailManager.sendEmail(email.email(), "Password Recovery", link);
@@ -153,21 +153,21 @@ public class AuthController {
         return ResponseEntity.badRequest().build();
     }
 
-//    @Transactional
-//    @PostMapping("/change-password")
-//    public ResponseEntity<MessageDto> changePassword(@RequestBody ChangePasswordDto dto) { //TODO (Complementar respuesta, ejm, cuando la new password sea igual a la contraseña existente, notificarlo, o que se pueada guardar un registro de contraseñas, para no poner una contraseña que ya hubiere estado en el registro)
-//        String emailUser = this.jwtUtil.getUsername(dto.token());
-//        String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
-//        if (this.userService.existsByEmail(emailUser) && this.jwtUtil.isValid(dto.token())) {
-//            if (this.userService.changePassword(emailUser, passwordEncoded)) {
-//                return ResponseEntity.ok(new MessageDto(true));
-//            } else {
-//                return ResponseEntity.ok((new MessageDto(false)));
-//            }
-//        } else {
-//            return ResponseEntity.ok((new MessageDto(false)));
-//        }
-//    }
+    @Transactional
+    @PostMapping("/change-password")
+    public ResponseEntity<MessageDto> changePassword(@RequestBody ChangePasswordDto dto) { //TODO (Complementar respuesta, ejm, cuando la new password sea igual a la contraseña existente, notificarlo, o que se pueada guardar un registro de contraseñas, para no poner una contraseña que ya hubiere estado en el registro)
+        String emailUser = this.jwtUtil.getUsername(dto.token());
+        String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
+        if (this.userService.existsByEmail(emailUser) && this.jwtUtil.isValid(dto.token())) {
+            if (this.userService.changePassword(emailUser, passwordEncoded)) {
+                return ResponseEntity.ok(new MessageDto(true));
+            } else {
+                return ResponseEntity.ok((new MessageDto(false)));
+            }
+        } else {
+            return ResponseEntity.ok((new MessageDto(false)));
+        }
+    }
 
 
 }
