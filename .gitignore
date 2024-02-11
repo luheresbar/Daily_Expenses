@@ -5,6 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+*.jar   # Agrega esta línea para incluir archivos .jar en tu repositorio
+
 ### STS ###
 .apt_generated
 .classpath

@@ -16,8 +16,9 @@ public interface IExpenseMapper {
     List<Expense> toExpenses(List<ExpenseEntity> expenseEntities);
 
     @Mappings({
-        @Mapping(target = "account", ignore = true),
-        @Mapping(target = "category", ignore = true)
+            @Mapping(target = "account", ignore = true),
+            @Mapping(target = "category", ignore = true),
+            @Mapping(target = "expenseDate", source = "expenseDate", dateFormat = "yyyy-MM-dd'T'HH:mm:ss") // Example date format, adjust as needed
     })
     ExpenseEntity toExpenseEntity(Expense expense);
 

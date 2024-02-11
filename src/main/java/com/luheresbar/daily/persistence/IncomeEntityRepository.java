@@ -33,7 +33,7 @@ public class IncomeEntityRepository implements IIncomeRepository {
 
         // Metodo usando JdbcTemplate
         String sql = "SELECT * FROM incomes WHERE user_id = ? ORDER BY income_date DESC";
-        List<IncomeEntity> incomeEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(IncomeEntity.class));
+        List<IncomeEntity> incomeEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(IncomeEntity.class)); // TODO reeemplazar JdbcTemplate, ya que esta dreprecate
         return this.incomeMapper.toIncomes(incomeEntities);
 
     }
