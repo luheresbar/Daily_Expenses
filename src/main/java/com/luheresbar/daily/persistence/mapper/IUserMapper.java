@@ -1,8 +1,6 @@
 package com.luheresbar.daily.persistence.mapper;
 
-import com.luheresbar.daily.domain.Category;
 import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.persistence.entity.CategoryEntity;
 import com.luheresbar.daily.persistence.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

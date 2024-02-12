@@ -1,12 +1,7 @@
 package com.luheresbar.daily.domain;
 
-import com.luheresbar.daily.persistence.entity.AccountEntity;
-import com.luheresbar.daily.persistence.entity.CategoryEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter

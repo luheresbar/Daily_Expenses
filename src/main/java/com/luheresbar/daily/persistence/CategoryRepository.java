@@ -3,7 +3,7 @@ package com.luheresbar.daily.persistence;
 import com.luheresbar.daily.domain.Category;
 import com.luheresbar.daily.domain.repository.ICategoryRepository;
 import com.luheresbar.daily.persistence.crud.ICategoryCrudRepository;
-import com.luheresbar.daily.persistence.entity.CategoryEntity;
+import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
 import com.luheresbar.daily.persistence.entity.CategoryPK;
 import com.luheresbar.daily.persistence.mapper.ICategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class CategoryRepository implements ICategoryRepository {
 
     @Override
     public List<Category> getByUser(Integer userId) {
-        List<CategoryEntity> categoryEntity =  this.categoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
-        return categoryMapper.toCategories(categoryEntity);
+        List<ExpenseCategoryEntity> expenseCategoryEntity =  this.categoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
+        return categoryMapper.toCategories(expenseCategoryEntity);
     }
 
     @Override
@@ -36,8 +36,8 @@ public class CategoryRepository implements ICategoryRepository {
 
     @Override
     public Category save(Category category) {
-        CategoryEntity categoryEntity = this.categoryMapper.toCategoryEntity(category);
-        return categoryMapper.toCategory(this.categoryCrudRepository.save(categoryEntity));
+        ExpenseCategoryEntity expenseCategoryEntity = this.categoryMapper.toCategoryEntity(category);
+        return categoryMapper.toCategory(this.categoryCrudRepository.save(expenseCategoryEntity));
     }
 
     @Override

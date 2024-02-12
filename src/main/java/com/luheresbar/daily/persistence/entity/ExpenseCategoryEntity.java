@@ -9,11 +9,11 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "expense_categories")
 @IdClass(CategoryPK.class)
 @Setter
 @Getter
-public class CategoryEntity {
+public class ExpenseCategoryEntity {
 
     @Id
     @Column(name = "category_name", nullable = false, length = 25)

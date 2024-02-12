@@ -8,7 +8,6 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "expenses")
@@ -54,7 +53,7 @@ public class ExpenseEntity {
             @JoinColumn(name = "category_name", referencedColumnName = "category_name",insertable = false, updatable = false)
     })
     @JsonIgnore
-    private CategoryEntity category;
+    private ExpenseCategoryEntity category;
 
     @Override
     public String toString() {
