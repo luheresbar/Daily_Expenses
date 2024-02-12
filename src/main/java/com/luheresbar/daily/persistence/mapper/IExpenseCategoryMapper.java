@@ -8,14 +8,14 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {IUserMapper.class})
-public interface ICategoryMapper {
+public interface IExpenseCategoryMapper {
 
-    ExpenseCategory toCategory(ExpenseCategoryEntity expenseCategoryEntity);
+    ExpenseCategory toExpenseCategory(ExpenseCategoryEntity expenseCategoryEntity);
 
-    List<ExpenseCategory> toCategories(List<ExpenseCategoryEntity> categoryEntities);
+    List<ExpenseCategory> toExpenseCategories(List<ExpenseCategoryEntity> expenseCategoryEntities);
 
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "expenses", ignore = true)
-    ExpenseCategoryEntity toCategoryEntity(ExpenseCategory expenseCategory);
+    ExpenseCategoryEntity toExpenseCategoryEntity(ExpenseCategory expenseCategory);
 
 }

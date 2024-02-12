@@ -8,7 +8,7 @@ import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ICategoryMapper.class, IAccountMapper.class})
+@Mapper(componentModel = "spring", uses = {IExpenseCategoryMapper.class, IAccountMapper.class})
 public interface IExpenseMapper {
 
     Expense toExpense(ExpenseEntity expenseEntity);
