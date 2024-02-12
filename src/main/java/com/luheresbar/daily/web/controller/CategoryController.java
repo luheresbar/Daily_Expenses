@@ -1,7 +1,7 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.ExpenseCategory;
-import com.luheresbar.daily.domain.service.CategoryService;
+import com.luheresbar.daily.domain.service.ExpenseCategoryService;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/categories")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private final ExpenseCategoryService expenseCategoryService;
     private Integer currentUser;
 
     @ModelAttribute
@@ -29,13 +29,13 @@ public class CategoryController {
     }
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public CategoryController(ExpenseCategoryService expenseCategoryService) {
+        this.expenseCategoryService = expenseCategoryService;
     }
 
     @GetMapping
     public ResponseEntity<List<ExpenseCategory>> getAll() {
-        return new ResponseEntity<>(categoryService.getByUser(this.currentUser), HttpStatus.OK);
+        return new ResponseEntity<>(expenseCategoryService.getByUser(this.currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/add")
@@ -43,8 +43,8 @@ public class CategoryController {
         expenseCategory.setUserId(this.currentUser);
         ExpenseCategoryPK expenseCategoryPK = new ExpenseCategoryPK(expenseCategory.getCategoryName(), expenseCategory.getUserId());
 
-        if (!this.categoryService.exists(expenseCategoryPK)) {
-            return ResponseEntity.ok(this.categoryService.save(expenseCategory));
+        if (!this.expenseCategoryService.exists(expenseCategoryPK)) {
+            return ResponseEntity.ok(this.expenseCategoryService.save(expenseCategory));
         }
         return ResponseEntity.badRequest().build();
     }
@@ -52,9 +52,9 @@ public class CategoryController {
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestBody ExpenseCategoryPK categoryPK) {
         categoryPK.setUserId(this.currentUser);
-        if (this.categoryService.exists(categoryPK)) {
+        if (this.expenseCategoryService.exists(categoryPK)) {
             if (!categoryPK.getCategoryName().equals("Others")) {
-                this.categoryService.delete(categoryPK);
+                this.expenseCategoryService.delete(categoryPK);
                 return ResponseEntity.ok().build();
             }
             return ResponseEntity.badRequest().build();
