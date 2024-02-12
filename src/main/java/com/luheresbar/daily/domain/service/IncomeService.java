@@ -38,4 +38,12 @@ public class IncomeService {
         return this.incomeRepository.getAccountIncomes(accountName, userId);
     }
 
+    public Double getTotalIncome(List<Income> incomes) {
+        Double totalIncome = 0.0;
+        for (int i = 0; i < incomes.size(); i++) {
+            totalIncome += incomes.get(i).getIncome();
+        }
+        return totalIncome;
+    }
+
 }

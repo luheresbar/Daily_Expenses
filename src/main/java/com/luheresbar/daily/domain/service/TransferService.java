@@ -1,5 +1,6 @@
 package com.luheresbar.daily.domain.service;
 
+import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.Transfer;
 import com.luheresbar.daily.domain.repository.ITransferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +38,6 @@ public class TransferService {
     public List<Transfer> getUserTransfers(Integer userId) {
         return this.transferRepository.getUserTransfers(userId);
     }
+
+
 }

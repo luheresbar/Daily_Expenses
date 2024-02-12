@@ -36,6 +36,9 @@ public class TransferEntity {
     @Column(name = "type")
     private String type;
 
+    @Column(length = 50)
+    private String description;
+
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),

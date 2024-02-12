@@ -1,6 +1,8 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.Expense;
+import com.luheresbar.daily.domain.Income;
+import com.luheresbar.daily.domain.Transfer;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +71,40 @@ public class TransactionsService {
             transaction.setSourceAccountName(expense.getAccountName());
             transactionDetails.add(transaction);
         }
+        return transactionDetails;
+    }
+
+    public List<TransactionDetail> incomeToTransactionDetail(List<Income> incomes) {
+
+        List<TransactionDetail> transactionDetails = new ArrayList<>();
+
+        // Convertir Income a TransactionDetail
+        for (Income income : incomes) {
+            TransactionDetail transaction = new TransactionDetail();
+            transaction.setType("income");
+            transaction.setDescription(income.getDescription());
+            transaction.setDate(income.getIncomeDate());
+            transaction.setAmount(income.getIncome());
+            transaction.setSourceAccountName(income.getAccountName());
+            transactionDetails.add(transaction);
+        }
+        return transactionDetails;
+    }
+ public List<TransactionDetail> transferToTransactionDetail(List<Transfer> transfers) {
+
+        List<TransactionDetail> transactionDetails = new ArrayList<>();
+
+        // Convertir Income a TransactionDetail
+     for (Transfer transfer : transfers) {
+         TransactionDetail transaction = new TransactionDetail();
+         transaction.setType("transfer");
+         transaction.setDescription(transfer.getDescription());
+         transaction.setDate(transfer.getTransferDate());
+         transaction.setAmount(transfer.getTransferValue());
+         transaction.setSourceAccountName(transfer.getSourceAccountName());
+         transaction.setDestinationAccountName(transfer.getDestinationAccountName());
+         transactionDetails.add(transaction);
+     }
         return transactionDetails;
     }
 

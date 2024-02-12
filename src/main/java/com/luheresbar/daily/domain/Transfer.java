@@ -14,5 +14,6 @@ public class Transfer {
     private String sourceAccountName;
     private String destinationAccountName;
     private String type;
+    private String description;
 
 }

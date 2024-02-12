@@ -1,8 +1,12 @@
 package com.luheresbar.daily.web.controller;
 
+import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Income;
+import com.luheresbar.daily.domain.dto.TransactionDetail;
+import com.luheresbar.daily.domain.dto.TransactionDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.IncomeService;
+import com.luheresbar.daily.domain.service.TransactionsService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +26,14 @@ public class IncomeController {
 
     private final IncomeService incomeService;
     private final AccountService accountService;
+    private final TransactionsService transactionsService;
     private Integer currentUser;
 
     @Autowired
-    public IncomeController(IncomeService incomeService, AccountService accountService) {
+    public IncomeController(IncomeService incomeService, AccountService accountService, TransactionsService transactionsService) {
         this.incomeService = incomeService;
         this.accountService = accountService;
+        this.transactionsService = transactionsService;
     }
 
     @ModelAttribute
@@ -41,9 +47,27 @@ public class IncomeController {
 
 
     @GetMapping
-    public ResponseEntity<List<Income>> getUserIncomes() {
-        return  ResponseEntity.ok(this.incomeService.getUserIncomes(this.currentUser));
+    public ResponseEntity<TransactionDto> getUserIncomes(@RequestParam(required = false) String account_name) {
+        if (account_name != null) {
+            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
+            if (this.accountService.exists(accountPK)) {
+                List<Income> incomes = this.incomeService.getAccountIncomes(account_name, this.currentUser);
+                List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomes);
+                List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
+                Double totalIncome = this.incomeService.getTotalIncome(incomes);
+                return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            List<Income> incomes = this.incomeService.getUserIncomes(this.currentUser);
+            List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomes);
+            List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
+            Double totalIncome = this.incomeService.getTotalIncome(incomes);
+            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
+        }
     }
+
     @GetMapping("/{account}")
     public ResponseEntity<List<Income>> getAccountIncomes(@PathVariable String account) {
         AccountPK accountPK = new AccountPK(account, this.currentUser);
