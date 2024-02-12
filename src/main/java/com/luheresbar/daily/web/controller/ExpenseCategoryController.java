@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
-public class CategoryController {
+public class ExpenseCategoryController {
 
     private final ExpenseCategoryService expenseCategoryService;
     private Integer currentUser;
@@ -29,7 +29,7 @@ public class CategoryController {
     }
 
     @Autowired
-    public CategoryController(ExpenseCategoryService expenseCategoryService) {
+    public ExpenseCategoryController(ExpenseCategoryService expenseCategoryService) {
         this.expenseCategoryService = expenseCategoryService;
     }
 
