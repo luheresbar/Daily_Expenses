@@ -55,44 +55,18 @@ public class TransactionController {
 
         List<TransactionDetail> transactionDetails = new ArrayList<>();
 
-        // TODO (Usar Los servicios para realizar estas transformaciones)
-        // Convertir gastos a TransactionDetail
-        for (Expense expense : expenses) {
-            TransactionDetail transaction = new TransactionDetail();
-            transaction.setType("expense");
-            transaction.setDescription(expense.getDescription());
-            transaction.setDate(expense.getExpenseDate());
-            transaction.setAmount(expense.getExpense());
-            transaction.setSourceAccountName(expense.getAccountName());
-            transactionDetails.add(transaction);
-        }
+        List<TransactionDetail> expensesTransaction = this.transactionsService.expenseToTransactionDetail(expenses);
+        List<TransactionDetail> incomesTransaction = this.transactionsService.incomeToTransactionDetail(incomes);
+        List<TransactionDetail> transfersTransaction = this.transactionsService.transferToTransactionDetail(transfers);
 
-        // Convertir ingresos a TransactionDetail
-        for (Income income : incomes) {
-            TransactionDetail transaction = new TransactionDetail();
-            transaction.setType("income");
-            transaction.setDescription(income.getDescription());
-            transaction.setDate(income.getIncomeDate());
-            transaction.setAmount(income.getIncome());
-            transaction.setSourceAccountName(income.getAccountName());
-            transactionDetails.add(transaction);
-        }
+        transactionDetails.addAll(expensesTransaction);
+        transactionDetails.addAll(incomesTransaction);
+        transactionDetails.addAll(transfersTransaction);
 
-        // Convertir transferencias a TransactionDetail
-        for (Transfer transfer : transfers) {
-            TransactionDetail transaction = new TransactionDetail();
-            transaction.setType("transfer");
-            transaction.setDescription("Transferencia");
-            transaction.setDate(transfer.getTransferDate());
-            transaction.setAmount(transfer.getTransferValue());
-            transaction.setSourceAccountName(transfer.getSourceAccountName());
-            transaction.setDestinationAccountName(transfer.getDestinationAccountName());
-            transactionDetails.add(transaction);
-        }
 
-        List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
+        List<TransactionDetail> transactionDetailsSorted = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
 
-        return new ResponseEntity<>(transactionDetailsSort, HttpStatus.OK);
+        return new ResponseEntity<>(transactionDetailsSorted, HttpStatus.OK);
     }
 
 }
