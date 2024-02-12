@@ -14,23 +14,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/expense-categories")
 public class ExpenseCategoryController {
 
     private final ExpenseCategoryService expenseCategoryService;
     private Integer currentUser;
 
+    @Autowired
+    public ExpenseCategoryController(ExpenseCategoryService expenseCategoryService) {
+        this.expenseCategoryService = expenseCategoryService;
+    }
     @ModelAttribute
     private void extractUserFromToken() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         String userToken = (String) authentication.getPrincipal();
         this.currentUser = Integer.valueOf(userToken);
-    }
-
-    @Autowired
-    public ExpenseCategoryController(ExpenseCategoryService expenseCategoryService) {
-        this.expenseCategoryService = expenseCategoryService;
     }
 
     @GetMapping

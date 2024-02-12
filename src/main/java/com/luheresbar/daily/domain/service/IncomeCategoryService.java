@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class incomeCategoryService {
+public class IncomeCategoryService {
 
 
     private final IIncomeCategoryRepository incomeCategoryRepository;
 
-    public incomeCategoryService(IIncomeCategoryRepository incomeCategoryRepository) {
+    public IncomeCategoryService(IIncomeCategoryRepository incomeCategoryRepository) {
         this.incomeCategoryRepository = incomeCategoryRepository;
     }
 
