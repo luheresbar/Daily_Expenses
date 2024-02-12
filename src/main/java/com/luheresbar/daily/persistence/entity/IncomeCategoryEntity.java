@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "income_categories")
-//@IdClass(InCategoryPK.class)
+@IdClass(IncomeCategoryPK.class)
 @Setter
 @Getter
 public class IncomeCategoryEntity {

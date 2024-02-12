@@ -50,6 +50,4 @@ public class IncomeEntity {
     @JsonIgnore
     private IncomeCategoryEntity categoryIncome;
 
-
-
 }

@@ -55,16 +55,4 @@ public class ExpenseEntity {
     @JsonIgnore
     private ExpenseCategoryEntity categoryExpense;
 
-    @Override
-    public String toString() {
-        return "ExpenseEntity{" +
-                "expenseId=" + expenseId +
-                ", expense=" + expense +
-                ", description='" + description + '\'' +
-                ", expenseDate=" + expenseDate +
-                ", userId=" + userId +
-                ", accountName='" + accountName + '\'' +
-                ", categoryName='" + categoryName + '\'' +
-                '}';
-    }
 }
