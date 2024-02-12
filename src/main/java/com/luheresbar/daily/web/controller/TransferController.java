@@ -1,7 +1,13 @@
 package com.luheresbar.daily.web.controller;
 
+import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.Transfer;
+import com.luheresbar.daily.domain.dto.TransactionDetail;
+import com.luheresbar.daily.domain.dto.TransactionDto;
+import com.luheresbar.daily.domain.service.AccountService;
+import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.domain.service.TransferService;
+import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,11 +24,16 @@ import java.util.Optional;
 public class TransferController {
 
     private final TransferService transferService;
+    private final TransactionService transactionService;
+    private final AccountService accountService;
+
     private Integer currentUser;
 
     @Autowired
-    public TransferController(TransferService transferService) {
+    public TransferController(TransferService transferService, TransactionService transactionService, AccountService accountService) {
         this.transferService = transferService;
+        this.transactionService = transactionService;
+        this.accountService = accountService;
     }
 
     @ModelAttribute
@@ -34,8 +45,26 @@ public class TransferController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Transfer>> getUserTransfers() {
-        return ResponseEntity.ok(this.transferService.getUserTransfers(this.currentUser));
+    public ResponseEntity<TransactionDto> getUserTransfer(@RequestParam(required = false) String account_name) {
+        if (account_name != null) {
+//            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
+//            if (this.accountService.exists(accountPK)) {
+//                List<Transfer> incomes = this.transferService.getAccountTransfers(account_name, this.currentUser);
+//                List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
+//                List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
+//                Double totalTransfer = this.transferService.getTotalTransfer(incomes);
+//                return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalTransfer));
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
+        } else {
+            List<Transfer> transfers = this.transferService.getUserTransfers(this.currentUser);
+            List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transfers);
+            List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
+            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, null));
+        }
+                return ResponseEntity.notFound().build();
+
     }
 
     @PostMapping("/add")

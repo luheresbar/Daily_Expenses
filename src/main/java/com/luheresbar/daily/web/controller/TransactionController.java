@@ -6,7 +6,7 @@ import com.luheresbar.daily.domain.Transfer;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.service.ExpenseService;
 import com.luheresbar.daily.domain.service.IncomeService;
-import com.luheresbar.daily.domain.service.TransactionsService;
+import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.domain.service.TransferService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +28,11 @@ public class TransactionController {
     final private ExpenseService expenseService;
     final private IncomeService incomeService;
     final private TransferService transferService;
-    final private TransactionsService transactionsService;
+    final private TransactionService transactionsService;
 
     private Integer currentUser;
 
-    public TransactionController(ExpenseService expenseService, IncomeService incomeService, TransferService transferService, TransactionsService transactionsService) {
+    public TransactionController(ExpenseService expenseService, IncomeService incomeService, TransferService transferService, TransactionService transactionsService) {
         this.expenseService = expenseService;
         this.incomeService = incomeService;
         this.transferService = transferService;

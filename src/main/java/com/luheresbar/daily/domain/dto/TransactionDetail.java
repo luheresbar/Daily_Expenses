@@ -10,4 +10,5 @@ public class TransactionDetail {
     private Double amount;
     private String sourceAccountName;
     private String destinationAccountName;
+    private String category;
 }

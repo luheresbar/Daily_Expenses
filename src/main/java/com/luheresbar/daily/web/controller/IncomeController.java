@@ -1,12 +1,11 @@
 package com.luheresbar.daily.web.controller;
 
-import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.dto.TransactionDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.IncomeService;
-import com.luheresbar.daily.domain.service.TransactionsService;
+import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,11 +25,11 @@ public class IncomeController {
 
     private final IncomeService incomeService;
     private final AccountService accountService;
-    private final TransactionsService transactionsService;
+    private final TransactionService transactionsService;
     private Integer currentUser;
 
     @Autowired
-    public IncomeController(IncomeService incomeService, AccountService accountService, TransactionsService transactionsService) {
+    public IncomeController(IncomeService incomeService, AccountService accountService, TransactionService transactionsService) {
         this.incomeService = incomeService;
         this.accountService = accountService;
         this.transactionsService = transactionsService;
@@ -43,9 +42,6 @@ public class IncomeController {
         String userToken = (String) authentication.getPrincipal();
         this.currentUser = Integer.valueOf(userToken);
     }
-
-
-
     @GetMapping
     public ResponseEntity<TransactionDto> getUserIncomes(@RequestParam(required = false) String account_name) {
         if (account_name != null) {

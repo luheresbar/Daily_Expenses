@@ -5,7 +5,7 @@ import com.luheresbar.daily.domain.dto.TransactionDto;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.ExpenseService;
-import com.luheresbar.daily.domain.service.TransactionsService;
+import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,11 +25,11 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
     private final AccountService accountService;
-    private final TransactionsService transactionsService;
+    private final TransactionService transactionsService;
     private Integer currentUser;
 
     @Autowired
-    public ExpenseController(ExpenseService expenseService, AccountService accountService, TransactionsService transactionsService) {
+    public ExpenseController(ExpenseService expenseService, AccountService accountService, TransactionService transactionsService) {
         this.expenseService = expenseService;
         this.accountService = accountService;
         this.transactionsService = transactionsService;

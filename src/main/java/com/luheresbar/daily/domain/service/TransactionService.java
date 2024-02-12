@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TransactionsService {
+public class TransactionService {
 
     public List<TransactionDetail> sortTransactionsByDateDescending(List<TransactionDetail> transactionDetails) {
         if (transactionDetails.size() <= 1) {
@@ -69,6 +69,7 @@ public class TransactionsService {
             transaction.setDate(expense.getExpenseDate());
             transaction.setAmount(expense.getExpense());
             transaction.setSourceAccountName(expense.getAccountName());
+            transaction.setCategory(expense.getCategoryName());
             transactionDetails.add(transaction);
         }
         return transactionDetails;
@@ -86,6 +87,7 @@ public class TransactionsService {
             transaction.setDate(income.getIncomeDate());
             transaction.setAmount(income.getIncome());
             transaction.setSourceAccountName(income.getAccountName());
+            transaction.setCategory(income.getCategoryName());
             transactionDetails.add(transaction);
         }
         return transactionDetails;
@@ -94,7 +96,7 @@ public class TransactionsService {
 
         List<TransactionDetail> transactionDetails = new ArrayList<>();
 
-        // Convertir Income a TransactionDetail
+        // Convertir Transfer a TransactionDetail
      for (Transfer transfer : transfers) {
          TransactionDetail transaction = new TransactionDetail();
          transaction.setType("transfer");
@@ -103,6 +105,7 @@ public class TransactionsService {
          transaction.setAmount(transfer.getTransferValue());
          transaction.setSourceAccountName(transfer.getSourceAccountName());
          transaction.setDestinationAccountName(transfer.getDestinationAccountName());
+         transaction.setCategory(transfer.getType());
          transactionDetails.add(transaction);
      }
         return transactionDetails;
