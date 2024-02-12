@@ -1,5 +1,6 @@
 package com.luheresbar.daily.domain.service;
 
+import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,23 @@ public class TransactionsService {
         }
 
         return mergedList;
+    }
+
+    public List<TransactionDetail> expenseToTransactionDetail(List<Expense> expenses) {
+
+        List<TransactionDetail> transactionDetails = new ArrayList<>();
+
+        // Convertir Expense a TransactionDetail
+        for (Expense expense : expenses) {
+            TransactionDetail transaction = new TransactionDetail();
+            transaction.setType("expense");
+            transaction.setDescription(expense.getDescription());
+            transaction.setDate(expense.getExpenseDate());
+            transaction.setAmount(expense.getExpense());
+            transaction.setSourceAccountName(expense.getAccountName());
+            transactionDetails.add(transaction);
+        }
+        return transactionDetails;
     }
 
 }

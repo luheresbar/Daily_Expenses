@@ -81,6 +81,9 @@ public class IncomeController {
             if(income.getAccountName() == null) {
                 income.setAccountName(incomeDb.get().getAccountName());
             }
+            if (income.getCategoryName() == null) {
+                income.setCategoryName(incomeDb.get().getCategoryName());
+            }
             return ResponseEntity.ok(this.incomeService.save(income));
         }
         return ResponseEntity.notFound().build();

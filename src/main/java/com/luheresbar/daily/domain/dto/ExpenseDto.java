@@ -5,7 +5,7 @@ import com.luheresbar.daily.domain.Expense;
 import java.util.List;
 
 public record ExpenseDto(
-        List<Expense> expenses,
+        List<TransactionDetail> expenses,
         Double totalExpense
 ) {
 }

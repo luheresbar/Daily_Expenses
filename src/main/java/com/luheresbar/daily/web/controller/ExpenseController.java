@@ -2,8 +2,10 @@ package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.dto.ExpenseDto;
+import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.ExpenseService;
+import com.luheresbar.daily.domain.service.TransactionsService;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import com.luheresbar.daily.web.config.JwtUtil;
@@ -27,12 +29,14 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
     private final AccountService accountService;
+    private final TransactionsService transactionsService;
     private Integer currentUser;
 
     @Autowired
-    public ExpenseController(ExpenseService expenseService, AccountService accountService) {
+    public ExpenseController(ExpenseService expenseService, AccountService accountService, TransactionsService transactionsService) {
         this.expenseService = expenseService;
         this.accountService = accountService;
+        this.transactionsService = transactionsService;
     }
 
     // Filtro para extraer el usuario del token y almacenarlo en la variable de instancia
@@ -50,15 +54,19 @@ public class ExpenseController {
             AccountPK accountPK = new AccountPK(account_name, this.currentUser);
             if (this.accountService.exists(accountPK)) {
                 List<Expense> expenses = this.expenseService.getAccountExpenses(account_name, this.currentUser);
+                List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenses);
+                List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
                 Double totalExpense = this.expenseService.getTotalExpense(expenses);
-                return ResponseEntity.ok(new ExpenseDto(expenses, totalExpense));
+                return ResponseEntity.ok(new ExpenseDto(transactionDetailsSort, totalExpense));
             } else {
                 return ResponseEntity.notFound().build();
             }
         } else {
             List<Expense> expenses = this.expenseService.getUserExpenses(this.currentUser);
+            List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenses);
+            List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
             Double totalExpense = this.expenseService.getTotalExpense(expenses);
-            return ResponseEntity.ok(new ExpenseDto(expenses, totalExpense));
+            return ResponseEntity.ok(new ExpenseDto(transactionDetailsSort, totalExpense));
         }
     }
 

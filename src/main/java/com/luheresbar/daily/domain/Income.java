@@ -13,6 +13,6 @@ public class Income {
     private String incomeDate;
     private Integer userId;
     private String accountName;
-
+    private String categoryName;
 
 }

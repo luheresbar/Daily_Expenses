@@ -1,9 +1,11 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.Expense;
+import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.repository.IExpenseRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

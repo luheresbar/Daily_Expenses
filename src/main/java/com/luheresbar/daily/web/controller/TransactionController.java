@@ -56,6 +56,7 @@ public class TransactionController {
 
         List<TransactionDetail> transactionDetails = new ArrayList<>();
 
+        // TODO (Usar Los servicios para realizar estas transformaciones)
         // Convertir gastos a TransactionDetail
         for (Expense expense : expenses) {
             TransactionDetail transaction = new TransactionDetail();
