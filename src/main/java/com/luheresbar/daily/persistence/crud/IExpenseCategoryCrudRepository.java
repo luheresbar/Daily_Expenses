@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface ICategoryCrudRepository extends CrudRepository<ExpenseCategoryEntity, ExpenseCategoryPK> {
+public interface IExpenseCategoryCrudRepository extends CrudRepository<ExpenseCategoryEntity, ExpenseCategoryPK> {
 
     List<ExpenseCategoryEntity> findAllByUserIdOrderByCategoryName(Integer userId);
 
