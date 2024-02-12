@@ -2,7 +2,7 @@ package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.repository.ICategoryRepository;
-import com.luheresbar.daily.persistence.entity.CategoryPK;
+import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +22,15 @@ public class CategoryService {
         return this.categoryRepository.getByUser(userId);
     }
 
-    public boolean exists(CategoryPK categoryPK) {
-        return this.categoryRepository.exists(categoryPK);
+    public boolean exists(ExpenseCategoryPK expenseCategoryPK) {
+        return this.categoryRepository.exists(expenseCategoryPK);
     }
 
     public ExpenseCategory save(ExpenseCategory expenseCategory) {
         return this.categoryRepository.save(expenseCategory);
     }
 
-    public void delete(CategoryPK categoryPK) {
-        this.categoryRepository.delete(categoryPK);
+    public void delete(ExpenseCategoryPK expenseCategoryPK) {
+        this.categoryRepository.delete(expenseCategoryPK);
     }
 }

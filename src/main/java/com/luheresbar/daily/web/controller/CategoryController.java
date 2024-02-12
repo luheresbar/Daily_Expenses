@@ -2,7 +2,7 @@ package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.service.CategoryService;
-import com.luheresbar.daily.persistence.entity.CategoryPK;
+import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,16 +41,16 @@ public class CategoryController {
     @PostMapping("/add")
     public ResponseEntity<ExpenseCategory> add(@RequestBody ExpenseCategory expenseCategory) {
         expenseCategory.setUserId(this.currentUser);
-        CategoryPK categoryPK = new CategoryPK(expenseCategory.getCategoryName(), expenseCategory.getUserId());
+        ExpenseCategoryPK expenseCategoryPK = new ExpenseCategoryPK(expenseCategory.getCategoryName(), expenseCategory.getUserId());
 
-        if (!this.categoryService.exists(categoryPK)) {
+        if (!this.categoryService.exists(expenseCategoryPK)) {
             return ResponseEntity.ok(this.categoryService.save(expenseCategory));
         }
         return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@RequestBody CategoryPK categoryPK) {
+    public ResponseEntity<Void> delete(@RequestBody ExpenseCategoryPK categoryPK) {
         categoryPK.setUserId(this.currentUser);
         if (this.categoryService.exists(categoryPK)) {
             if (!categoryPK.getCategoryName().equals("Others")) {

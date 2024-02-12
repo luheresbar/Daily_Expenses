@@ -8,7 +8,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryPK {
+public class ExpenseCategoryPK {
 
     private String categoryName;
     private Integer userId;
@@ -16,12 +16,12 @@ public class CategoryPK {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CategoryPK that)) return false;
-        return Objects.equals(categoryName, that.categoryName) && Objects.equals(userId, that.userId);
+        if (!(o instanceof ExpenseCategoryPK that)) return false;
+        return Objects.equals(getCategoryName(), that.getCategoryName()) && Objects.equals(getUserId(), that.getUserId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(categoryName, userId);
+        return Objects.hash(getCategoryName(), getUserId());
     }
 }

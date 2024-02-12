@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "expense_categories")
-@IdClass(CategoryPK.class)
+@IdClass(ExpenseCategoryPK.class)
 @Setter
 @Getter
 public class ExpenseCategoryEntity {

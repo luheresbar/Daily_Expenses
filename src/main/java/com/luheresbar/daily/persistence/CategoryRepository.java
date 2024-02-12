@@ -4,7 +4,7 @@ import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.repository.ICategoryRepository;
 import com.luheresbar.daily.persistence.crud.ICategoryCrudRepository;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
-import com.luheresbar.daily.persistence.entity.CategoryPK;
+import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import com.luheresbar.daily.persistence.mapper.ICategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -30,8 +30,8 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public boolean exists(CategoryPK categoryPK) {
-        return this.categoryCrudRepository.existsById(categoryPK);
+    public boolean exists(ExpenseCategoryPK expenseCategoryPK) {
+        return this.categoryCrudRepository.existsById(expenseCategoryPK);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public void delete(CategoryPK categoryPK) {
-        this.categoryCrudRepository.deleteById(categoryPK);
+    public void delete(ExpenseCategoryPK expenseCategoryPK) {
+        this.categoryCrudRepository.deleteById(expenseCategoryPK);
     }
 }
 
