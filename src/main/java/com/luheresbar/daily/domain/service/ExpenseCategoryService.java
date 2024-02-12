@@ -1,7 +1,7 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.ExpenseCategory;
-import com.luheresbar.daily.domain.repository.ICategoryRepository;
+import com.luheresbar.daily.domain.repository.IExpenseCategoryRepository;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,10 @@ import java.util.List;
 @Service
 public class ExpenseCategoryService {
 
-    private final ICategoryRepository categoryRepository;
+    private final IExpenseCategoryRepository categoryRepository;
 
     @Autowired
-    public ExpenseCategoryService(ICategoryRepository categoryRepository) {
+    public ExpenseCategoryService(IExpenseCategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 

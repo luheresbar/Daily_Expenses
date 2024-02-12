@@ -5,7 +5,7 @@ import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 
 import java.util.List;
 
-public interface ICategoryRepository {
+public interface IExpenseCategoryRepository {
 
     List<ExpenseCategory> getByUser(Integer userId);
 

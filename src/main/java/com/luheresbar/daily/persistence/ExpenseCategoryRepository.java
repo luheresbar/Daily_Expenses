@@ -1,7 +1,7 @@
 package com.luheresbar.daily.persistence;
 
 import com.luheresbar.daily.domain.ExpenseCategory;
-import com.luheresbar.daily.domain.repository.ICategoryRepository;
+import com.luheresbar.daily.domain.repository.IExpenseCategoryRepository;
 import com.luheresbar.daily.persistence.crud.ICategoryCrudRepository;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class CategoryRepository implements ICategoryRepository {
+public class ExpenseCategoryRepository implements IExpenseCategoryRepository {
 
     private final ICategoryCrudRepository categoryCrudRepository;
     private final ICategoryMapper categoryMapper;
 
     @Autowired
-    public CategoryRepository(ICategoryCrudRepository categoryCrudRepository, ICategoryMapper categoryMapper) {
+    public ExpenseCategoryRepository(ICategoryCrudRepository categoryCrudRepository, ICategoryMapper categoryMapper) {
         this.categoryCrudRepository = categoryCrudRepository;
         this.categoryMapper = categoryMapper;
     }
