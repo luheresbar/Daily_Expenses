@@ -14,35 +14,35 @@ import java.util.List;
 @Repository
 public class ExpenseCategoryRepository implements IExpenseCategoryRepository {
 
-    private final IExpenseCategoryCrudRepository categoryCrudRepository;
+    private final IExpenseCategoryCrudRepository expenseCategoryCrudRepository;
     private final IExpenseCategoryMapper categoryMapper;
 
     @Autowired
     public ExpenseCategoryRepository(IExpenseCategoryCrudRepository categoryCrudRepository, IExpenseCategoryMapper categoryMapper) {
-        this.categoryCrudRepository = categoryCrudRepository;
+        this.expenseCategoryCrudRepository = categoryCrudRepository;
         this.categoryMapper = categoryMapper;
     }
 
     @Override
     public List<ExpenseCategory> getByUser(Integer userId) {
-        List<ExpenseCategoryEntity> expenseCategoryEntity =  this.categoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
+        List<ExpenseCategoryEntity> expenseCategoryEntity =  this.expenseCategoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
         return categoryMapper.toExpenseCategories(expenseCategoryEntity);
     }
 
     @Override
     public boolean exists(ExpenseCategoryPK expenseCategoryPK) {
-        return this.categoryCrudRepository.existsById(expenseCategoryPK);
+        return this.expenseCategoryCrudRepository.existsById(expenseCategoryPK);
     }
 
     @Override
     public ExpenseCategory save(ExpenseCategory expenseCategory) {
         ExpenseCategoryEntity expenseCategoryEntity = this.categoryMapper.toExpenseCategoryEntity(expenseCategory);
-        return categoryMapper.toExpenseCategory(this.categoryCrudRepository.save(expenseCategoryEntity));
+        return categoryMapper.toExpenseCategory(this.expenseCategoryCrudRepository.save(expenseCategoryEntity));
     }
 
     @Override
     public void delete(ExpenseCategoryPK expenseCategoryPK) {
-        this.categoryCrudRepository.deleteById(expenseCategoryPK);
+        this.expenseCategoryCrudRepository.deleteById(expenseCategoryPK);
     }
 }
 
