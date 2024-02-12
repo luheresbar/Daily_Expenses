@@ -40,7 +40,7 @@ public class UserEntity {
     private List<AccountEntity> accounts;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<ExpenseCategoryEntity> categories;
+    private List<ExpenseCategoryEntity> expenseCategories;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserRoleEntity> roles;

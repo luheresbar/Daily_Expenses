@@ -28,7 +28,7 @@ public class ExpenseCategoryEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categoryExpense", fetch = FetchType.LAZY)
     private List<ExpenseEntity> expenses;
 
 

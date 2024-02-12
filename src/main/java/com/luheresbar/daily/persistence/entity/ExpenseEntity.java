@@ -53,7 +53,7 @@ public class ExpenseEntity {
             @JoinColumn(name = "category_name", referencedColumnName = "category_name",insertable = false, updatable = false)
     })
     @JsonIgnore
-    private ExpenseCategoryEntity category;
+    private ExpenseCategoryEntity categoryExpense;
 
     @Override
     public String toString() {

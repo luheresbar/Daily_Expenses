@@ -18,7 +18,7 @@ public interface IUserMapper {
     @Mappings({
             @Mapping(target = "roles", ignore = true),
             @Mapping(target = "accounts", ignore = true),
-            @Mapping(target = "categories", ignore = true)
+            @Mapping(target = "expenseCategories", ignore = true)
     })
     UserEntity toUserEntity(User user);
 
