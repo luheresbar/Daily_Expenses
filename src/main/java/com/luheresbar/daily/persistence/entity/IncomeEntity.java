@@ -42,6 +42,14 @@ public class IncomeEntity {
     @JsonIgnore
     private AccountEntity account;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumns ({
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id", updatable = false, insertable = false),
+            @JoinColumn(name = "category_name", referencedColumnName = "category_name",insertable = false, updatable = false)
+    })
+    @JsonIgnore
+    private IncomeCategoryEntity categoryIncome;
+
 
 
 }
