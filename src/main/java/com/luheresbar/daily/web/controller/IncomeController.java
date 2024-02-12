@@ -39,9 +39,10 @@ public class IncomeController {
     }
 
 
+
     @GetMapping
     public ResponseEntity<List<Income>> getUserIncomes() {
-        return  ResponseEntity.ok(incomeService.getUserIncomes(currentUser));
+        return  ResponseEntity.ok(this.incomeService.getUserIncomes(this.currentUser));
     }
     @GetMapping("/{account}")
     public ResponseEntity<List<Income>> getAccountIncomes(@PathVariable String account) {

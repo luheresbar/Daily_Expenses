@@ -56,7 +56,7 @@ public class ExpenseController {
                 return ResponseEntity.notFound().build();
             }
         } else {
-            List<Expense> expenses = this.expenseService.getUserExpenses(currentUser);
+            List<Expense> expenses = this.expenseService.getUserExpenses(this.currentUser);
             Double totalExpense = this.expenseService.getTotalExpense(expenses);
             return ResponseEntity.ok(new ExpenseDto(expenses, totalExpense));
         }

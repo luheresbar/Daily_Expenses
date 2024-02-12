@@ -20,16 +20,4 @@ public class Expense {
     private String accountName;
     private String categoryName;
 
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "expenseId=" + expenseId +
-                ", expense=" + expense +
-                ", description='" + description + '\'' +
-                ", expenseDate='" + expenseDate + '\'' +
-                ", userId=" + userId +
-                ", accountName='" + accountName + '\'' +
-                ", categoryName='" + categoryName + '\'' +
-                '}';
-    }
 }
