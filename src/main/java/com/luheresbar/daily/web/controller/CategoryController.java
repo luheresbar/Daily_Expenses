@@ -1,6 +1,6 @@
 package com.luheresbar.daily.web.controller;
 
-import com.luheresbar.daily.domain.Category;
+import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.service.CategoryService;
 import com.luheresbar.daily.persistence.entity.CategoryPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +34,17 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> getAll() {
+    public ResponseEntity<List<ExpenseCategory>> getAll() {
         return new ResponseEntity<>(categoryService.getByUser(this.currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Category> add(@RequestBody Category category) {
-        category.setUserId(this.currentUser);
-        CategoryPK categoryPK = new CategoryPK(category.getCategoryName(), category.getUserId());
+    public ResponseEntity<ExpenseCategory> add(@RequestBody ExpenseCategory expenseCategory) {
+        expenseCategory.setUserId(this.currentUser);
+        CategoryPK categoryPK = new CategoryPK(expenseCategory.getCategoryName(), expenseCategory.getUserId());
 
         if (!this.categoryService.exists(categoryPK)) {
-            return ResponseEntity.ok(this.categoryService.save(category));
+            return ResponseEntity.ok(this.categoryService.save(expenseCategory));
         }
         return ResponseEntity.badRequest().build();
     }

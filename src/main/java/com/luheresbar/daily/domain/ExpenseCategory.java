@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Category {
+public class ExpenseCategory {
 
     private String categoryName;
     private Integer userId;

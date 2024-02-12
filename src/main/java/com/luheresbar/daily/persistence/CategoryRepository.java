@@ -1,6 +1,6 @@
 package com.luheresbar.daily.persistence;
 
-import com.luheresbar.daily.domain.Category;
+import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.repository.ICategoryRepository;
 import com.luheresbar.daily.persistence.crud.ICategoryCrudRepository;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
@@ -24,7 +24,7 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public List<Category> getByUser(Integer userId) {
+    public List<ExpenseCategory> getByUser(Integer userId) {
         List<ExpenseCategoryEntity> expenseCategoryEntity =  this.categoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
         return categoryMapper.toCategories(expenseCategoryEntity);
     }
@@ -35,8 +35,8 @@ public class CategoryRepository implements ICategoryRepository {
     }
 
     @Override
-    public Category save(Category category) {
-        ExpenseCategoryEntity expenseCategoryEntity = this.categoryMapper.toCategoryEntity(category);
+    public ExpenseCategory save(ExpenseCategory expenseCategory) {
+        ExpenseCategoryEntity expenseCategoryEntity = this.categoryMapper.toCategoryEntity(expenseCategory);
         return categoryMapper.toCategory(this.categoryCrudRepository.save(expenseCategoryEntity));
     }
 

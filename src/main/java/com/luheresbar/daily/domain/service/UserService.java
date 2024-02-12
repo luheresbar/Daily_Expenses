@@ -65,7 +65,7 @@ public class UserService {
     }
 
 //    public List<CategoryDto> getCategoryDto(Optional<User> userDB) {
-//        List<Category> categories = userDB.get().getCategories();
+//        List<ExpenseCategory> categories = userDB.get().getCategories();
 //        List<CategoryDto> categoryNames = categories.stream()
 //                .map(category -> new CategoryDto(category.getCategoryName()))
 //                .collect(Collectors.toList());

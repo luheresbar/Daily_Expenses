@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -92,10 +91,10 @@ public class AuthController {
             userRole.setGrantedDate(currentDate);
             this.userRoleService.save(userRole);
 
-            Category category = new Category();
-            category.setUserId(userDB.get().getUserId());
-            category.setCategoryName("Others");
-            this.categoryService.save(category);
+            ExpenseCategory expenseCategory = new ExpenseCategory();
+            expenseCategory.setUserId(userDB.get().getUserId());
+            expenseCategory.setCategoryName("Others");
+            this.categoryService.save(expenseCategory);
 
             Account account = new Account();
             account.setUserId(userDB.get().getUserId());

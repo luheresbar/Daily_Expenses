@@ -1,6 +1,6 @@
 package com.luheresbar.daily.domain.service;
 
-import com.luheresbar.daily.domain.Category;
+import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.repository.ICategoryRepository;
 import com.luheresbar.daily.persistence.entity.CategoryPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getByUser(Integer userId) {
+    public List<ExpenseCategory> getByUser(Integer userId) {
         return this.categoryRepository.getByUser(userId);
     }
 
@@ -26,8 +26,8 @@ public class CategoryService {
         return this.categoryRepository.exists(categoryPK);
     }
 
-    public Category save(Category category) {
-        return this.categoryRepository.save(category);
+    public ExpenseCategory save(ExpenseCategory expenseCategory) {
+        return this.categoryRepository.save(expenseCategory);
     }
 
     public void delete(CategoryPK categoryPK) {
