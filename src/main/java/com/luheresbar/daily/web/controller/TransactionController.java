@@ -3,7 +3,6 @@ package com.luheresbar.daily.web.controller;
 import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.Transfer;
-import com.luheresbar.daily.domain.dto.ExpenseDto;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.service.ExpenseService;
 import com.luheresbar.daily.domain.service.IncomeService;

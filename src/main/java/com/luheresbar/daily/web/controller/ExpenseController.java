@@ -1,14 +1,12 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Expense;
-import com.luheresbar.daily.domain.dto.ExpenseDto;
+import com.luheresbar.daily.domain.dto.TransactionDto;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.ExpenseService;
 import com.luheresbar.daily.domain.service.TransactionsService;
-import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
-import com.luheresbar.daily.web.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +15,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +45,7 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<ExpenseDto> getUserExpenses(@RequestParam(required = false) String account_name) {
+    public ResponseEntity<TransactionDto> getUserExpenses(@RequestParam(required = false) String account_name) {
         if (account_name != null) {
             AccountPK accountPK = new AccountPK(account_name, this.currentUser);
             if (this.accountService.exists(accountPK)) {
@@ -57,7 +53,7 @@ public class ExpenseController {
                 List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenses);
                 List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
                 Double totalExpense = this.expenseService.getTotalExpense(expenses);
-                return ResponseEntity.ok(new ExpenseDto(transactionDetailsSort, totalExpense));
+                return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense));
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -66,7 +62,7 @@ public class ExpenseController {
             List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenses);
             List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
             Double totalExpense = this.expenseService.getTotalExpense(expenses);
-            return ResponseEntity.ok(new ExpenseDto(transactionDetailsSort, totalExpense));
+            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense));
         }
     }
 
