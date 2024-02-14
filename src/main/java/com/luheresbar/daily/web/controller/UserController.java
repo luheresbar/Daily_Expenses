@@ -1,8 +1,6 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.domain.dto.AccountDto;
-import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.dto.UserProfileDto;
 import com.luheresbar.daily.domain.service.UserService;

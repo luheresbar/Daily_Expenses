@@ -65,6 +65,7 @@ public class TransactionService {
         for (Expense expense : expenses) {
             TransactionDetail transaction = new TransactionDetail();
             transaction.setType("expense");
+            transaction.setId(expense.getExpenseId());
             transaction.setDescription(expense.getDescription());
             transaction.setDate(expense.getExpenseDate());
             transaction.setAmount(expense.getExpense());
@@ -83,6 +84,7 @@ public class TransactionService {
         for (Income income : incomes) {
             TransactionDetail transaction = new TransactionDetail();
             transaction.setType("income");
+            transaction.setId(income.getIncomeId());
             transaction.setDescription(income.getDescription());
             transaction.setDate(income.getIncomeDate());
             transaction.setAmount(income.getIncome());
@@ -100,6 +102,7 @@ public class TransactionService {
      for (Transfer transfer : transfers) {
          TransactionDetail transaction = new TransactionDetail();
          transaction.setType("transfer");
+         transaction.setId(transfer.getTransferId());
          transaction.setDescription(transfer.getDescription());
          transaction.setDate(transfer.getTransferDate());
          transaction.setAmount(transfer.getTransferValue());

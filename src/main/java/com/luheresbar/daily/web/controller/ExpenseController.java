@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,7 +68,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Expense> add(@RequestBody Expense expense) {
+    public ResponseEntity<TransactionDetail> add(@RequestBody Expense expense) {
         expense.setUserId(this.currentUser);
         if (expense.getCategoryName() == null) {
             expense.setCategoryName("Others");
@@ -76,7 +77,12 @@ public class ExpenseController {
             expense.setExpenseDate(String.valueOf(LocalDateTime.now()));
         }
         System.out.println("Cracion de expense " + expense.toString());
-        return new ResponseEntity<>(expenseService.save(expense), HttpStatus.CREATED);
+
+        Expense savedExpense = this.expenseService.save(expense);
+        List<Expense> expenseList = Collections.singletonList(savedExpense);
+        List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenseList);
+
+        return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
