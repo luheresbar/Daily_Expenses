@@ -72,11 +72,11 @@ public class UserService {
 //        return categoryNames;
 //    }
 //
-//    public List<AccountDto> getAccountDto(Optional<User> userDB) {
+//    public List<SummaryAccountsDto> getAccountDto(Optional<User> userDB) {
 //        List<Account> accounts = userDB.get().getAccounts();
-//        List<AccountDto> accountNames = accounts.stream()
+//        List<SummaryAccountsDto> accountNames = accounts.stream()
 //                .filter(account -> account.getAvailable()) // Filtrar solo las cuentas con available = true
-//                .map(account -> new AccountDto(account.getAccountName()))
+//                .map(account -> new SummaryAccountsDto(account.getAccountName()))
 //                .collect(Collectors.toList());
 //        return accountNames;
 //    }

@@ -1,7 +1,7 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.Account;
-import com.luheresbar.daily.domain.dto.AccountDto;
+import com.luheresbar.daily.domain.dto.SummaryAccountsDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +35,10 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<AccountDto> viewAccountsUser() {
+    public ResponseEntity<SummaryAccountsDto> viewAccountsUser() {
         List<Account> accounts = this.accountService.getAccountsByUser(this.currentUser);
         Double availableMoney = this.accountService.availableMoney(this.currentUser);
-        return ResponseEntity.ok(new AccountDto(accounts, availableMoney));
+        return ResponseEntity.ok(new SummaryAccountsDto(accounts, availableMoney));
     }
 
     @GetMapping("/available-money")

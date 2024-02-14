@@ -4,7 +4,7 @@ import com.luheresbar.daily.domain.Account;
 
 import java.util.List;
 
-public record AccountDto(
+public record SummaryAccountsDto(
         List<Account> accounts,
         Double totalAvailableMoney
 ) {
