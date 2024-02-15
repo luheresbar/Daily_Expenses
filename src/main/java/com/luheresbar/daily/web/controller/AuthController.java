@@ -2,10 +2,7 @@ package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.*;
 import com.luheresbar.daily.domain.dto.*;
-import com.luheresbar.daily.domain.service.AccountService;
-import com.luheresbar.daily.domain.service.ExpenseCategoryService;
-import com.luheresbar.daily.domain.service.UserRoleService;
-import com.luheresbar.daily.domain.service.UserService;
+import com.luheresbar.daily.domain.service.*;
 import com.luheresbar.daily.web.config.JwtUtil;
 import com.luheresbar.daily.web.mailManager.MailManager;
 import jakarta.mail.MessagingException;
@@ -33,6 +30,7 @@ public class AuthController {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final ExpenseCategoryService expenseCategoryService;
+    private final IncomeCategoryService incomeCategoryService;
     private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
     private final MailManager mailManager;
@@ -43,7 +41,7 @@ public class AuthController {
             AuthenticationManager authenticationManager,
             UserService userService, JwtUtil jwtUtil,
             UserRoleService userRoleService,
-            ExpenseCategoryService expenseCategoryService,
+            ExpenseCategoryService expenseCategoryService, IncomeCategoryService incomeCategoryService,
             AccountService accountService,
             PasswordEncoder passwordEncoder,
             MailManager mailManager) {
@@ -52,6 +50,7 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
         this.userRoleService = userRoleService;
         this.expenseCategoryService = expenseCategoryService;
+        this.incomeCategoryService = incomeCategoryService;
         this.accountService = accountService;
         this.passwordEncoder = passwordEncoder;
         this.mailManager = mailManager;
@@ -95,6 +94,11 @@ public class AuthController {
             expenseCategory.setUserId(userDB.get().getUserId());
             expenseCategory.setCategoryName("Others");
             this.expenseCategoryService.save(expenseCategory);
+
+            IncomeCategory incomeCategory = new IncomeCategory();
+            incomeCategory.setUserId(userDB.get().getUserId());
+            incomeCategory.setCategoryName("Salary");
+            this.incomeCategoryService.save(incomeCategory);
 
             Account account = new Account();
             account.setUserId(userDB.get().getUserId());

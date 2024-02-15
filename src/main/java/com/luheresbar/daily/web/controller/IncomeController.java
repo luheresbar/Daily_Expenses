@@ -1,5 +1,6 @@
 package com.luheresbar.daily.web.controller;
 
+import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.dto.TransactionDto;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +44,7 @@ public class IncomeController {
         String userToken = (String) authentication.getPrincipal();
         this.currentUser = Integer.valueOf(userToken);
     }
+
     @GetMapping
     public ResponseEntity<TransactionDto> getUserIncomes(@RequestParam(required = false) String account_name) {
         if (account_name != null) {
@@ -67,51 +70,61 @@ public class IncomeController {
     @GetMapping("/{account}")
     public ResponseEntity<List<Income>> getAccountIncomes(@PathVariable String account) {
         AccountPK accountPK = new AccountPK(account, this.currentUser);
-        if(this.accountService.exists(accountPK)) {
+        if (this.accountService.exists(accountPK)) {
             return ResponseEntity.ok(this.incomeService.getAccountIncomes(account, this.currentUser));
         }
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Income> add(@RequestBody Income income) {
+    @PostMapping("/create")
+    public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailIncome) {
+        Income income = this.transactionsService.transactionDetailToIncome(transactionDetailIncome);
         income.setUserId(this.currentUser);
 
-        if(income.getIncomeDate() == null) {
+        if (income.getIncomeDate() == null) {
             income.setIncomeDate(String.valueOf(LocalDateTime.now()));
         }
-        return new ResponseEntity<>(incomeService.save(income), HttpStatus.CREATED);
+
+        Income savedIncome = this.incomeService.save(income);
+        List<Income> incomeList = Collections.singletonList(savedIncome);
+        List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomeList);
+        return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<Income> update(@RequestBody Income income) {
+    @PutMapping("/update")
+    public ResponseEntity<TransactionDetail> update(@RequestBody TransactionDetail transactionDetailIncome) {
+        Income income = this.transactionsService.transactionDetailToIncome(transactionDetailIncome);
+
         income.setUserId(this.currentUser);
         Optional<Income> incomeDb = this.incomeService.getById(income.getIncomeId());
-        if(incomeDb.get().getUserId().equals(this.currentUser)) {
+        if (incomeDb.get().getUserId().equals(this.currentUser)) {
 
-            if(income.getIncome() == null) {
+            if (income.getIncome() == null) {
                 income.setIncome(incomeDb.get().getIncome());
             }
-            if(income.getDescription() == null) {
+            if (income.getDescription() == null) {
                 income.setDescription(incomeDb.get().getDescription());
             }
-            if(income.getIncomeDate() == null) {
+            if (income.getIncomeDate() == null) {
                 income.setIncomeDate(incomeDb.get().getIncomeDate());
             }
-            if(income.getAccountName() == null) {
+            if (income.getAccountName() == null) {
                 income.setAccountName(incomeDb.get().getAccountName());
             }
             if (income.getCategoryName() == null) {
                 income.setCategoryName(incomeDb.get().getCategoryName());
             }
-            return ResponseEntity.ok(this.incomeService.save(income));
+            Income savedIncome = this.incomeService.save(income);
+            List<Income> incomeList = Collections.singletonList(savedIncome);
+            List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomeList);
+            return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{incomeId}")
     public ResponseEntity<Void> delete(@PathVariable int incomeId) {
-        if(this.incomeService.delete(incomeId, this.currentUser)) {
+        if (this.incomeService.delete(incomeId, this.currentUser)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

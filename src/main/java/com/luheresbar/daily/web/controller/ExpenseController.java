@@ -77,7 +77,7 @@ public class ExpenseController {
         if (expense.getExpenseDate() == null) {
             expense.setExpenseDate(String.valueOf(LocalDateTime.now()));
         }
-        System.out.println("Cracion de expense " + expense.toString());
+        System.out.println("Cracion de expense " + expense.toString()); //TODO (quitar linea)
 
         Expense savedExpense = this.expenseService.save(expense);
         List<Expense> expenseList = Collections.singletonList(savedExpense);
