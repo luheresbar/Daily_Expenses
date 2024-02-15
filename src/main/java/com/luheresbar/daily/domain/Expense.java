@@ -2,9 +2,11 @@ package com.luheresbar.daily.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class Expense {
 
     private int expenseId;

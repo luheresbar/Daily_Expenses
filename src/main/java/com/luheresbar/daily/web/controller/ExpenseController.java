@@ -68,7 +68,8 @@ public class ExpenseController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TransactionDetail> add(@RequestBody Expense expense) {
+    public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailExpense) {
+        Expense expense = this.transactionsService.transactionDetailToExpense(transactionDetailExpense);
         expense.setUserId(this.currentUser);
         if (expense.getCategoryName() == null) {
             expense.setCategoryName("Others");
@@ -86,7 +87,9 @@ public class ExpenseController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Expense> update(@RequestBody Expense expense) {
+    public ResponseEntity<TransactionDetail> update(@RequestBody TransactionDetail transactionDetailExpense) {
+        Expense expense = this.transactionsService.transactionDetailToExpense(transactionDetailExpense);
+        System.out.println("Holaaaa" + expense);
         expense.setUserId(this.currentUser);
         Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
 
@@ -107,8 +110,10 @@ public class ExpenseController {
             if (expense.getCategoryName() == null) {
                 expense.setCategoryName(expenseDb.get().getCategoryName());
             }
-
-            return ResponseEntity.ok(this.expenseService.save(expense));
+            Expense savedExpense = this.expenseService.save(expense);
+            List<Expense> expenseList = Collections.singletonList(savedExpense);
+            List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenseList);
+            return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();
     }

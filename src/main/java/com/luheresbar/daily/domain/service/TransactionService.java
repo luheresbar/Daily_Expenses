@@ -94,24 +94,59 @@ public class TransactionService {
         }
         return transactionDetails;
     }
- public List<TransactionDetail> transferToTransactionDetail(List<Transfer> transfers) {
+
+    public List<TransactionDetail> transferToTransactionDetail(List<Transfer> transfers) {
 
         List<TransactionDetail> transactionDetails = new ArrayList<>();
 
         // Convertir Transfer a TransactionDetail
-     for (Transfer transfer : transfers) {
-         TransactionDetail transaction = new TransactionDetail();
-         transaction.setType("transfer");
-         transaction.setId(transfer.getTransferId());
-         transaction.setDescription(transfer.getDescription());
-         transaction.setDate(transfer.getTransferDate());
-         transaction.setAmount(transfer.getTransferValue());
-         transaction.setSourceAccountName(transfer.getSourceAccountName());
-         transaction.setDestinationAccountName(transfer.getDestinationAccountName());
-         transaction.setCategory(transfer.getType());
-         transactionDetails.add(transaction);
-     }
+        for (Transfer transfer : transfers) {
+            TransactionDetail transaction = new TransactionDetail();
+            transaction.setType("transfer");
+            transaction.setId(transfer.getTransferId());
+            transaction.setDescription(transfer.getDescription());
+            transaction.setDate(transfer.getTransferDate());
+            transaction.setAmount(transfer.getTransferValue());
+            transaction.setSourceAccountName(transfer.getSourceAccountName());
+            transaction.setDestinationAccountName(transfer.getDestinationAccountName());
+            transaction.setCategory(transfer.getType());
+            transactionDetails.add(transaction);
+        }
         return transactionDetails;
+    }
+
+    public Expense transactionDetailToExpense(TransactionDetail transactionDetail) {
+        Expense expense = new Expense();
+        expense.setExpenseId(transactionDetail.getId());
+        expense.setExpense(transactionDetail.getAmount());
+        expense.setAccountName(transactionDetail.getSourceAccountName());
+        expense.setCategoryName(transactionDetail.getCategory());
+        expense.setDescription(transactionDetail.getDescription());
+        expense.setExpenseDate(transactionDetail.getDate());
+        return expense;
+    }
+
+    public Income transactionDetailToIncome(TransactionDetail transactionDetail) {
+        Income income = new Income();
+        income.setIncomeId(transactionDetail.getId());
+        income.setIncome(transactionDetail.getAmount());
+        income.setAccountName(transactionDetail.getSourceAccountName());
+        income.setCategoryName(transactionDetail.getCategory());
+        income.setDescription(transactionDetail.getDescription());
+        income.setIncomeDate(transactionDetail.getDate());
+        return income;
+    }
+
+    public Transfer transactionDetailToTransfer(TransactionDetail transactionDetail) {
+        Transfer transfer = new Transfer();
+        transfer.setTransferId(transactionDetail.getId());
+        transfer.setTransferValue(transactionDetail.getAmount());
+        transfer.setSourceAccountName(transactionDetail.getSourceAccountName());
+        transfer.setDestinationAccountName(transactionDetail.getDestinationAccountName());
+        transfer.setType(transactionDetail.getCategory());
+        transfer.setDescription(transactionDetail.getDescription());
+        transfer.setTransferDate(transactionDetail.getDate());
+        return transfer;
     }
 
 }
