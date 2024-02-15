@@ -34,6 +34,9 @@ public class IncomeEntity {
     @Column(name = "account_name", nullable = false, length = 30)
     private String accountName;
 
+    @Column(name = "category_name")
+    private String categoryName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false),

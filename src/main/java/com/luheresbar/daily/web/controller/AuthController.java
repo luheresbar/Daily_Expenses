@@ -97,7 +97,7 @@ public class AuthController {
 
             IncomeCategory incomeCategory = new IncomeCategory();
             incomeCategory.setUserId(userDB.get().getUserId());
-            incomeCategory.setCategoryName("Salary");
+            incomeCategory.setCategoryName("Others");
             this.incomeCategoryService.save(incomeCategory);
 
             Account account = new Account();

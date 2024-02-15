@@ -78,12 +78,14 @@ public class IncomeController {
     @PostMapping("/create")
     public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailIncome) {
         Income income = this.transactionService.transactionDetailToIncome(transactionDetailIncome);
+        System.out.println(income); //TODO(Eliminar linea)
         income.setUserId(this.currentUser);
-
+        if (income.getCategoryName() == null) {
+            income.setCategoryName("Others");
+        }
         if (income.getIncomeDate() == null) {
             income.setIncomeDate(String.valueOf(LocalDateTime.now()));
         }
-
         Income savedIncome = this.incomeService.save(income);
         List<Income> incomeList = Collections.singletonList(savedIncome);
         List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomeList);
