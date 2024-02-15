@@ -26,14 +26,14 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
     private final AccountService accountService;
-    private final TransactionService transactionsService;
+    private final TransactionService transactionService;
     private Integer currentUser;
 
     @Autowired
     public ExpenseController(ExpenseService expenseService, AccountService accountService, TransactionService transactionsService) {
         this.expenseService = expenseService;
         this.accountService = accountService;
-        this.transactionsService = transactionsService;
+        this.transactionService = transactionsService;
     }
 
     // Filtro para extraer el usuario del token y almacenarlo en la variable de instancia
@@ -51,8 +51,8 @@ public class ExpenseController {
             AccountPK accountPK = new AccountPK(account_name, this.currentUser);
             if (this.accountService.exists(accountPK)) {
                 List<Expense> expenses = this.expenseService.getAccountExpenses(account_name, this.currentUser);
-                List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenses);
-                List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
+                List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenses);
+                List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
                 Double totalExpense = this.expenseService.getTotalExpense(expenses);
                 return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense));
             } else {
@@ -60,8 +60,8 @@ public class ExpenseController {
             }
         } else {
             List<Expense> expenses = this.expenseService.getUserExpenses(this.currentUser);
-            List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenses);
-            List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
+            List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenses);
+            List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
             Double totalExpense = this.expenseService.getTotalExpense(expenses);
             return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense));
         }
@@ -69,7 +69,7 @@ public class ExpenseController {
 
     @PostMapping("/create")
     public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailExpense) {
-        Expense expense = this.transactionsService.transactionDetailToExpense(transactionDetailExpense);
+        Expense expense = this.transactionService.transactionDetailToExpense(transactionDetailExpense);
         expense.setUserId(this.currentUser);
         if (expense.getCategoryName() == null) {
             expense.setCategoryName("Others");
@@ -81,14 +81,14 @@ public class ExpenseController {
 
         Expense savedExpense = this.expenseService.save(expense);
         List<Expense> expenseList = Collections.singletonList(savedExpense);
-        List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenseList);
+        List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenseList);
 
         return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity<TransactionDetail> update(@RequestBody TransactionDetail transactionDetailExpense) {
-        Expense expense = this.transactionsService.transactionDetailToExpense(transactionDetailExpense);
+        Expense expense = this.transactionService.transactionDetailToExpense(transactionDetailExpense);
         System.out.println("Holaaaa" + expense);
         expense.setUserId(this.currentUser);
         Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
@@ -112,7 +112,7 @@ public class ExpenseController {
             }
             Expense savedExpense = this.expenseService.save(expense);
             List<Expense> expenseList = Collections.singletonList(savedExpense);
-            List<TransactionDetail> transactionDetails = this.transactionsService.expenseToTransactionDetail(expenseList);
+            List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenseList);
             return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();

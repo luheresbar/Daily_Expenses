@@ -1,6 +1,5 @@
 package com.luheresbar.daily.web.controller;
 
-import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.dto.TransactionDto;
@@ -27,14 +26,14 @@ public class IncomeController {
 
     private final IncomeService incomeService;
     private final AccountService accountService;
-    private final TransactionService transactionsService;
+    private final TransactionService transactionService;
     private Integer currentUser;
 
     @Autowired
     public IncomeController(IncomeService incomeService, AccountService accountService, TransactionService transactionsService) {
         this.incomeService = incomeService;
         this.accountService = accountService;
-        this.transactionsService = transactionsService;
+        this.transactionService = transactionsService;
     }
 
     @ModelAttribute
@@ -51,8 +50,8 @@ public class IncomeController {
             AccountPK accountPK = new AccountPK(account_name, this.currentUser);
             if (this.accountService.exists(accountPK)) {
                 List<Income> incomes = this.incomeService.getAccountIncomes(account_name, this.currentUser);
-                List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomes);
-                List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
+                List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
+                List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
                 Double totalIncome = this.incomeService.getTotalIncome(incomes);
                 return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
             } else {
@@ -60,8 +59,8 @@ public class IncomeController {
             }
         } else {
             List<Income> incomes = this.incomeService.getUserIncomes(this.currentUser);
-            List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomes);
-            List<TransactionDetail> transactionDetailsSort = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
+            List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
+            List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
             Double totalIncome = this.incomeService.getTotalIncome(incomes);
             return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
         }
@@ -78,7 +77,7 @@ public class IncomeController {
 
     @PostMapping("/create")
     public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailIncome) {
-        Income income = this.transactionsService.transactionDetailToIncome(transactionDetailIncome);
+        Income income = this.transactionService.transactionDetailToIncome(transactionDetailIncome);
         income.setUserId(this.currentUser);
 
         if (income.getIncomeDate() == null) {
@@ -87,13 +86,13 @@ public class IncomeController {
 
         Income savedIncome = this.incomeService.save(income);
         List<Income> incomeList = Collections.singletonList(savedIncome);
-        List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomeList);
+        List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomeList);
         return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity<TransactionDetail> update(@RequestBody TransactionDetail transactionDetailIncome) {
-        Income income = this.transactionsService.transactionDetailToIncome(transactionDetailIncome);
+        Income income = this.transactionService.transactionDetailToIncome(transactionDetailIncome);
 
         income.setUserId(this.currentUser);
         Optional<Income> incomeDb = this.incomeService.getById(income.getIncomeId());
@@ -116,7 +115,7 @@ public class IncomeController {
             }
             Income savedIncome = this.incomeService.save(income);
             List<Income> incomeList = Collections.singletonList(savedIncome);
-            List<TransactionDetail> transactionDetails = this.transactionsService.incomeToTransactionDetail(incomeList);
+            List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomeList);
             return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();

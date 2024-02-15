@@ -1,6 +1,5 @@
 package com.luheresbar.daily.web.controller;
 
-import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.Transfer;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.dto.TransactionDto;
@@ -9,6 +8,7 @@ import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.domain.service.TransferService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,8 +68,10 @@ public class TransferController {
 
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Transfer> add(@RequestBody Transfer transfer) {
+    @PostMapping("/create")
+    public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailTransfer) {
+        Transfer transfer = this.transactionService.transactionDetailToTransfer(transactionDetailTransfer);
+        System.out.println(transfer);
         transfer.setUserId(this.currentUser);
         if(!transfer.getSourceAccountName().equals(transfer.getDestinationAccountName())) {
 
@@ -77,7 +80,10 @@ public class TransferController {
             }
             extractedTypeTransfer(transfer);
 
-            return ResponseEntity.ok(this.transferService.save(transfer));
+            Transfer savedTransfer = this.transferService.save(transfer);
+            List<Transfer> transferList = Collections.singletonList(savedTransfer);
+            List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transferList);
+            return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -94,8 +100,10 @@ public class TransferController {
         }
     }
 
-    @PatchMapping("/update")
-    public ResponseEntity<Transfer> update(@RequestBody Transfer transfer) {
+    @PutMapping("/update")
+    public ResponseEntity<TransactionDetail> update(@RequestBody TransactionDetail transactionDetailTransfer) {
+        Transfer transfer = this.transactionService.transactionDetailToTransfer(transactionDetailTransfer);
+
         transfer.setUserId(this.currentUser);
         Optional<Transfer> transferDb = this.transferService.getById(transfer.getTransferId());
 
@@ -113,7 +121,10 @@ public class TransferController {
                 transfer.setDestinationAccountName(transferDb.get().getDestinationAccountName());
             }
             extractedTypeTransfer(transfer);
-            return ResponseEntity.ok(this.transferService.save(transfer));
+            Transfer savedTransfer = this.transferService.save(transfer);
+            List<Transfer> transferList = Collections.singletonList(savedTransfer);
+            List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transferList);
+            return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();
     }

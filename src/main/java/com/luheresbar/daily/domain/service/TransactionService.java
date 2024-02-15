@@ -143,7 +143,6 @@ public class TransactionService {
         transfer.setTransferValue(transactionDetail.getAmount());
         transfer.setSourceAccountName(transactionDetail.getSourceAccountName());
         transfer.setDestinationAccountName(transactionDetail.getDestinationAccountName());
-        transfer.setType(transactionDetail.getCategory());
         transfer.setDescription(transactionDetail.getDescription());
         transfer.setTransferDate(transactionDetail.getDate());
         return transfer;
