@@ -1,5 +1,8 @@
 FROM amazoncorretto:17-alpine-jdk
 
-COPY  Daily-Expenses.jar app.jar
+# Exponer el puerto 8080
+EXPOSE 8080
+
+COPY Daily-Expenses.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "/app.jar"]
