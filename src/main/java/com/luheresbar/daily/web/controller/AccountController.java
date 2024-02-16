@@ -4,7 +4,6 @@ import com.luheresbar.daily.domain.Account;
 import com.luheresbar.daily.domain.dto.SummaryAccountsDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -21,7 +20,6 @@ public class AccountController {
     private final AccountService accountService;
     private Integer currentUser;
 
-    @Autowired
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }

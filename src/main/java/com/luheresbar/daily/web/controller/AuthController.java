@@ -36,7 +36,6 @@ public class AuthController {
     private final MailManager mailManager;
     private final JwtUtil jwtUtil;
 
-    @Autowired
     public AuthController(
             AuthenticationManager authenticationManager,
             UserService userService, JwtUtil jwtUtil,
@@ -62,7 +61,7 @@ public class AuthController {
             Optional<User> userDb = this.userService.findUserByEmail(loginDto.getEmail());
             int userId = userDb.get().getUserId();
             UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(userId, loginDto.getPassword());
-            Authentication authentication = this.authenticationManager.authenticate(login);
+            this.authenticationManager.authenticate(login);
 
             String access_token = this.jwtUtil.createJwt(userId);
             String refresh_token = this.jwtUtil.createJwtRefresh(userId);
