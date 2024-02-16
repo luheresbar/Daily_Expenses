@@ -1,20 +1,25 @@
 FROM ubuntu:latest AS build
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+# Instalación de Java JDK 17
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk
 
-# Instala Gradle
-RUN apt-get install wget unzip -y
-RUN wget https://services.gradle.org/distributions/gradle-7.3-bin.zip
-RUN mkdir /opt/gradle
-RUN unzip -d /opt/gradle gradle-7.3-bin.zip
-ENV PATH="/opt/gradle/gradle-7.3/bin:${PATH}"
+# Instalación de Gradle
+RUN apt-get install -y wget unzip && \
+    wget -q --show-progress --progress=bar:force:noscroll --https-only --timestamping https://services.gradle.org/distributions/gradle-8.3-bin.zip && \
+    unzip -q -d /opt/gradle gradle-8.3-bin.zip && \
+    rm gradle-8.3-bin.zip
 
+# Configuración de las variables de entorno para Gradle
+ENV GRADLE_HOME=/opt/gradle/gradle-8.3
+ENV PATH=${GRADLE_HOME}/bin:${PATH}
+
+# Copiar archivos del proyecto y compilar con Gradle
 COPY . .
 
-# Ejecuta el comando Gradle con opciones de depuración
-RUN gradle clean build --stacktrace
+RUN gradle clean build
 
+# Etapa final
 FROM openjdk:17-jdk-slim
 
 EXPOSE 8080
