@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface IExpenseCategoryCrudRepository extends CrudRepository<ExpenseCategoryEntity, ExpenseCategoryPK> {
 
+
     List<ExpenseCategoryEntity> findAllByUserIdOrderByCategoryName(Integer userId);
 
 }

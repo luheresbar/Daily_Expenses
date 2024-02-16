@@ -28,10 +28,24 @@ public class TransferEntityRepository implements ITransferRepository {
     }
 
 
-    @Override
+    @Override //TODO (Varificar la necesidad de este metodo)
     public List<Transfer> getAll() {
         List<TransferEntity> transfers = transferCrudRepository.findAll();
         return transferMapper.toTransfers(transfers);
+    }
+
+//    @Override
+//    public List<Transfer> getUserTransfers(Integer userId) {
+//        // Metodo usando JdbcTemplate
+//        String sql = "SELECT * FROM transfers WHERE user_id = ? ORDER BY transfer_date DESC";
+//        List<TransferEntity> transferEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(TransferEntity.class));
+//        return this.transferMapper.toTransfers(transferEntities);
+//    }
+
+    @Override
+    public List<Transfer> getUserTransfers(Integer userId) {
+        List<TransferEntity> transferEntities = this.transferCrudRepository.findAllByUserIdOrderByTransferDate(userId);
+        return this.transferMapper.toTransfers(transferEntities);
     }
 
     @Override
@@ -56,12 +70,6 @@ public class TransferEntityRepository implements ITransferRepository {
         return false;
     }
 
-    @Override
-    public List<Transfer> getUserTransfers(Integer userId) {
-        // Metodo usando JdbcTemplate
-        String sql = "SELECT * FROM transfers WHERE user_id = ? ORDER BY transfer_date DESC";
-        List<TransferEntity> transferEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(TransferEntity.class));
-        return this.transferMapper.toTransfers(transferEntities);
-    }
+
 
 }

@@ -27,14 +27,18 @@ public class ExpenseEntityRepository implements IExpenseRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+//    @Override
+//    public List<Expense> getUserExpenses(Integer userId) {
+//        // Metodo usando JdbcTemplate
+//        String sql = "SELECT * FROM expenses WHERE user_id = ? ORDER BY expense_date DESC";
+//        List<ExpenseEntity> expenseEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(ExpenseEntity.class));
+//        return this.expenseMapper.toExpenses(expenseEntities);
+//    }
+
     @Override
     public List<Expense> getUserExpenses(Integer userId) {
-
-        // Metodo usando JdbcTemplate
-        String sql = "SELECT * FROM expenses WHERE user_id = ? ORDER BY expense_date DESC";
-        List<ExpenseEntity> expenseEntities = jdbcTemplate.query(sql, new Object[]{userId}, new BeanPropertyRowMapper<>(ExpenseEntity.class));
+        List<ExpenseEntity> expenseEntities = this.expenseCrudRepository.findAllByUserIdOrderByExpenseDate(userId);
         return this.expenseMapper.toExpenses(expenseEntities);
-
     }
 
     @Override

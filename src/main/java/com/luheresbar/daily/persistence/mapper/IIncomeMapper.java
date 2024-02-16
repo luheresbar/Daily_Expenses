@@ -15,6 +15,7 @@ public interface IIncomeMapper {
     List<Income> toIncomes(List<IncomeEntity> incomeEntities);
 
     @Mapping(target = "account", ignore = true)
+    @Mapping(target = "categoryIncome", ignore = true)
     IncomeEntity toIncomeEntity(Income income);
 
 }

@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface IIncomeCrudRepository extends ListCrudRepository<IncomeEntity, Integer> {
 
+    List<IncomeEntity> findAllByUserIdOrderByIncomeDate(Integer userId);
+
     @Query(value = "SELECT i " +
             "FROM IncomeEntity i " +
             "WHERE userId = :userId AND accountName = :accountName " +
