@@ -22,7 +22,7 @@ RUN gradle clean build
 # Etapa final
 FROM openjdk:17-jdk-slim
 
-EXPOSE 8080
+EXPOSE 8081
 
 COPY --from=build /Daily-Expenses.jar app.jar
 
