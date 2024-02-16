@@ -1,8 +1,6 @@
 package com.luheresbar.daily.persistence.crud;
 
-import com.luheresbar.daily.domain.User;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
-import com.luheresbar.daily.persistence.entity.ExpenseEntity;
 import com.luheresbar.daily.persistence.entity.UserEntity;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.data.jpa.repository.Modifying;

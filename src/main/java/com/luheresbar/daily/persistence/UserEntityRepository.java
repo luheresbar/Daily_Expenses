@@ -1,14 +1,12 @@
 package com.luheresbar.daily.persistence;
 
 import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.domain.dto.ChangePasswordDto;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.repository.IUserRepository;
 import com.luheresbar.daily.persistence.crud.IUserCrudRepository;
 import com.luheresbar.daily.persistence.entity.UserEntity;
 import com.luheresbar.daily.persistence.mapper.IUserMapper;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +20,6 @@ public class UserEntityRepository implements IUserRepository {
     private final IUserMapper userMapper;
 
 
-    @Autowired
     public UserEntityRepository(IUserCrudRepository userCrudRepository, IUserMapper userMapper) {
         this.userCrudRepository = userCrudRepository;
         this.userMapper = userMapper;

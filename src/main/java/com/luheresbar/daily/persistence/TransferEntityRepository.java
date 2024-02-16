@@ -5,9 +5,6 @@ import com.luheresbar.daily.domain.repository.ITransferRepository;
 import com.luheresbar.daily.persistence.crud.ITransferCrudRepository;
 import com.luheresbar.daily.persistence.entity.TransferEntity;
 import com.luheresbar.daily.persistence.mapper.ITransferMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,13 +15,10 @@ public class TransferEntityRepository implements ITransferRepository {
 
     private final ITransferCrudRepository transferCrudRepository;
     private final ITransferMapper transferMapper;
-    private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public TransferEntityRepository(ITransferCrudRepository transferCrudRepository, ITransferMapper transferMapper, JdbcTemplate jdbcTemplate) {
+    public TransferEntityRepository(ITransferCrudRepository transferCrudRepository, ITransferMapper transferMapper) {
         this.transferCrudRepository = transferCrudRepository;
         this.transferMapper = transferMapper;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
 

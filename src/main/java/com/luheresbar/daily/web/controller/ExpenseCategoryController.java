@@ -3,7 +3,6 @@ package com.luheresbar.daily.web.controller;
 import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.service.ExpenseCategoryService;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,7 +19,6 @@ public class ExpenseCategoryController {
     private final ExpenseCategoryService expenseCategoryService;
     private Integer currentUser;
 
-    @Autowired
     public ExpenseCategoryController(ExpenseCategoryService expenseCategoryService) {
         this.expenseCategoryService = expenseCategoryService;
     }

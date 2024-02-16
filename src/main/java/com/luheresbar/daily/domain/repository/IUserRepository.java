@@ -1,7 +1,6 @@
 package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.domain.dto.ChangePasswordDto;
 import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 

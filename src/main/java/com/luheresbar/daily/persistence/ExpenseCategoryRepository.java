@@ -6,7 +6,6 @@ import com.luheresbar.daily.persistence.crud.IExpenseCategoryCrudRepository;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import com.luheresbar.daily.persistence.mapper.IExpenseCategoryMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class ExpenseCategoryRepository implements IExpenseCategoryRepository {
     private final IExpenseCategoryCrudRepository expenseCategoryCrudRepository;
     private final IExpenseCategoryMapper categoryMapper;
 
-    @Autowired
     public ExpenseCategoryRepository(IExpenseCategoryCrudRepository categoryCrudRepository, IExpenseCategoryMapper categoryMapper) {
         this.expenseCategoryCrudRepository = categoryCrudRepository;
         this.categoryMapper = categoryMapper;

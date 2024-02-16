@@ -6,7 +6,6 @@ import com.luheresbar.daily.persistence.crud.IUserRoleCrudRepository;
 import com.luheresbar.daily.persistence.entity.UserRoleEntity;
 import com.luheresbar.daily.persistence.entity.UserRolePK;
 import com.luheresbar.daily.persistence.mapper.IUserRolMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public class UserRoleEntityRepository implements IUserRoleRepository {
     private final IUserRoleCrudRepository userRolCrudRepository;
     private final IUserRolMapper userRolMapper;
 
-    @Autowired
     public UserRoleEntityRepository(IUserRoleCrudRepository userRolCrudRepository, IUserRolMapper userRolMapper) {
         this.userRolCrudRepository = userRolCrudRepository;
         this.userRolMapper = userRolMapper;

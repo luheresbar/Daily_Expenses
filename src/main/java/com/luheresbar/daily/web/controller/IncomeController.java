@@ -7,7 +7,6 @@ import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.IncomeService;
 import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.persistence.entity.AccountPK;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -29,7 +28,6 @@ public class IncomeController {
     private final TransactionService transactionService;
     private Integer currentUser;
 
-    @Autowired
     public IncomeController(IncomeService incomeService, AccountService accountService, TransactionService transactionsService) {
         this.incomeService = incomeService;
         this.accountService = accountService;

@@ -5,7 +5,6 @@ import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.dto.UserProfileDto;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -26,7 +25,6 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private Integer currentUser;
 
-    @Autowired
     public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;

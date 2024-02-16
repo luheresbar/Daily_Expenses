@@ -1,6 +1,5 @@
 package com.luheresbar.daily.web.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,7 +24,6 @@ public class HttpSecurityConfig {
 
     private final JwtFilter jwtFilter;
 
-    @Autowired
     public HttpSecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }

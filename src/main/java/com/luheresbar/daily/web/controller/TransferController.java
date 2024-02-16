@@ -6,8 +6,6 @@ import com.luheresbar.daily.domain.dto.TransactionDto;
 import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.domain.service.TransferService;
-import com.luheresbar.daily.persistence.entity.AccountPK;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,15 +24,12 @@ public class TransferController {
 
     private final TransferService transferService;
     private final TransactionService transactionService;
-    private final AccountService accountService;
 
     private Integer currentUser;
 
-    @Autowired
-    public TransferController(TransferService transferService, TransactionService transactionService, AccountService accountService) {
+    public TransferController(TransferService transferService, TransactionService transactionService) {
         this.transferService = transferService;
         this.transactionService = transactionService;
-        this.accountService = accountService;
     }
 
     @ModelAttribute

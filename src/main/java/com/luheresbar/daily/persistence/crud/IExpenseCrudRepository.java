@@ -4,7 +4,6 @@ import com.luheresbar.daily.persistence.entity.ExpenseEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 

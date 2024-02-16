@@ -1,6 +1,5 @@
 package com.luheresbar.daily.persistence.crud;
 
-import com.luheresbar.daily.persistence.entity.ExpenseEntity;
 import com.luheresbar.daily.persistence.entity.IncomeEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;

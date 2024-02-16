@@ -6,7 +6,6 @@ import com.luheresbar.daily.persistence.crud.IAccountCrudRepository;
 import com.luheresbar.daily.persistence.entity.AccountEntity;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import com.luheresbar.daily.persistence.mapper.IAccountMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +17,6 @@ public class AccountEntityRepository implements IAccountRepository {
     private final IAccountCrudRepository accountCrudRepository;
     private final IAccountMapper accountMapper;
 
-    @Autowired
     public AccountEntityRepository(IAccountCrudRepository accountCrudRepository, IAccountMapper accountMapper) {
         this.accountCrudRepository = accountCrudRepository;
         this.accountMapper = accountMapper;

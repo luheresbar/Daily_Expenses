@@ -5,9 +5,6 @@ import com.luheresbar.daily.domain.repository.IExpenseRepository;
 import com.luheresbar.daily.persistence.crud.IExpenseCrudRepository;
 import com.luheresbar.daily.persistence.entity.ExpenseEntity;
 import com.luheresbar.daily.persistence.mapper.IExpenseMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,13 +15,10 @@ public class ExpenseEntityRepository implements IExpenseRepository {
 
     private final IExpenseCrudRepository expenseCrudRepository;
     private final IExpenseMapper expenseMapper;
-    private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public ExpenseEntityRepository(IExpenseCrudRepository expenseCrudRepository, IExpenseMapper expenseMapper, JdbcTemplate jdbcTemplate) {
+    public ExpenseEntityRepository(IExpenseCrudRepository expenseCrudRepository, IExpenseMapper expenseMapper) {
         this.expenseCrudRepository = expenseCrudRepository;
         this.expenseMapper = expenseMapper;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
 //    @Override

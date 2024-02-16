@@ -3,7 +3,6 @@ package com.luheresbar.daily.web.controller;
 import com.luheresbar.daily.domain.UserRole;
 import com.luheresbar.daily.domain.service.UserRoleService;
 import com.luheresbar.daily.persistence.entity.UserRolePK;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ public class UserRoleController {
 
     private final UserRoleService userRoleService;
 
-    @Autowired
     public UserRoleController(UserRoleService userRoleService) {
         this.userRoleService = userRoleService;
     }

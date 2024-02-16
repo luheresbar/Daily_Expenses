@@ -1,6 +1,5 @@
 package com.luheresbar.daily.domain.repository;
 
-import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Income;
 
 import java.util.List;

@@ -3,7 +3,6 @@ package com.luheresbar.daily.domain.service;
 import com.luheresbar.daily.domain.UserRole;
 import com.luheresbar.daily.domain.repository.IUserRoleRepository;
 import com.luheresbar.daily.persistence.entity.UserRolePK;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +12,6 @@ public class UserRoleService {
 
     private final IUserRoleRepository userRolRepository;
 
-    @Autowired
     public UserRoleService(IUserRoleRepository userRolRepository) {
         this.userRolRepository = userRolRepository;
     }
