@@ -41,7 +41,7 @@ public class UserRoleController {
     // Como usuario con rol ADMIN puedo quitar a otros usuarios sus roles que permiten acceder a funcionalidades adicionales en la app.
     @DeleteMapping("/user")
     @Secured("ROLE_ADMIN")
-    public ResponseEntity removeRole(@RequestBody UserRolePK userRolePK) {
+    public ResponseEntity<Void> removeRole(@RequestBody UserRolePK userRolePK) {
         if(!userRolePK.getRole().equals("USER")) {
             if(this.userRoleService.delete(userRolePK)) {
                 return ResponseEntity.ok().build();
