@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface IAccountRepository {
 
-    List<Account> getAccountsByUser(Integer userId);
+    List<Account> getEnabledAccountsByUser(Integer userId);
+    
+    List<Account> getDisabledAccountsByUser(Integer userId);
 
     Double availableMoney(Integer userId);
 

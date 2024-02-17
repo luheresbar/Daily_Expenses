@@ -17,8 +17,11 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public List<Account> getAccountsByUser(Integer userId) {
-        return this.accountRepository.getAccountsByUser(userId);
+    public List<Account> getEnabledAccountsByUser(Integer userId) {
+        return this.accountRepository.getEnabledAccountsByUser(userId);
+    }
+    public List<Account> getDisabledAccountsByUser(Integer userId) {
+        return this.accountRepository.getDisabledAccountsByUser(userId);
     }
 
     public Double availableMoney(Integer userId) {

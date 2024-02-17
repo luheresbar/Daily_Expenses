@@ -23,8 +23,14 @@ public class AccountEntityRepository implements IAccountRepository {
     }
 
     @Override
-    public List<Account> getAccountsByUser(Integer userId) {
-        List<AccountEntity> accounts = this.accountCrudRepository.findAllByUserIdOrderByAccountName(userId);
+    public List<Account> getEnabledAccountsByUser(Integer userId) {
+        List<AccountEntity> accounts = this.accountCrudRepository.findAllAvailableByUserIdOrderByAccountName(userId);
+        return accountMapper.toAccounts(accounts);
+    }
+
+    @Override
+    public List<Account> getDisabledAccountsByUser(Integer userId) {
+        List<AccountEntity> accounts = this.accountCrudRepository.findAllNoAvailableByUserIdOrderByAccountName(userId);
         return accountMapper.toAccounts(accounts);
     }
 

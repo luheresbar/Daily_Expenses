@@ -34,9 +34,10 @@ public class AccountController {
 
     @GetMapping
     public ResponseEntity<SummaryAccountsDto> viewAccountsUser() {
-        List<Account> accounts = this.accountService.getAccountsByUser(this.currentUser);
+        List<Account> enabledAccounts = this.accountService.getEnabledAccountsByUser(this.currentUser);
+        List<Account> disabledAccounts = this.accountService.getDisabledAccountsByUser(this.currentUser);
         Double availableMoney = this.accountService.availableMoney(this.currentUser);
-        return ResponseEntity.ok(new SummaryAccountsDto(accounts, availableMoney));
+        return ResponseEntity.ok(new SummaryAccountsDto(enabledAccounts, disabledAccounts, availableMoney));
     }
 
     @GetMapping("/available-money")
