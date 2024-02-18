@@ -97,14 +97,20 @@ public class AuthController {
             incomeCategory.setCategoryName("Others");
             this.incomeCategoryService.save(incomeCategory);
 
-            Account account = new Account();
-            account.setUserId(userDB.get().getUserId());
-            account.setAccountName("Cash");
-            account.setAvailableMoney(0.0);
-            account.setAvailable(true);
-            this.accountService.save(account);
+            Account cashAccount = new Account();
+            cashAccount.setUserId(userDB.get().getUserId());
+            cashAccount.setAccountName("Cash");
+            cashAccount.setAvailableMoney(0.0);
+            cashAccount.setAvailable(true);
+            this.accountService.save(cashAccount);
 
-
+            Account bankAccount = new Account();
+            bankAccount.setUserId(userDB.get().getUserId());
+            bankAccount.setAccountName("Bank");
+            bankAccount.setAvailableMoney(0.0);
+            bankAccount.setAvailable(true);
+            this.accountService.save(bankAccount);
+            
             return ResponseEntity.ok(Optional.of(new UserProfileDto(
                             userDB.get().getUserId(),
                             userDB.get().getUsername(),

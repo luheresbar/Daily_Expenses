@@ -45,7 +45,7 @@ public class AccountController {
         return ResponseEntity.ok(this.accountService.availableMoney(this.currentUser));
     }
 
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<Account> updateAccount(@RequestBody Account account){
         account.setUserId(currentUser);
         if(!this.accountService.exists(new AccountPK(account.getAccountName(), account.getUserId()))) {
@@ -63,15 +63,13 @@ public class AccountController {
         return ResponseEntity.ok(this.accountService.save(account));
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<Account> add(@RequestBody Account account) {
         account.setUserId(this.currentUser);
         if(account.getAvailableMoney() == null) {
         account.setAvailableMoney(0.0);
         }
-        if(account.getAvailable() == null) {
         account.setAvailable(true);
-        }
         AccountPK accountPK = new AccountPK(account.getAccountName(), account.getUserId());
         if(!this.accountService.exists(accountPK)) {
             return ResponseEntity.ok(this.accountService.save(account));
