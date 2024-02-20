@@ -76,7 +76,7 @@ public class AccountController {
         if (accountInDb.equals(account)) {
             return ResponseEntity.ok(account);
         }
-    
+
         return ResponseEntity.ok(this.accountService.save(account));
     }
 
