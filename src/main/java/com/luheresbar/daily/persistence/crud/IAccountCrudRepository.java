@@ -1,7 +1,9 @@
 package com.luheresbar.daily.persistence.crud;
 
+import com.luheresbar.daily.domain.dto.UpdateAccountDto;
 import com.luheresbar.daily.persistence.entity.AccountEntity;
 import com.luheresbar.daily.persistence.entity.AccountPK;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +24,18 @@ public interface IAccountCrudRepository extends CrudRepository<AccountEntity, Ac
 
     @Query(value = "SELECT SUM(available_money) FROM accounts WHERE user_id = :userId AND available = true", nativeQuery = true)
     Double availableMoney(@Param("userId") Integer userId);
+
+    @Modifying
+    @Query("UPDATE AccountEntity a " +
+            "SET a.accountName = :newAccountName " +
+            "WHERE a.accountName = :accountName AND a.userId = :currentUser ")
+    void updateNameAccount(@Param("accountName") String accountName, @Param("newAccountName") String newAccountName, @Param("currentUser") Integer currentUser);
+
+    // Query Nativo
+//    @Query(value =  "UPDATE users " +
+//            "SET user_id = :#{#updateUserId.newUserId} " +
+//            "WHERE user_id = :#{#updateUserId.currentUserId}", nativeQuery = true)
+//    @Modifying
+//    void updateUserId(@Param("updateUserId") UpdateUserIdDto updateUserIdDto);
 
 }

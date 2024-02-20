@@ -1,6 +1,7 @@
 package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.dto.UpdateAccountDto;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 
 import java.util.List;
@@ -22,5 +23,6 @@ public interface IAccountRepository {
 
     void delete(AccountPK accountPK);
 
-//    Optional<Account> updateAccountName(UpdateAccountIdDto updateAccountIdDto);
+    void updateNameAccount(String accountName, String newAccountName, Integer currentUser);
+
 }

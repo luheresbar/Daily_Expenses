@@ -1,7 +1,6 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.dto.UserProfileDto;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
@@ -87,15 +86,15 @@ public class UserController {
     }
 
     // Actualizar el userId de un usuario.
-    @PatchMapping("/update/userid")
-    public ResponseEntity<Optional<User>> updateUserId(@RequestBody UpdateUserIdDto updateUserIdDto) {
-        updateUserIdDto.setCurrentUserId(this.currentUser);
-        if (this.userService.exists(currentUser)) {
-            this.userService.updateUserId(updateUserIdDto);
-            return ResponseEntity.ok(this.userService.getById(updateUserIdDto.getNewUserId()));
-        }
-        return ResponseEntity.notFound().build();
-    }
+    // @PatchMapping("/update/userid")
+    // public ResponseEntity<Optional<User>> updateUserId(@RequestBody UpdateUserIdDto updateUserIdDto) {
+    //     updateUserIdDto.setCurrentUserId(this.currentUser);
+    //     if (this.userService.exists(currentUser)) {
+    //         this.userService.updateUserId(updateUserIdDto);
+    //         return ResponseEntity.ok(this.userService.getById(updateUserIdDto.getNewUserId()));
+    //     }
+    //     return ResponseEntity.notFound().build();
+    // }
 
 
     //  Unicamente un usuario puede eliminar su propia cuenta.
