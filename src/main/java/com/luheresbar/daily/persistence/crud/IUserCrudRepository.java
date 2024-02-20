@@ -1,6 +1,5 @@
 package com.luheresbar.daily.persistence.crud;
 
-import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.persistence.entity.UserEntity;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,13 +15,6 @@ public interface IUserCrudRepository extends CrudRepository<UserEntity, Integer>
     // anotación @Query con JPQL
     @Query("SELECT u.userId as userId, u.registerDate as registerDate FROM UserEntity u")
     List<IUserSummary> viewUsersSummary();
-
-    // Query JPQL
-    @Query("UPDATE UserEntity u " +
-            "SET u.userId = :#{#updateUserId.newUserId} " +
-            "WHERE u.userId = :#{#updateUserId.currentUserId}")
-    @Modifying
-    void updateUserId(@Param("updateUserId") UpdateUserIdDto updateUserIdDto);
 
     @Query(value = "SELECT e " +
             "FROM UserEntity e " +

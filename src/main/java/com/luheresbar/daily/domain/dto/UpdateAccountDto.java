@@ -1,12 +1,13 @@
-package com.luheresbar.daily.domain;
+package com.luheresbar.daily.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Account {
+public class UpdateAccountDto {
     private String accountName;
+    private String newAccountName;
     private Integer userId;
     private Double availableMoney;
     private Boolean available;

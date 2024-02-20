@@ -1,9 +1,11 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.dto.UpdateAccountDto;
 import com.luheresbar.daily.domain.repository.IAccountRepository;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,4 +45,7 @@ public class AccountService {
         this.accountRepository.delete(accountPK);
     }
 
+    public void updateNameAccount(String accountName, String newAccountName, Integer currentUser) {
+        this.accountRepository.updateNameAccount(accountName, newAccountName, currentUser);
+    }
 }

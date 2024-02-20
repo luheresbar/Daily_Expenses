@@ -1,6 +1,7 @@
 package com.luheresbar.daily.persistence;
 
 import com.luheresbar.daily.domain.Account;
+import com.luheresbar.daily.domain.dto.UpdateAccountDto;
 import com.luheresbar.daily.domain.repository.IAccountRepository;
 import com.luheresbar.daily.persistence.crud.IAccountCrudRepository;
 import com.luheresbar.daily.persistence.entity.AccountEntity;
@@ -57,9 +58,16 @@ public class AccountEntityRepository implements IAccountRepository {
     }
 
     @Override
+    public void updateNameAccount(String accountName, String newAccountName, Integer currentUser) {
+        this.accountCrudRepository.updateNameAccount(accountName, newAccountName, currentUser);
+    }
+
+
+    @Override
     public void delete(AccountPK accountPK) {
         this.accountCrudRepository.deleteById(accountPK);
     }
+
 
 
 }

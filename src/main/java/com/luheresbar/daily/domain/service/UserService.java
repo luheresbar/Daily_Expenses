@@ -1,7 +1,6 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.User;
-import com.luheresbar.daily.domain.dto.UpdateUserIdDto;
 import com.luheresbar.daily.domain.repository.IUserRepository;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.stereotype.Service;
@@ -51,10 +50,6 @@ public class UserService {
         return this.userRepository.countUsers();
     }
 
-    public void updateUserId(UpdateUserIdDto updateUserIdDto) {
-        this.userRepository.updateUserId(updateUserIdDto);
-
-    }
     public boolean changePassword(String email, String newPassword) {
         return this.userRepository.changePassword(email, newPassword);
     }
