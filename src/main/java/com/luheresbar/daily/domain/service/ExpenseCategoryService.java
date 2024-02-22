@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExpenseCategoryService {
@@ -22,6 +23,9 @@ public class ExpenseCategoryService {
         return this.categoryRepository.getByUser(userId);
     }
 
+    public Optional<ExpenseCategory> getById(String categoryName, Integer userId) {
+        return this.categoryRepository.getById(categoryName, userId);
+    }
     public boolean exists(ExpenseCategoryPK expenseCategoryPK) {
         return this.categoryRepository.exists(expenseCategoryPK);
     }
@@ -48,4 +52,10 @@ public class ExpenseCategoryService {
         }
         return categoryDtos;
     }
+
+    public void updateNameCategory(String categoryName, String newCategoryName, Integer userId) {
+        this.categoryRepository.updateNameCategory(categoryName, newCategoryName, userId);
+    }
+
+
 }
