@@ -1,5 +1,6 @@
 package com.luheresbar.daily.web.controller;
 
+import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.service.IncomeCategoryService;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -40,13 +42,16 @@ public class IncomeCategoryController {
         return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<IncomeCategory> add(@RequestBody IncomeCategory expenseCategory) {
+    @PostMapping("/create")
+    public ResponseEntity<CategoryDto> add(@RequestBody IncomeCategory expenseCategory) {
         expenseCategory.setUserId(this.currentUser);
         IncomeCategoryPK expenseCategoryPK = new IncomeCategoryPK(expenseCategory.getCategoryName(), expenseCategory.getUserId());
 
         if (!this.incomeCategoryService.exists(expenseCategoryPK)) {
-            return ResponseEntity.ok(this.incomeCategoryService.save(expenseCategory));
+            IncomeCategory newIncomeCategory = this.incomeCategoryService.save(expenseCategory);
+            List<IncomeCategory> categoryList = Collections.singletonList(newIncomeCategory);
+            List<CategoryDto> categoryDto = this.incomeCategoryService.expenseCategoriesToDto(categoryList);
+            return ResponseEntity.ok(categoryDto.get(0));
         }
         return ResponseEntity.badRequest().build();
     }
