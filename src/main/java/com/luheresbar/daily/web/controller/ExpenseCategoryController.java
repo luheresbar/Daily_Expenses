@@ -1,6 +1,7 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.ExpenseCategory;
+import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.service.ExpenseCategoryService;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import org.springframework.http.HttpStatus;
@@ -31,8 +32,10 @@ public class ExpenseCategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ExpenseCategory>> getAll() {
-        return new ResponseEntity<>(expenseCategoryService.getByUser(this.currentUser), HttpStatus.OK);
+    public ResponseEntity<List<CategoryDto>> getAll() {
+        List<ExpenseCategory> expenseCategories = this.expenseCategoryService.getByUser(this.currentUser);
+        List<CategoryDto> categoryDtos = this.expenseCategoryService.expenseCategoriesToDto(expenseCategories);
+        return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
     }
 
     @PostMapping("/add")
