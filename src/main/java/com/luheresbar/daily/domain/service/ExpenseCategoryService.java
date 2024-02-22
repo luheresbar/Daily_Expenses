@@ -1,10 +1,12 @@
 package com.luheresbar.daily.domain.service;
 
 import com.luheresbar.daily.domain.ExpenseCategory;
+import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.repository.IExpenseCategoryRepository;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,5 +32,20 @@ public class ExpenseCategoryService {
 
     public void delete(ExpenseCategoryPK expenseCategoryPK) {
         this.categoryRepository.delete(expenseCategoryPK);
+    }
+
+    public List<CategoryDto> expenseCategoriesToDto(List<ExpenseCategory> expenseCategories) {
+        List<CategoryDto> categoryDtos = new ArrayList<>();
+
+        // Convertir Transfer a TransactionDetail
+        for (ExpenseCategory category : expenseCategories) {
+            CategoryDto categoryDto = new CategoryDto();
+            categoryDto.setCategoryType("expense");
+            categoryDto.setUserId(category.getUserId());
+            categoryDto.setCategoryName(category.getCategoryName());
+
+            categoryDtos.add(categoryDto);
+        }
+        return categoryDtos;
     }
 }

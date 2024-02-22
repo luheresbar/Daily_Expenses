@@ -1,6 +1,7 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.IncomeCategory;
+import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.service.IncomeCategoryService;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,10 @@ public class IncomeCategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<IncomeCategory>> getAll() {
-        return new ResponseEntity<>(incomeCategoryService.getByUser(this.currentUser), HttpStatus.OK);
+    public ResponseEntity<List<CategoryDto>> getAll() {
+        List<IncomeCategory> expenseCategories = this.incomeCategoryService.getByUser(this.currentUser);
+        List<CategoryDto> categoryDtos = this.incomeCategoryService.expenseCategoriesToDto(expenseCategories);
+        return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
     }
 
     @PostMapping("/add")
