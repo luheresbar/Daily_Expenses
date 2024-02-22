@@ -62,6 +62,7 @@ public class ExpenseCategoryController {
     @PutMapping("/update")
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody UpdateCategoryDto updateCategoryDto) {
         updateCategoryDto.setUserId(currentUser);
+
         ExpenseCategoryPK expenseCategoryPK = new ExpenseCategoryPK(updateCategoryDto.getCategoryName(), updateCategoryDto.getUserId());
 
         if (!this.expenseCategoryService.exists(expenseCategoryPK)) {
@@ -75,10 +76,10 @@ public class ExpenseCategoryController {
         Optional<ExpenseCategory> optionalCategoryInDb = this.expenseCategoryService.getById(updateCategoryDto.getNewCategoryName(), this.currentUser);
 
         // Verificar si el Optional contiene un valor antes de extraerlo y asignar valores predeterminados
-        ExpenseCategory category = optionalCategoryInDb.orElse(new ExpenseCategory());
+        ExpenseCategory category = new ExpenseCategory();
         category.setUserId(updateCategoryDto.getUserId());
         category.setCategoryName(updateCategoryDto.getNewCategoryName());
-        category.setAvailable(updateCategoryDto.getAvailable() != null ? updateCategoryDto.getAvailable() : category.getAvailable());
+        category.setAvailable(updateCategoryDto.getAvailable());
 
         if (optionalCategoryInDb.isPresent()) {
             ExpenseCategory categoryInDb = optionalCategoryInDb.get();

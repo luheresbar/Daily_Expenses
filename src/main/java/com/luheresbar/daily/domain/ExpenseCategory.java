@@ -9,6 +9,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@ToString
 @EqualsAndHashCode
 public class ExpenseCategory {
 

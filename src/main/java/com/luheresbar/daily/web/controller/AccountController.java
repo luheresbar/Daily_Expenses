@@ -66,11 +66,11 @@ public class AccountController {
         Optional<Account> accountInDb = this.accountService.getById(updateAccount.getNewAccountName(), this.currentUser);
 
         // Verificar si el Optional contiene un valor antes de extraerlo y asignar valores predeterminados
-        Account account = accountInDb.orElse(new Account());
+        Account account = new Account();
         account.setAccountName(updateAccount.getNewAccountName());
         account.setUserId(updateAccount.getUserId());
         account.setAvailableMoney(updateAccount.getAvailableMoney());
-        account.setAvailable(updateAccount.getAvailable() != null ? updateAccount.getAvailable() : account.getAvailable());
+        account.setAvailable(updateAccount.getAvailable());
 
         if (accountInDb.isPresent() && accountInDb.get().equals(account)) {
             return ResponseEntity.ok(account);
