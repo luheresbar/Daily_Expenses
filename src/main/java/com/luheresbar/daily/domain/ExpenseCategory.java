@@ -9,5 +9,6 @@ public class ExpenseCategory {
 
     private String categoryName;
     private Integer userId;
+    private Boolean available;
 
 }

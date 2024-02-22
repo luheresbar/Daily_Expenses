@@ -43,6 +43,7 @@ public class IncomeCategoryService {
             CategoryDto categoryDto = new CategoryDto();
             categoryDto.setCategoryType("income");
             categoryDto.setUserId(category.getUserId());
+            categoryDto.setAvailable(category.getAvailable());
             categoryDto.setCategoryName(category.getCategoryName());
 
             categoryDtos.add(categoryDto);

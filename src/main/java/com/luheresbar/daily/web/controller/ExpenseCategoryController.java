@@ -49,6 +49,7 @@ public class ExpenseCategoryController {
     @PostMapping("/create")
     public ResponseEntity<CategoryDto> add(@RequestBody ExpenseCategory expenseCategory) {
         expenseCategory.setUserId(this.currentUser);
+        expenseCategory.setAvailable(true);
         ExpenseCategoryPK expenseCategoryPK = new ExpenseCategoryPK(expenseCategory.getCategoryName(), expenseCategory.getUserId());
 
         if (!this.expenseCategoryService.exists(expenseCategoryPK)) {

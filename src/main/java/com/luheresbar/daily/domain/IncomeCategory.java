@@ -9,5 +9,6 @@ public class IncomeCategory {
 
     private String categoryName;
     private Integer userId;
+    private Boolean available;
 
 }

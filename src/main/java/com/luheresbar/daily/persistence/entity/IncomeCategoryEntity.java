@@ -22,6 +22,9 @@ public class IncomeCategoryEntity {
     @Column(name = "user_id", nullable = false, length = 25)
     private Integer userId;
 
+    @Column(columnDefinition = "boolean default true")
+    private Boolean available;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)

@@ -11,4 +11,6 @@ public class UpdateCategoryDto {
     private String categoryName;
     private String newCategoryName;
     private Integer userId;
+    private Boolean available;
+
 }
