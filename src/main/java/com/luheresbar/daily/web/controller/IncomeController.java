@@ -76,7 +76,6 @@ public class IncomeController {
     @PostMapping("/create")
     public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailIncome) {
         Income income = this.transactionService.transactionDetailToIncome(transactionDetailIncome);
-        System.out.println(income); //TODO(Eliminar linea)
         income.setUserId(this.currentUser);
         if (income.getCategoryName() == null) {
             income.setCategoryName("Others");

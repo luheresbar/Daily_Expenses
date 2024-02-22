@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IncomeCategoryService {
@@ -23,6 +24,10 @@ public class IncomeCategoryService {
         return this.incomeCategoryRepository.getByUser(userId);
     }
 
+    public Optional<IncomeCategory> getById(String categoryName, Integer userId) {
+        return this.incomeCategoryRepository.getById(categoryName, userId);
+    }
+
     public boolean exists(IncomeCategoryPK expenseCategoryPK) {
         return this.incomeCategoryRepository.exists(expenseCategoryPK);
     }
@@ -35,7 +40,7 @@ public class IncomeCategoryService {
         this.incomeCategoryRepository.delete(expenseCategoryPK);
     }
 
-    public List<CategoryDto> expenseCategoriesToDto(List<IncomeCategory> expenseCategories) {
+    public List<CategoryDto> incomeCategoriesToDto(List<IncomeCategory> expenseCategories) {
         List<CategoryDto> categoryDtos = new ArrayList<>();
 
         // Convertir Transfer a TransactionDetail
@@ -49,6 +54,10 @@ public class IncomeCategoryService {
             categoryDtos.add(categoryDto);
         }
         return categoryDtos;
+    }
+
+    public void updateNameCategory(String categoryName, String newCategoryName, Integer userId) {
+        this.incomeCategoryRepository.updateNameCategory(categoryName, newCategoryName, userId);
     }
 
 }
