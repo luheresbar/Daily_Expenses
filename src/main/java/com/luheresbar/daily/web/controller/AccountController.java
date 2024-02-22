@@ -53,31 +53,32 @@ public class AccountController {
     public ResponseEntity<Account> updateAccount(@RequestBody UpdateAccountDto updateAccount) {
         updateAccount.setUserId(currentUser);
 
-        if (!this.accountService.exists(new AccountPK(updateAccount.getAccountName(), updateAccount.getUserId()))) {
+        AccountPK accountPK = new AccountPK(updateAccount.getAccountName(), updateAccount.getUserId());
+
+        if (!this.accountService.exists(accountPK)) {
             return ResponseEntity.notFound().build();
         }
+
         if (!Objects.equals(updateAccount.getAccountName(), updateAccount.getNewAccountName())) {
             this.accountService.updateNameAccount(updateAccount.getAccountName(), updateAccount.getNewAccountName(), this.currentUser);
         }
+
         Optional<Account> accountInDb = this.accountService.getById(updateAccount.getNewAccountName(), this.currentUser);
-        Account account = new Account();
+
+        // Verificar si el Optional contiene un valor antes de extraerlo y asignar valores predeterminados
+        Account account = accountInDb.orElse(new Account());
         account.setAccountName(updateAccount.getNewAccountName());
         account.setUserId(updateAccount.getUserId());
         account.setAvailableMoney(updateAccount.getAvailableMoney());
-        account.setAvailable(updateAccount.getAvailable());
+        account.setAvailable(updateAccount.getAvailable() != null ? updateAccount.getAvailable() : account.getAvailable());
 
-        if (updateAccount.getAvailableMoney() == null && accountInDb.get().getAvailable()) {
-            account.setAvailableMoney(accountInDb.get().getAvailableMoney());
-        }
-        if (updateAccount.getAvailable() == null) {
-            account.setAvailable(accountInDb.get().getAvailable());
-        }
-
-        if (accountInDb.equals(account)) {
+        if (accountInDb.isPresent() && accountInDb.get().equals(account)) {
             return ResponseEntity.ok(account);
         }
 
-        return ResponseEntity.ok(this.accountService.save(account));
+        // Guardar la cuenta actualizada o nueva
+        Account savedAccount = this.accountService.save(account);
+        return ResponseEntity.ok(savedAccount);
     }
 
     @PostMapping("/create")

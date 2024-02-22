@@ -37,7 +37,6 @@ public class IncomeCategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAll() {
         List<IncomeCategory> expenseCategories = this.incomeCategoryService.getByUser(this.currentUser);
-        System.out.println("Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Income" + this.currentUser  + expenseCategories); //TODO(Eliminar)
 
         List<CategoryDto> categoryDtos = this.incomeCategoryService.expenseCategoriesToDto(expenseCategories);
         return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
