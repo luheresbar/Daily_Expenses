@@ -77,10 +77,10 @@ public class IncomeCategoryController {
         Optional<IncomeCategory> optionalCategoryInDb = this.incomeCategoryService.getById(updateCategoryDto.getNewCategoryName(), this.currentUser);
 
         // Verificar si el Optional contiene un valor antes de extraerlo y asignar valores predeterminados
-        IncomeCategory category = optionalCategoryInDb.orElse(new IncomeCategory());
+        IncomeCategory category = new IncomeCategory();
         category.setUserId(updateCategoryDto.getUserId());
         category.setCategoryName(updateCategoryDto.getNewCategoryName());
-        category.setAvailable(updateCategoryDto.getAvailable() != null ? updateCategoryDto.getAvailable() : category.getAvailable());
+        category.setAvailable(updateCategoryDto.getAvailable());
 
         if (optionalCategoryInDb.isPresent()) {
             IncomeCategory categoryInDb = optionalCategoryInDb.get();
