@@ -59,7 +59,7 @@ public class AccountController {
         if (!Objects.equals(updateAccount.getAccountName(), updateAccount.getNewAccountName())) {
             this.accountService.updateNameAccount(updateAccount.getAccountName(), updateAccount.getNewAccountName(), this.currentUser);
         }
-        Optional<Account> accountInDb = this.accountService.getById(updateAccount.getAccountName(), this.currentUser);
+        Optional<Account> accountInDb = this.accountService.getById(updateAccount.getNewAccountName(), this.currentUser);
         Account account = new Account();
         account.setAccountName(updateAccount.getNewAccountName());
         account.setUserId(updateAccount.getUserId());

@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-//import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -61,7 +60,6 @@ public class ExpenseCategoryController {
         return ResponseEntity.badRequest().build();
     }
 
-
     @PutMapping("/update")
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody UpdateCategoryDto updateCategoryDto) {
         updateCategoryDto.setUserId(currentUser);
@@ -74,14 +72,29 @@ public class ExpenseCategoryController {
         if (!Objects.equals(updateCategoryDto.getCategoryName(), updateCategoryDto.getNewCategoryName())) {
             this.expenseCategoryService.updateNameCategory(updateCategoryDto.getCategoryName(), updateCategoryDto.getNewCategoryName(), this.currentUser);
         }
-        Optional<ExpenseCategory> categoryInDb = this.expenseCategoryService.getById(updateCategoryDto.getCategoryName(), this.currentUser);
+        Optional<ExpenseCategory> categoryInDb = this.expenseCategoryService.getById(updateCategoryDto.getNewCategoryName(), this.currentUser);
+
         ExpenseCategory category = new ExpenseCategory();
-        category.setUserId(categoryInDb.get().getUserId());
-        category.setCategoryName(categoryInDb.get().getCategoryName());
-        List<ExpenseCategory> categoryList = Collections.singletonList(category);
+        category.setUserId(updateCategoryDto.getUserId());
+        category.setCategoryName(updateCategoryDto.getNewCategoryName());
+        category.setAvailable(updateCategoryDto.getAvailable());
+
+        if (updateCategoryDto.getAvailable() == null) {
+            category.setAvailable(categoryInDb.get().getAvailable());
+        }
+
+        if (categoryInDb.equals(category)) {
+            List<ExpenseCategory> categoryList = Collections.singletonList(category);
+            List<CategoryDto> categoryDto = this.expenseCategoryService.expenseCategoriesToDto(categoryList);
+            return ResponseEntity.ok(categoryDto.get(0));
+        }
+
+        ExpenseCategory newExpenseCategory = this.expenseCategoryService.save(category);
+        List<ExpenseCategory> categoryList = Collections.singletonList(newExpenseCategory);
         List<CategoryDto> categoryDto = this.expenseCategoryService.expenseCategoriesToDto(categoryList);
         return ResponseEntity.ok(categoryDto.get(0));
     }
+
 
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@RequestBody ExpenseCategoryPK categoryPK) {
