@@ -1,14 +1,18 @@
 package com.luheresbar.daily.persistence;
 
+import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.repository.IIncomeCategoryRepository;
 import com.luheresbar.daily.persistence.crud.IIncomeCategoryCrudRepository;
+import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
+import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryEntity;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
 import com.luheresbar.daily.persistence.mapper.IIncomeCategoryMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class IncomeCategoryRepository implements IIncomeCategoryRepository {
@@ -28,6 +32,13 @@ public class IncomeCategoryRepository implements IIncomeCategoryRepository {
     }
 
     @Override
+    public Optional<IncomeCategory> getById(String categoryName, Integer userId) {
+        IncomeCategoryPK categoryPK = new IncomeCategoryPK(categoryName, userId);
+        Optional<IncomeCategoryEntity> incomeCategory = this.incomeCategoryCrudRepository.findById(categoryPK);
+        return incomeCategory.map(acc -> this.incomeCategoryMapper.toIncomeCategory(acc));
+    }
+
+    @Override
     public boolean exists(IncomeCategoryPK expenseCategoryPK) {
         return this.incomeCategoryCrudRepository.existsById(expenseCategoryPK);
     }
@@ -41,6 +52,11 @@ public class IncomeCategoryRepository implements IIncomeCategoryRepository {
     @Override
     public void delete(IncomeCategoryPK expenseCategoryPK) {
         this.incomeCategoryCrudRepository.deleteById(expenseCategoryPK);
+    }
+
+    @Override
+    public void updateNameCategory(String categoryName, String newCategoryName, Integer userId) {
+        this.incomeCategoryCrudRepository.updateIncomeCategory(categoryName, newCategoryName, userId);
     }
 
 }
