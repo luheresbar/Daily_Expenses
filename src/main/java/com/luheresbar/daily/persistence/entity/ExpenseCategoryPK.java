@@ -8,6 +8,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ExpenseCategoryPK {
 
     private String categoryName;

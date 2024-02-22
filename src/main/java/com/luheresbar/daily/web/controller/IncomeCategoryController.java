@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -36,17 +37,22 @@ public class IncomeCategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAll() {
         List<IncomeCategory> expenseCategories = this.incomeCategoryService.getByUser(this.currentUser);
+        System.out.println("Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Income" + this.currentUser  + expenseCategories); //TODO(Eliminar)
+
         List<CategoryDto> categoryDtos = this.incomeCategoryService.expenseCategoriesToDto(expenseCategories);
         return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<IncomeCategory> add(@RequestBody IncomeCategory expenseCategory) {
+    @PostMapping("/create")
+    public ResponseEntity<CategoryDto> add(@RequestBody IncomeCategory expenseCategory) {
         expenseCategory.setUserId(this.currentUser);
         IncomeCategoryPK expenseCategoryPK = new IncomeCategoryPK(expenseCategory.getCategoryName(), expenseCategory.getUserId());
 
         if (!this.incomeCategoryService.exists(expenseCategoryPK)) {
-            return ResponseEntity.ok(this.incomeCategoryService.save(expenseCategory));
+            IncomeCategory newIncomeCategory = this.incomeCategoryService.save(expenseCategory);
+            List<IncomeCategory> categoryList = Collections.singletonList(newIncomeCategory);
+            List<CategoryDto> categoryDto = this.incomeCategoryService.expenseCategoriesToDto(categoryList);
+            return ResponseEntity.ok(categoryDto.get(0));
         }
         return ResponseEntity.badRequest().build();
     }

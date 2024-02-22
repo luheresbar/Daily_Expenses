@@ -4,6 +4,7 @@ import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IExpenseCategoryRepository {
 
@@ -14,4 +15,8 @@ public interface IExpenseCategoryRepository {
     ExpenseCategory save(ExpenseCategory expenseCategory);
 
     void delete(ExpenseCategoryPK expenseCategoryPK);
+
+    void updateNameCategory(String categoryName, String newCategoryName, Integer userId);
+
+    Optional<ExpenseCategory> getById(String categoryName, Integer userId);
 }

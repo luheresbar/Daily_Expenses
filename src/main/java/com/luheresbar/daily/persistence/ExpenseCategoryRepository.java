@@ -9,6 +9,7 @@ import com.luheresbar.daily.persistence.mapper.IExpenseCategoryMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ExpenseCategoryRepository implements IExpenseCategoryRepository {
@@ -23,8 +24,15 @@ public class ExpenseCategoryRepository implements IExpenseCategoryRepository {
 
     @Override
     public List<ExpenseCategory> getByUser(Integer userId) {
-        List<ExpenseCategoryEntity> expenseCategoryEntity =  this.expenseCategoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
+        List<ExpenseCategoryEntity> expenseCategoryEntity = this.expenseCategoryCrudRepository.findAllByUserIdOrderByCategoryName(userId);
         return categoryMapper.toExpenseCategories(expenseCategoryEntity);
+    }
+
+    @Override
+    public Optional<ExpenseCategory> getById(String categoryName, Integer userId) {
+        ExpenseCategoryPK categoryPK = new ExpenseCategoryPK(categoryName, userId);
+        Optional<ExpenseCategoryEntity> expenseCategory = this.expenseCategoryCrudRepository.findById(categoryPK);
+        return expenseCategory.map(acc -> this.categoryMapper.toExpenseCategory(acc));
     }
 
     @Override
@@ -42,6 +50,13 @@ public class ExpenseCategoryRepository implements IExpenseCategoryRepository {
     public void delete(ExpenseCategoryPK expenseCategoryPK) {
         this.expenseCategoryCrudRepository.deleteById(expenseCategoryPK);
     }
+
+    @Override
+    public void updateNameCategory(String categoryName, String newCategoryName, Integer userId) {
+        this.expenseCategoryCrudRepository.updateExpenseCategory(categoryName, newCategoryName, userId);
+    }
+
+
 }
 
 
