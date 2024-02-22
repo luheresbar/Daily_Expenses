@@ -7,7 +7,6 @@ import com.luheresbar.daily.persistence.entity.UserEntity;
 import com.luheresbar.daily.persistence.mapper.IUserMapper;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

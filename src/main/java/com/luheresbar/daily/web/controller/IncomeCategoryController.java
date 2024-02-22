@@ -1,6 +1,5 @@
 package com.luheresbar.daily.web.controller;
 
-import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.service.IncomeCategoryService;
@@ -38,6 +37,8 @@ public class IncomeCategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAll() {
         List<IncomeCategory> expenseCategories = this.incomeCategoryService.getByUser(this.currentUser);
+        System.out.println("Holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Income" + this.currentUser  + expenseCategories); //TODO(Eliminar)
+
         List<CategoryDto> categoryDtos = this.incomeCategoryService.expenseCategoriesToDto(expenseCategories);
         return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
     }

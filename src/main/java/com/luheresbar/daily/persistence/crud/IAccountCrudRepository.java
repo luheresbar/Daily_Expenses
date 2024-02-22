@@ -1,6 +1,5 @@
 package com.luheresbar.daily.persistence.crud;
 
-import com.luheresbar.daily.domain.dto.UpdateAccountDto;
 import com.luheresbar.daily.persistence.entity.AccountEntity;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,7 +28,7 @@ public interface IAccountCrudRepository extends CrudRepository<AccountEntity, Ac
     @Query("UPDATE AccountEntity a " +
             "SET a.accountName = :newAccountName " +
             "WHERE a.accountName = :accountName AND a.userId = :currentUser ")
-    void updateNameAccount(@Param("accountName") String accountName, @Param("newAccountName") String newAccountName, @Param("currentUser") Integer currentUser);
+    void updateAccountName(@Param("accountName") String accountName, @Param("newAccountName") String newAccountName, @Param("currentUser") Integer currentUser);
 
     // Query Nativo
 //    @Query(value =  "UPDATE users " +
