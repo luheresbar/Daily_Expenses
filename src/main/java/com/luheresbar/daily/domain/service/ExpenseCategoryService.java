@@ -23,6 +23,13 @@ public class ExpenseCategoryService {
         return this.categoryRepository.getByUser(userId);
     }
 
+    public List<ExpenseCategory> getEnabledCategoriesByUser(Integer userId) {
+        return this.categoryRepository.getEnabledCategoriesByUser(userId);
+    }
+    public List<ExpenseCategory> getDisabledCategoriesByUser(Integer userId) {
+        return this.categoryRepository.getDisabledCategoriesByUser(userId);
+    }
+
     public Optional<ExpenseCategory> getById(String categoryName, Integer userId) {
         return this.categoryRepository.getById(categoryName, userId);
     }

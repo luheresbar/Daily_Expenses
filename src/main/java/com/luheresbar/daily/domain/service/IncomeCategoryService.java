@@ -1,5 +1,6 @@
 package com.luheresbar.daily.domain.service;
 
+import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.repository.IIncomeCategoryRepository;
@@ -22,6 +23,14 @@ public class IncomeCategoryService {
 
     public List<IncomeCategory> getByUser(Integer userId) {
         return this.incomeCategoryRepository.getByUser(userId);
+    }
+
+    public List<IncomeCategory> getEnabledCategoriesByUser(Integer userId) {
+        return this.incomeCategoryRepository.getEnabledCategoriesByUser(userId);
+    }
+
+    public List<IncomeCategory> getDisabledCategoriesByUser(Integer userId) {
+        return this.incomeCategoryRepository.getDisabledCategoriesByUser(userId);
     }
 
     public Optional<IncomeCategory> getById(String categoryName, Integer userId) {

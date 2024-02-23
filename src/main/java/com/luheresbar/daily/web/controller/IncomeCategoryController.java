@@ -2,10 +2,12 @@ package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
+import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.dto.CategoryDto;
+import com.luheresbar.daily.domain.dto.SummaryCategoryDto;
 import com.luheresbar.daily.domain.dto.UpdateCategoryDto;
 import com.luheresbar.daily.domain.service.IncomeCategoryService;
-import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
+import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +42,14 @@ public class IncomeCategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getAll() {
-        List<IncomeCategory> incomeCategories = this.incomeCategoryService.getByUser(this.currentUser);
+    public ResponseEntity<SummaryCategoryDto> viewCategoriesUser() {
+        List<IncomeCategory> enabledCategories = this.incomeCategoryService.getEnabledCategoriesByUser(this.currentUser);
+        List<IncomeCategory> disabledCategories = this.incomeCategoryService.getDisabledCategoriesByUser(this.currentUser);
 
-        List<CategoryDto> categoryDtos = this.incomeCategoryService.incomeCategoriesToDto(incomeCategories);
-        return new ResponseEntity<>(categoryDtos, HttpStatus.OK);
+        List<CategoryDto> enabledCategoriesToDto = this.incomeCategoryService.incomeCategoriesToDto(enabledCategories);
+        List<CategoryDto> disabledCategoriesToDto = this.incomeCategoryService.incomeCategoriesToDto(disabledCategories);
+
+        return ResponseEntity.ok(new SummaryCategoryDto(enabledCategoriesToDto, disabledCategoriesToDto));
     }
 
     @PostMapping("/create")

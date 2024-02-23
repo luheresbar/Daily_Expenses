@@ -1,5 +1,6 @@
 package com.luheresbar.daily.domain.repository;
 
+import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
 
@@ -19,4 +20,8 @@ public interface IIncomeCategoryRepository {
     void delete(IncomeCategoryPK incomeCategoryPK);
 
     void updateNameCategory(String categoryName, String newCategoryName, Integer userId);
+
+    List<IncomeCategory> getEnabledCategoriesByUser(Integer userId);
+
+    List<IncomeCategory> getDisabledCategoriesByUser(Integer userId);
 }

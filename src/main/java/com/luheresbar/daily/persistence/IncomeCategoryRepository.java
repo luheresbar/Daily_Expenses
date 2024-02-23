@@ -32,6 +32,18 @@ public class IncomeCategoryRepository implements IIncomeCategoryRepository {
     }
 
     @Override
+    public List<IncomeCategory> getEnabledCategoriesByUser(Integer userId) {
+        List<IncomeCategoryEntity> accounts = this.incomeCategoryCrudRepository.findAllAvailableByUserIdOrderByCategoryName(userId);
+        return incomeCategoryMapper.toIncomeCategories(accounts);
+    }
+
+    @Override
+    public List<IncomeCategory> getDisabledCategoriesByUser(Integer userId) {
+        List<IncomeCategoryEntity> accounts = this.incomeCategoryCrudRepository.findAllNoAvailableByUserIdOrderByCategoryName(userId);
+        return incomeCategoryMapper.toIncomeCategories(accounts);
+    }
+
+    @Override
     public Optional<IncomeCategory> getById(String categoryName, Integer userId) {
         IncomeCategoryPK categoryPK = new IncomeCategoryPK(categoryName, userId);
         Optional<IncomeCategoryEntity> incomeCategory = this.incomeCategoryCrudRepository.findById(categoryPK);
