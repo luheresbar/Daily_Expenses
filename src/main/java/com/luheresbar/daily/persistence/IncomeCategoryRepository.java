@@ -1,11 +1,8 @@
 package com.luheresbar.daily.persistence;
 
-import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.repository.IIncomeCategoryRepository;
 import com.luheresbar.daily.persistence.crud.IIncomeCategoryCrudRepository;
-import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
-import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryEntity;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
 import com.luheresbar.daily.persistence.mapper.IIncomeCategoryMapper;

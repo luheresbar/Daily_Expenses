@@ -3,7 +3,6 @@ package com.luheresbar.daily.persistence;
 import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.repository.IExpenseCategoryRepository;
 import com.luheresbar.daily.persistence.crud.IExpenseCategoryCrudRepository;
-import com.luheresbar.daily.persistence.entity.AccountEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import com.luheresbar.daily.persistence.mapper.IExpenseCategoryMapper;

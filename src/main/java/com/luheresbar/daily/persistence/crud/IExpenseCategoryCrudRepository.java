@@ -1,7 +1,6 @@
 package com.luheresbar.daily.persistence.crud;
 
 
-import com.luheresbar.daily.persistence.entity.AccountEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import org.springframework.data.jpa.repository.Modifying;

@@ -1,15 +1,11 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.IncomeCategory;
-import com.luheresbar.daily.domain.IncomeCategory;
-import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.domain.dto.CategoryDto;
 import com.luheresbar.daily.domain.dto.SummaryCategoryDto;
 import com.luheresbar.daily.domain.dto.UpdateCategoryDto;
 import com.luheresbar.daily.domain.service.IncomeCategoryService;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
-import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
