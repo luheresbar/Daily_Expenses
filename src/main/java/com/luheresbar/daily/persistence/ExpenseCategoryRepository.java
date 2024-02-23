@@ -3,6 +3,7 @@ package com.luheresbar.daily.persistence;
 import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.repository.IExpenseCategoryRepository;
 import com.luheresbar.daily.persistence.crud.IExpenseCategoryCrudRepository;
+import com.luheresbar.daily.persistence.entity.AccountEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryEntity;
 import com.luheresbar.daily.persistence.entity.ExpenseCategoryPK;
 import com.luheresbar.daily.persistence.mapper.IExpenseCategoryMapper;
@@ -33,6 +34,18 @@ public class ExpenseCategoryRepository implements IExpenseCategoryRepository {
         ExpenseCategoryPK categoryPK = new ExpenseCategoryPK(categoryName, userId);
         Optional<ExpenseCategoryEntity> expenseCategory = this.expenseCategoryCrudRepository.findById(categoryPK);
         return expenseCategory.map(acc -> this.categoryMapper.toExpenseCategory(acc));
+    }
+
+    @Override
+    public List<ExpenseCategory> getEnabledCategoriesByUser(Integer userId) {
+        List<ExpenseCategoryEntity> accounts = this.expenseCategoryCrudRepository.findAllAvailableByUserIdOrderByCategoryName(userId);
+        return categoryMapper.toExpenseCategories(accounts);
+    }
+
+    @Override
+    public List<ExpenseCategory> getDisabledCategoriesByUser(Integer userId) {
+        List<ExpenseCategoryEntity> accounts = this.expenseCategoryCrudRepository.findAllNoAvailableByUserIdOrderByCategoryName(userId);
+        return categoryMapper.toExpenseCategories(accounts);
     }
 
     @Override

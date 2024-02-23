@@ -13,6 +13,13 @@ import java.util.List;
 public interface IIncomeCategoryCrudRepository extends CrudRepository<IncomeCategoryEntity, IncomeCategoryPK> {
     List<IncomeCategoryEntity> findAllByUserIdOrderByCategoryName(Integer userId);
 
+    @Query("SELECT c FROM IncomeCategoryEntity c WHERE c.available = true AND c.userId = :userId ORDER BY c.categoryName")
+    List<IncomeCategoryEntity> findAllAvailableByUserIdOrderByCategoryName(@Param("userId") Integer userId);
+
+    // Query JPQL
+    @Query("SELECT c FROM IncomeCategoryEntity c WHERE c.available = false AND c.userId = :userId ORDER BY c.categoryName")
+    List<IncomeCategoryEntity> findAllNoAvailableByUserIdOrderByCategoryName(@Param("userId") Integer userId);
+
     @Transactional
     @Modifying
     @Query("UPDATE IncomeCategoryEntity c " +
