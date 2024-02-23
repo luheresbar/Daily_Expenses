@@ -1,6 +1,5 @@
 package com.luheresbar.daily.domain.repository;
 
-import com.luheresbar.daily.domain.ExpenseCategory;
 import com.luheresbar.daily.domain.IncomeCategory;
 import com.luheresbar.daily.persistence.entity.IncomeCategoryPK;
 
