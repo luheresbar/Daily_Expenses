@@ -69,8 +69,9 @@ public class UserEntityRepository implements IUserRepository {
     }
 
     @Override
-    public boolean changePassword(String email, String newPassword) {
-        if (this.userCrudRepository.changePassword(email, newPassword) > 0) {
+    public boolean changePassword(Integer userId, String newPassword) {
+        if (this.userCrudRepository.changePassword(userId, newPassword) > 0) {
+            System.out.println("nueva password REpository" + newPassword); //TODO (Eliminar)
             return true;
         } else {
             return false;

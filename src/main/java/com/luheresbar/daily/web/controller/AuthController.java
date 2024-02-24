@@ -162,10 +162,16 @@ public class AuthController {
     @Transactional
     @PostMapping("/change-password")
     public ResponseEntity<MessageDto> changePassword(@RequestBody ChangePasswordDto dto) { //TODO (Complementar respuesta, ejm, cuando la new password sea igual a la contraseña existente, notificarlo, o que se pueada guardar un registro de contraseñas, para no poner una contraseña que ya hubiere estado en el registro)
-        String emailUser = this.jwtUtil.getUsername(dto.token());
+        Integer userId = Integer.valueOf(this.jwtUtil.getUsername(dto.token()));
         String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
-        if (this.userService.existsByEmail(emailUser) && this.jwtUtil.isValid(dto.token())) {
-            if (this.userService.changePassword(emailUser, passwordEncoded)) {
+
+        System.out.println(userId); //TODO (Eliminar)
+        System.out.println(this.userService.exists(userId)); //TODO (Eliminar)
+        System.out.println(this.jwtUtil.isValid(dto.token())); //TODO (Eliminar)
+
+        if (this.userService.exists(userId) && this.jwtUtil.isValid(dto.token())) {
+        System.out.println( "new pasword in controller " + passwordEncoded); //TODO (Eliminar)
+            if (this.userService.changePassword(userId, passwordEncoded)) {
                 return ResponseEntity.ok(new MessageDto(true));
             } else {
                 return ResponseEntity.ok((new MessageDto(false)));
