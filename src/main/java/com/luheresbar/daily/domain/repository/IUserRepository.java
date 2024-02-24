@@ -24,5 +24,5 @@ public interface IUserRepository {
 
     Integer countUsers();
 
-    boolean changePassword(String email, String newPassword);
+    boolean changePassword(Integer userId, String newPassword);
 }
