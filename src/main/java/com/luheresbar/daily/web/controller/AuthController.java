@@ -165,7 +165,6 @@ public class AuthController {
         Integer userId = Integer.valueOf(this.jwtUtil.getUsername(dto.token()));
         String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
 
-        if (this.userService.exists(userId) && this.jwtUtil.isValid(dto.token())) {
             if (this.userService.changePassword(userId, passwordEncoded)) {
                 return ResponseEntity.ok(new MessageDto(true));
             } else {
