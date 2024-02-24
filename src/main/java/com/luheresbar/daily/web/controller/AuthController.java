@@ -110,7 +110,7 @@ public class AuthController {
             bankAccount.setAvailableMoney(0.0);
             bankAccount.setAvailable(true);
             this.accountService.save(bankAccount);
-            
+
             return ResponseEntity.ok(Optional.of(new UserProfileDto(
                             userDB.get().getUserId(),
                             userDB.get().getUsername(),
@@ -165,6 +165,7 @@ public class AuthController {
         Integer userId = Integer.valueOf(this.jwtUtil.getUsername(dto.token()));
         String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
 
+        if (this.userService.exists(userId) && this.jwtUtil.isValid(dto.token())) {
             if (this.userService.changePassword(userId, passwordEncoded)) {
                 return ResponseEntity.ok(new MessageDto(true));
             } else {
@@ -174,5 +175,6 @@ public class AuthController {
             return ResponseEntity.ok((new MessageDto(false)));
         }
     }
+
 
 }
