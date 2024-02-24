@@ -24,8 +24,8 @@ public interface IUserCrudRepository extends CrudRepository<UserEntity, Integer>
     Boolean existsByEmail(String email);
 
     @Modifying
-    @Query("UPDATE UserEntity u SET u.password = :newPassword WHERE u.email = :email")
-    int changePassword(@Param("email") String email, @Param("newPassword") String newPassword);
+    @Query("UPDATE UserEntity u SET u.password = :newPassword WHERE u.userId = :userId")
+    int changePassword(@Param("userId") Integer userId, @Param("newPassword") String newPassword);
 
 
     // Query Nativo

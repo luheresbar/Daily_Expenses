@@ -1,6 +1,9 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.MessageDto;
+import com.luheresbar.daily.domain.dto.UpdatePasswordDto;
+import com.luheresbar.daily.domain.dto.UpdateUserDto;
 import com.luheresbar.daily.domain.dto.UserProfileDto;
 import com.luheresbar.daily.domain.service.UserService;
 import com.luheresbar.daily.persistence.projections.IUserSummary;
@@ -12,6 +15,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -53,48 +58,80 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity<Optional<UserProfileDto>> viewInformation() {
         Optional<User> userDB = userService.getById(this.currentUser);
-
-        return ResponseEntity.ok(Optional.of(new UserProfileDto(
-                        userDB.get().getUserId(),
-                        userDB.get().getUsername(),
-                        userDB.get().getEmail(),
-                        userDB.get().getRegisterDate(),
-                        userDB.get().getRoles()
+        return userDB.map(user -> ResponseEntity.ok(Optional.of(new UserProfileDto(
+                        user.getUserId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getRegisterDate(),
+                        user.getRoles()
                 ))
-        );
+        )).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Como usuario puedo actualizar mi informacion personal registrada en la app para que pueda tener la informacion actualizada.
-    @PutMapping("/user")
-    public ResponseEntity<User> update(@RequestBody User user) {
+    @PutMapping("/update")
+    public ResponseEntity<UserProfileDto> update(@RequestBody UpdateUserDto updateUserDto) {
+        User user = new User();
         user.setUserId(this.currentUser);
-        Optional<User> userInDb = this.userService.getById(this.currentUser);
+        user.setUsername(updateUserDto.username());
+        user.setEmail(updateUserDto.email());
+        user.setPassword(updateUserDto.password());
 
-        if (user.getUsername() == null) {
-            user.setUsername(userInDb.get().getUsername());
-        }
-        if (user.getPassword() == null) {
+        Optional<User> userInDb = this.userService.getById(this.currentUser);
+        if (userInDb.isPresent()) {
+            user.setRoles(userInDb.get().getRoles());
+            user.setRegisterDate(userInDb.get().getRegisterDate());
+            if (user.getUsername() == null || user.getUsername().isEmpty()) {
+                user.setUsername(userInDb.get().getUsername());
+            }
+            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                user.setEmail(userInDb.get().getEmail());
+            }
             user.setPassword(userInDb.get().getPassword());
-        } else if (!user.getPassword().equals(userInDb.get().getPassword())) {
-            String encodedPassword = this.passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
+
+            if (userInDb.get().equals(user)) {
+                return ResponseEntity.ok(new UserProfileDto(
+                        user.getUserId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getRegisterDate(),
+                        user.getRoles()
+                ));
+            }
+
+            if (!userInDb.get().getEmail().equals(updateUserDto.email()) && this.passwordEncoder.matches(updateUserDto.password(), userInDb.get().getPassword())) {
+                user.setEmail(updateUserDto.email());
+            } else if (!userInDb.get().getEmail().equals(updateUserDto.email()) && !this.passwordEncoder.matches(updateUserDto.password(), userInDb.get().getPassword())) {
+                return ResponseEntity.badRequest().build();
+            }
+            User updatedUser = this.userService.save(user);
+
+            return ResponseEntity.ok(new UserProfileDto(
+                    updatedUser.getUserId(),
+                    updatedUser.getUsername(),
+                    updatedUser.getEmail(),
+                    updatedUser.getRegisterDate(),
+                    updatedUser.getRoles()
+            ));
         }
-        if (user.getEmail() == null) {
-            user.setEmail(userInDb.get().getEmail());
-        }
-        return ResponseEntity.ok(this.userService.save(user));
+        return ResponseEntity.badRequest().build();
     }
 
-    // Actualizar el userId de un usuario.
-    // @PatchMapping("/update/userid")
-    // public ResponseEntity<Optional<User>> updateUserId(@RequestBody UpdateUserIdDto updateUserIdDto) {
-    //     updateUserIdDto.setCurrentUserId(this.currentUser);
-    //     if (this.userService.exists(currentUser)) {
-    //         this.userService.updateUserId(updateUserIdDto);
-    //         return ResponseEntity.ok(this.userService.getById(updateUserIdDto.getNewUserId()));
-    //     }
-    //     return ResponseEntity.notFound().build();
-    // }
+    @Transactional
+    @PutMapping("/update-password")
+    public ResponseEntity<MessageDto> updatePassword(@RequestBody UpdatePasswordDto dto) { //TODO (Complementar respuesta, ejm, cuando la new password sea igual a la contraseña existente, notificarlo, o que se pueada guardar un registro de contraseñas, para no poner una contraseña que ya hubiere estado en el registro)
+        Optional<User> userInDb = this.userService.getById(this.currentUser);
+        if (userInDb.isPresent() && !dto.currentPassword().equals(dto.newPassword()) && this.passwordEncoder.matches(dto.currentPassword(), userInDb.get().getPassword())) {
+
+            String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
+
+            if (this.userService.changePassword(this.currentUser, passwordEncoded)) {
+                return ResponseEntity.ok(new MessageDto(true));
+            } else {
+                return ResponseEntity.ok((new MessageDto(false)));
+            }
+        }
+        return ResponseEntity.ok((new MessageDto(false)));
+    }
 
 
     //  Unicamente un usuario puede eliminar su propia cuenta.

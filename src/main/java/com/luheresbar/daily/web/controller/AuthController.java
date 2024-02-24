@@ -11,10 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.time.LocalDateTime;
@@ -110,7 +107,7 @@ public class AuthController {
             bankAccount.setAvailableMoney(0.0);
             bankAccount.setAvailable(true);
             this.accountService.save(bankAccount);
-            
+
             return ResponseEntity.ok(Optional.of(new UserProfileDto(
                             userDB.get().getUserId(),
                             userDB.get().getUsername(),
@@ -160,12 +157,13 @@ public class AuthController {
     }
 
     @Transactional
-    @PostMapping("/change-password")
+    @PutMapping("/change-password")
     public ResponseEntity<MessageDto> changePassword(@RequestBody ChangePasswordDto dto) { //TODO (Complementar respuesta, ejm, cuando la new password sea igual a la contraseña existente, notificarlo, o que se pueada guardar un registro de contraseñas, para no poner una contraseña que ya hubiere estado en el registro)
-        String emailUser = this.jwtUtil.getUsername(dto.token());
+        Integer userId = Integer.valueOf(this.jwtUtil.getUsername(dto.token()));
         String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
-        if (this.userService.existsByEmail(emailUser) && this.jwtUtil.isValid(dto.token())) {
-            if (this.userService.changePassword(emailUser, passwordEncoded)) {
+
+        if (this.userService.exists(userId) && this.jwtUtil.isValid(dto.token())) {
+            if (this.userService.changePassword(userId, passwordEncoded)) {
                 return ResponseEntity.ok(new MessageDto(true));
             } else {
                 return ResponseEntity.ok((new MessageDto(false)));
