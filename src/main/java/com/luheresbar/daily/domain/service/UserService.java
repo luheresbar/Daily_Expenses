@@ -50,8 +50,8 @@ public class UserService {
         return this.userRepository.countUsers();
     }
 
-    public boolean changePassword(String email, String newPassword) {
-        return this.userRepository.changePassword(email, newPassword);
+    public boolean changePassword(Integer userId, String newPassword) {
+        return this.userRepository.changePassword(userId, newPassword);
     }
 
 //    public List<CategoryDto> getCategoryDto(Optional<User> userDB) {
