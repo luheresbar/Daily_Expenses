@@ -1,6 +1,8 @@
 package com.luheresbar.daily.web.controller;
 
 import com.luheresbar.daily.domain.User;
+import com.luheresbar.daily.domain.dto.MessageDto;
+import com.luheresbar.daily.domain.dto.UpdatePasswordDto;
 import com.luheresbar.daily.domain.dto.UpdateUserDto;
 import com.luheresbar.daily.domain.dto.UserProfileDto;
 import com.luheresbar.daily.domain.service.UserService;
@@ -13,6 +15,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -112,16 +116,22 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-//     Actualizar el userId de un usuario.
-//     @PatchMapping("/update/userid")
-//     public ResponseEntity<Optional<User>> updateUserId(@RequestBody UpdateUserIdDto updateUserIdDto) {
-//         updateUserIdDto.setCurrentUserId(this.currentUser);
-//         if (this.userService.exists(currentUser)) {
-//             this.userService.updateUserId(updateUserIdDto);
-//             return ResponseEntity.ok(this.userService.getById(updateUserIdDto.getNewUserId()));
-//         }
-//         return ResponseEntity.notFound().build();
-//     }
+    @Transactional
+    @PutMapping("/update-password")
+    public ResponseEntity<MessageDto> updatePassword(@RequestBody UpdatePasswordDto dto) { //TODO (Complementar respuesta, ejm, cuando la new password sea igual a la contraseña existente, notificarlo, o que se pueada guardar un registro de contraseñas, para no poner una contraseña que ya hubiere estado en el registro)
+        Optional<User> userInDb = this.userService.getById(this.currentUser);
+        if (userInDb.isPresent() && !dto.currentPassword().equals(dto.newPassword()) && this.passwordEncoder.matches(dto.currentPassword(), userInDb.get().getPassword())) {
+
+            String passwordEncoded = this.passwordEncoder.encode(dto.newPassword());
+
+            if (this.userService.changePassword(this.currentUser, passwordEncoded)) {
+                return ResponseEntity.ok(new MessageDto(true));
+            } else {
+                return ResponseEntity.ok((new MessageDto(false)));
+            }
+        }
+        return ResponseEntity.ok((new MessageDto(false)));
+    }
 
 
     //  Unicamente un usuario puede eliminar su propia cuenta.
