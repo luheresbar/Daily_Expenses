@@ -35,7 +35,6 @@ public class ExpenseService {
     public List<Expense> getAccountExpenses(String accountName, Integer userId) {
         return this.expenseRepository.getAccountExpenses(accountName, userId);
     }
-
     public Double getTotalExpense(List<Expense> expenses) {
         Double totalExpense = 0.0;
         for (int i = 0; i < expenses.size(); i++) {

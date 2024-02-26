@@ -80,20 +80,24 @@ public class ExpenseController {
         List<Expense> expenseList = Collections.singletonList(savedExpense);
         List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenseList);
 
+        // Update money available in account
+        this.accountService.updateAccountOnExpenseInsert(expense.getExpense(), expense.getAccountName(), this.currentUser);
+
         return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
     }
 
     @PutMapping("/update")
     public ResponseEntity<TransactionDetail> update(@RequestBody TransactionDetail transactionDetailExpense) {
         Expense expense = this.transactionService.transactionDetailToExpense(transactionDetailExpense);
-        System.out.println("Holaaaa" + expense);
         expense.setUserId(this.currentUser);
+
         Optional<Expense> expenseDb = this.expenseService.getById(expense.getExpenseId());
 
-        if (expenseDb.get().getUserId().equals(this.currentUser)) {
+        if (expenseDb.isPresent()) {
 
             if (expense.getExpense() == null) {
                 expense.setExpense(expenseDb.get().getExpense());
+
             }
             if (expense.getDescription() == null) {
                 expense.setDescription(expenseDb.get().getDescription());
@@ -110,6 +114,14 @@ public class ExpenseController {
             Expense savedExpense = this.expenseService.save(expense);
             List<Expense> expenseList = Collections.singletonList(savedExpense);
             List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenseList);
+
+            // Update money available in account
+            String oldAccountName = expenseDb.get().getAccountName();
+            String newAccountName = expense.getAccountName();
+            Double oldExpense = expenseDb.get().getExpense();
+            Double newExpense = expense.getExpense();
+            this.accountService.updateAccountOnExpenseUpdate(oldAccountName, newAccountName, oldExpense, newExpense, this.currentUser);
+
             return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();
@@ -117,8 +129,18 @@ public class ExpenseController {
 
     @DeleteMapping("/delete/{expenseId}")
     public ResponseEntity<Void> delete(@PathVariable int expenseId) {
-        if (this.expenseService.delete(expenseId, this.currentUser)) {
-            return ResponseEntity.ok().build();
+        Optional<Expense> expenseDb = this.expenseService.getById(expenseId);
+        if (expenseDb.isPresent()) {
+            String accountName = expenseDb.get().getAccountName();
+            Double expense = expenseDb.get().getExpense();
+            Integer userId = this.currentUser;
+            if (this.expenseService.delete(expenseId, this.currentUser)) {
+
+                // Update money available in account
+                this.accountService.updateAccountOnExpenseDelete(accountName, expense, userId);
+
+                return ResponseEntity.ok().build();
+            }
         }
         return ResponseEntity.notFound().build();
     }

@@ -86,6 +86,10 @@ public class IncomeController {
         Income savedIncome = this.incomeService.save(income);
         List<Income> incomeList = Collections.singletonList(savedIncome);
         List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomeList);
+
+        // Update money available in account
+        this.accountService.updateAccountOnIncomeInsert(income.getIncome(), income.getAccountName(), this.currentUser);
+
         return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
     }
 
@@ -95,7 +99,7 @@ public class IncomeController {
 
         income.setUserId(this.currentUser);
         Optional<Income> incomeDb = this.incomeService.getById(income.getIncomeId());
-        if (incomeDb.get().getUserId().equals(this.currentUser)) {
+        if (incomeDb.isPresent()) {
 
             if (income.getIncome() == null) {
                 income.setIncome(incomeDb.get().getIncome());
@@ -115,6 +119,14 @@ public class IncomeController {
             Income savedIncome = this.incomeService.save(income);
             List<Income> incomeList = Collections.singletonList(savedIncome);
             List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomeList);
+
+            // Update money available in account
+            String oldAccountName = incomeDb.get().getAccountName();
+            String newAccountName = income.getAccountName();
+            Double oldExpense = incomeDb.get().getIncome();
+            Double newIncome = income.getIncome();
+            this.accountService.updateAccountOnIncomeUpdate(oldAccountName, newAccountName, oldExpense, newIncome, this.currentUser);
+
             return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();
@@ -122,8 +134,18 @@ public class IncomeController {
 
     @DeleteMapping("/delete/{incomeId}")
     public ResponseEntity<Void> delete(@PathVariable int incomeId) {
-        if (this.incomeService.delete(incomeId, this.currentUser)) {
-            return ResponseEntity.ok().build();
+        Optional<Income> incomeDb = this.incomeService.getById(incomeId);
+        if (incomeDb.isPresent()) {
+            String accountName = incomeDb.get().getAccountName();
+            Double income = incomeDb.get().getIncome();
+            Integer userId = this.currentUser;
+            if (this.incomeService.delete(incomeId, this.currentUser)) {
+
+                // Update money available in account
+                this.accountService.updateAccountOnIncomeDelete(accountName, income, userId);
+
+                return ResponseEntity.ok().build();
+            }
         }
         return ResponseEntity.notFound().build();
     }

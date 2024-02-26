@@ -3,6 +3,7 @@ package com.luheresbar.daily.web.controller;
 import com.luheresbar.daily.domain.Transfer;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
 import com.luheresbar.daily.domain.dto.TransactionDto;
+import com.luheresbar.daily.domain.service.AccountService;
 import com.luheresbar.daily.domain.service.TransactionService;
 import com.luheresbar.daily.domain.service.TransferService;
 import org.springframework.http.HttpStatus;
@@ -23,12 +24,14 @@ public class TransferController {
 
     private final TransferService transferService;
     private final TransactionService transactionService;
+    private final AccountService accountService;
 
     private Integer currentUser;
 
-    public TransferController(TransferService transferService, TransactionService transactionService) {
+    public TransferController(TransferService transferService, TransactionService transactionService, AccountService accountService) {
         this.transferService = transferService;
         this.transactionService = transactionService;
+        this.accountService = accountService;
     }
 
     @ModelAttribute
@@ -77,6 +80,10 @@ public class TransferController {
             Transfer savedTransfer = this.transferService.save(transfer);
             List<Transfer> transferList = Collections.singletonList(savedTransfer);
             List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transferList);
+
+            // Update money available in accounts
+            this.accountService.updateAccountOnTransferInsert(transfer.getTransferValue(), transfer.getSourceAccountName(), transfer.getDestinationAccountName(), this.currentUser);
+
             return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
         }
         return ResponseEntity.badRequest().build();
@@ -101,7 +108,7 @@ public class TransferController {
         transfer.setUserId(this.currentUser);
         Optional<Transfer> transferDb = this.transferService.getById(transfer.getTransferId());
 
-        if(transferDb.get().getUserId().equals(this.currentUser)) {
+        if(transferDb.isPresent()) {
             if(transfer.getTransferValue() == null) {
                 transfer.setTransferValue(transferDb.get().getTransferValue());
             }
@@ -118,6 +125,16 @@ public class TransferController {
             Transfer savedTransfer = this.transferService.save(transfer);
             List<Transfer> transferList = Collections.singletonList(savedTransfer);
             List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transferList);
+
+            // Update money available in account
+            String oldSourceAccountName = transferDb.get().getSourceAccountName();
+            String newSourceAccountName = transfer.getSourceAccountName();
+            String oldDestinationAccountName = transferDb.get().getDestinationAccountName();
+            String newDestinationAccountName = transfer.getDestinationAccountName();
+            Double oldTransferValue = transferDb.get().getTransferValue();
+            Double newTransferValue = transfer.getTransferValue();
+            this.accountService.updateAccountOnTransferUpdate(oldSourceAccountName, newSourceAccountName, oldDestinationAccountName, newDestinationAccountName, oldTransferValue, newTransferValue, this.currentUser);
+
             return ResponseEntity.ok(transactionDetails.get(0));
         }
         return ResponseEntity.notFound().build();
@@ -125,8 +142,22 @@ public class TransferController {
 
     @DeleteMapping("/delete/{transferId}")
     public ResponseEntity<Void> delete(@PathVariable int transferId) {
-        if(this.transferService.delete(transferId, this.currentUser)) {
-            return  ResponseEntity.ok().build();
+        Optional<Transfer> transferDb = this.transferService.getById(transferId);
+
+        if(transferDb.isPresent()) {
+            String sourceAccountName = transferDb.get().getSourceAccountName();
+            String destinationAccountName = transferDb.get().getDestinationAccountName();
+            Double transferValue = transferDb.get().getTransferValue();
+            Integer userId = this.currentUser;
+
+
+            if (this.transferService.delete(transferId, this.currentUser)) {
+
+                // Update money available in account
+                this.accountService.updateAccountOnTransferDelete(sourceAccountName, destinationAccountName, transferValue, userId);
+
+                return ResponseEntity.ok().build();
+            }
         }
         return ResponseEntity.notFound().build();
     }

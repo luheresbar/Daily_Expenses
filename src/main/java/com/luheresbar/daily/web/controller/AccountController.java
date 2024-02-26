@@ -100,9 +100,9 @@ public class AccountController {
         accountPK.setUserId(this.currentUser);
         if (this.accountService.exists(accountPK)) {
             this.accountService.delete(accountPK);
+
             return ResponseEntity.ok().build();
         }
-        ;
         return ResponseEntity.notFound().build();
     }
 
