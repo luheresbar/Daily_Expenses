@@ -16,4 +16,6 @@ public interface IExpenseRepository {
     Optional<Expense> getById(int expenseId);
 
     List<Expense> getAccountExpenses(String accountName, Integer userId);
+
+
 }

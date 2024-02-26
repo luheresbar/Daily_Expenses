@@ -135,7 +135,7 @@ public class UserController {
 
 
     //  Unicamente un usuario puede eliminar su propia cuenta.
-    @DeleteMapping("/user/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteUser() {
         if (this.userService.delete(this.currentUser)) {
             return ResponseEntity.ok().build();

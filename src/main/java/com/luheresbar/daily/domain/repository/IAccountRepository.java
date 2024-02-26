@@ -20,8 +20,15 @@ public interface IAccountRepository {
 
     Account save(Account account);
 
+
     void delete(AccountPK accountPK);
 
     void updateNameAccount(String accountName, String newAccountName, Integer currentUser);
+
+//    void handleTransactionInsert(Integer userId, String accountName, Double amount);
+
+//    void handleExpenseUpdate(Expense oldExpense, Expense newExpense);
+
+//    void handleTransactionDelete(Integer userId, String accountName, Double amount);
 
 }

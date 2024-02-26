@@ -56,6 +56,7 @@ public class AccountEntityRepository implements IAccountRepository {
         return this.accountMapper.toAccount(this.accountCrudRepository.save(accountEntity));
     }
 
+
     @Override
     public void updateNameAccount(String accountName, String newAccountName, Integer currentUser) {
         this.accountCrudRepository.updateAccountName(accountName, newAccountName, currentUser);
