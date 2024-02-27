@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -43,25 +45,33 @@ public class IncomeController {
     }
 
     @GetMapping
-    public ResponseEntity<TransactionDto> getUserIncomes(@RequestParam(required = false) String account_name) {
-        if (account_name != null) {
-            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
-            if (this.accountService.exists(accountPK)) {
-                List<Income> incomes = this.incomeService.getAccountIncomes(account_name, this.currentUser);
-                List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
-                List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
-                Double totalIncome = this.incomeService.getTotalIncome(incomes);
-                return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+    public ResponseEntity<TransactionDto> getUserIncomes(@RequestParam(required = false) String account_name, @RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
+        List<Income> incomes = new ArrayList<>();
+        if (current_date != null && next_date != null) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            LocalDateTime startDate = LocalDateTime.parse(current_date, formatter);
+            LocalDateTime endDate = LocalDateTime.parse(next_date, formatter);
+
+            incomes = this.incomeService.findByDateBetween( startDate, endDate, this.currentUser);
+
+//            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
+//            if (this.accountService.exists(accountPK)) {
+//                List<Income> incomes = this.incomeService.getAccountIncomes(account_name, this.currentUser);
+//                List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
+//                List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
+//                Double totalIncome = this.incomeService.getTotalIncome(incomes);
+//                return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
         } else {
-            List<Income> incomes = this.incomeService.getUserIncomes(this.currentUser);
+            incomes = this.incomeService.getUserIncomes(this.currentUser);
+        }
             List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
             List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
             Double totalIncome = this.incomeService.getTotalIncome(incomes);
             return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
-        }
     }
 
     @GetMapping("/{account}")
