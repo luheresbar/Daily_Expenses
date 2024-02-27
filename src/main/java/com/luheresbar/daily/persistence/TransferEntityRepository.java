@@ -1,5 +1,6 @@
 package com.luheresbar.daily.persistence;
 
+import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Transfer;
 import com.luheresbar.daily.domain.repository.ITransferRepository;
 import com.luheresbar.daily.persistence.crud.ITransferCrudRepository;
@@ -7,6 +8,8 @@ import com.luheresbar.daily.persistence.entity.TransferEntity;
 import com.luheresbar.daily.persistence.mapper.ITransferMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +49,13 @@ public class TransferEntityRepository implements ITransferRepository {
     public Optional<Transfer> getById(int transferId) {
         Optional<TransferEntity> transferEntity = this.transferCrudRepository.findById(transferId);
         return transferEntity.map(trn -> this.transferMapper.toTransfer(trn));
+    }
+
+    @Override
+    public List<Transfer> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        List<TransferEntity> transferEntities = this.transferCrudRepository.findByDateBetween(startDate, endDate, userId);
+
+        return this.transferMapper.toTransfers(transferEntities);
     }
 
     @Override

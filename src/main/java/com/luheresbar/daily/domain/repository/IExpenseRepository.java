@@ -2,6 +2,7 @@ package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.Expense;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,5 @@ public interface IExpenseRepository {
     Optional<Expense> getById(int expenseId);
 
     List<Expense> getAccountExpenses(String accountName, Integer userId);
-
-
+    List<Expense> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
 }

@@ -2,6 +2,7 @@ package com.luheresbar.daily.domain.repository;
 
 import com.luheresbar.daily.domain.Income;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,4 +18,5 @@ public interface IIncomeRepository {
 
     List<Income> getAccountIncomes(String accountName, Integer userId);
 
+    List<Income> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
 }

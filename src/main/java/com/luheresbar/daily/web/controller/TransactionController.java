@@ -13,11 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,11 +47,26 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionDetail>> getUserTransactions() {
-        List<Expense> expenses = this.expenseService.getUserExpenses(this.currentUser);
-        List<Income> incomes = this.incomeService.getUserIncomes(this.currentUser);
-        List<Transfer> transfers = this.transferService.getUserTransfers(this.currentUser);
+    public ResponseEntity<List<TransactionDetail>> getUserTransactions(@RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
+//        System.out.println("aquiiiiiiiiiiiiiiiiiiii" + current_date); //TODO (Delete)
+//        System.out.println("aquiiiiiiiiiiiiiiiiiiii" + next_date);
+        List<Expense> expenses = new ArrayList<>();
+        List<Income> incomes = new ArrayList<>();
+        List<Transfer> transfers = new ArrayList<>();
 
+        if (current_date != null && next_date != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            LocalDateTime startDate = LocalDateTime.parse(current_date, formatter);
+            LocalDateTime endDate = LocalDateTime.parse(next_date, formatter);
+
+            expenses = this.expenseService.findByDateBetween( startDate, endDate, this.currentUser);
+            incomes = this.incomeService.findByDateBetween( startDate, endDate, this.currentUser);
+            transfers = this.transferService.findByDateBetween( startDate, endDate, this.currentUser);
+        } else {
+            expenses = this.expenseService.getUserExpenses(this.currentUser);
+            incomes = this.incomeService.getUserIncomes(this.currentUser);
+            transfers = this.transferService.getUserTransfers(this.currentUser);
+        }
         List<TransactionDetail> transactionDetails = new ArrayList<>();
 
         List<TransactionDetail> expensesTransaction = this.transactionsService.expenseToTransactionDetail(expenses);

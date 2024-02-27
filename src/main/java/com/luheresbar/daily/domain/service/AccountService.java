@@ -4,6 +4,7 @@ import com.luheresbar.daily.domain.Account;
 import com.luheresbar.daily.domain.repository.IAccountRepository;
 import com.luheresbar.daily.persistence.entity.AccountPK;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
