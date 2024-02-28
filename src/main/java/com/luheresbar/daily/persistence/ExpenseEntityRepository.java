@@ -7,6 +7,8 @@ import com.luheresbar.daily.persistence.entity.ExpenseEntity;
 import com.luheresbar.daily.persistence.mapper.IExpenseMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,18 @@ public class ExpenseEntityRepository implements IExpenseRepository {
     @Override
     public List<Expense> getAccountExpenses(String accountName, Integer userId) {
         return this.expenseMapper.toExpenses(this.expenseCrudRepository.getAccountExpenses(accountName, userId));
+    }
+
+    @Override
+    public List<Expense> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        List<ExpenseEntity> expenseEntities = this.expenseCrudRepository.findByDateBetween(startDate, endDate, userId);
+
+        return this.expenseMapper.toExpenses(expenseEntities);
+    }
+
+    @Override
+    public Double getMonthlyExpenseTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+        return this.expenseCrudRepository.getMonthlyExpenseTotal(startDate, endDate, userId);
     }
 
     @Override

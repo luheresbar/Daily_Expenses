@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -44,25 +46,57 @@ public class ExpenseController {
     }
 
     @GetMapping
-    public ResponseEntity<TransactionDto> getUserExpenses(@RequestParam(required = false) String account_name) {
-        if (account_name != null) {
-            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
-            if (this.accountService.exists(accountPK)) {
-                List<Expense> expenses = this.expenseService.getAccountExpenses(account_name, this.currentUser);
-                List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenses);
-                List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
-                Double totalExpense = this.expenseService.getTotalExpense(expenses);
-                return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+    public ResponseEntity<TransactionDto> getUserExpenses(@RequestParam(required = false) String account_name, @RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
+        List<Expense> expenses = new ArrayList<>();
+
+
+        if (current_date != null && next_date != null) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            LocalDateTime startDate = LocalDateTime.parse(current_date, formatter);
+            LocalDateTime endDate = LocalDateTime.parse(next_date, formatter);
+
+            expenses = this.expenseService.findByDateBetween(startDate, endDate, this.currentUser);
+
+//            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
+//            if (this.accountService.exists(accountPK)) {
+//                List<Expense> expenses = this.expenseService.getAccountExpenses(account_name, this.currentUser);
+//                List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenses);
+//                List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
+//                Double totalExpense = this.expenseService.getTotalExpense(expenses);
+//                return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense));
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
         } else {
-            List<Expense> expenses = this.expenseService.getUserExpenses(this.currentUser);
+            expenses = this.expenseService.getUserExpenses(this.currentUser);
+        }
             List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenses);
             List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
             Double totalExpense = this.expenseService.getTotalExpense(expenses);
-            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense));
+            Double totalIncome = 0.0;
+
+            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense, totalIncome));
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<TransactionDto> getMonthlyExpenseTotal (@RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
+        List<TransactionDetail> transactionDetails = new ArrayList<>();
+        System.out.println("fechasss " + current_date + " _ " + next_date ); // TODO (Delete)
+
+        Double totalExpense = 0.0;
+        Double totalIncome = 0.0;
+
+        if (current_date != null && next_date != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            LocalDateTime startDate = LocalDateTime.parse(current_date, formatter);
+            LocalDateTime endDate = LocalDateTime.parse(next_date, formatter);
+
+            totalExpense = this.expenseService.getMonthlyExpenseTotal(startDate, endDate, this.currentUser);
+            TransactionDto transactionDto = new TransactionDto(transactionDetails, totalExpense, totalIncome);
+            return ResponseEntity.ok(transactionDto);
         }
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/create")

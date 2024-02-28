@@ -7,6 +7,8 @@ import com.luheresbar.daily.persistence.entity.IncomeEntity;
 import com.luheresbar.daily.persistence.mapper.IIncomeMapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,18 @@ public class IncomeEntityRepository implements IIncomeRepository {
     @Override
     public List<Income> getAccountIncomes(String accountName, Integer userId) {
         return this.incomeMapper.toIncomes(this.incomeCrudRepository.getAccountIncomes(accountName, userId));
+    }
+
+    @Override
+    public List<Income> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        List<IncomeEntity> incomeEntities = this.incomeCrudRepository.findByDateBetween(startDate, endDate, userId);
+
+        return this.incomeMapper.toIncomes(incomeEntities);
+    }
+
+    @Override
+    public Double getMonthlyIncomeTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+        return this.incomeCrudRepository.getMonthlyIncomeTotal(startDate, endDate, userId);
     }
 
     @Override

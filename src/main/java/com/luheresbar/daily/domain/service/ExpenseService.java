@@ -4,6 +4,7 @@ import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.repository.IExpenseRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,14 @@ public class ExpenseService {
         return this.expenseRepository.getById(expenseId);
     }
 
+    public List<Expense> getAccountExpenses(String accountName, Integer userId) {
+        return this.expenseRepository.getAccountExpenses(accountName, userId);
+    }
+
+    public List<Expense> findByDateBetween (LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        return this.expenseRepository.findByDateBetween(startDate, endDate, userId);
+    }
+
     public Expense save(Expense expense) {
         return expenseRepository.save(expense);
     }
@@ -32,9 +41,6 @@ public class ExpenseService {
         return this.expenseRepository.delete(expenseId, userId);
     }
 
-    public List<Expense> getAccountExpenses(String accountName, Integer userId) {
-        return this.expenseRepository.getAccountExpenses(accountName, userId);
-    }
     public Double getTotalExpense(List<Expense> expenses) {
         Double totalExpense = 0.0;
         for (int i = 0; i < expenses.size(); i++) {
@@ -43,4 +49,7 @@ public class ExpenseService {
         return totalExpense;
     }
 
+    public Double getMonthlyExpenseTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+        return this.expenseRepository.getMonthlyExpenseTotal(startDate, endDate, userId);
+    }
 }

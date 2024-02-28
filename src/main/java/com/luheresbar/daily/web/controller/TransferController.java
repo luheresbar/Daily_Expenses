@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -43,8 +45,17 @@ public class TransferController {
     }
 
     @GetMapping
-    public ResponseEntity<TransactionDto> getUserTransfer(@RequestParam(required = false) String account_name) {
-        if (account_name != null) {
+    public ResponseEntity<TransactionDto> getUserTransfer(@RequestParam(required = false) String account_name, @RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
+        List<Transfer> transfers = new ArrayList<>();
+
+        if (current_date != null && next_date != null) {
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            LocalDateTime startDate = LocalDateTime.parse(current_date, formatter);
+            LocalDateTime endDate = LocalDateTime.parse(next_date, formatter);
+
+            transfers = this.transferService.findByDateBetween(startDate, endDate, this.currentUser);
+
 //            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
 //            if (this.accountService.exists(accountPK)) {
 //                List<Transfer> incomes = this.transferService.getAccountTransfers(account_name, this.currentUser);
@@ -56,12 +67,11 @@ public class TransferController {
 //                return ResponseEntity.notFound().build();
 //            }
         } else {
-            List<Transfer> transfers = this.transferService.getUserTransfers(this.currentUser);
-            List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transfers);
-            List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
-            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, null));
+            transfers = this.transferService.getUserTransfers(this.currentUser);
         }
-                return ResponseEntity.notFound().build();
+        List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transfers);
+        List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
+        return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, null, null));
 
     }
 
@@ -70,9 +80,9 @@ public class TransferController {
         Transfer transfer = this.transactionService.transactionDetailToTransfer(transactionDetailTransfer);
         System.out.println(transfer);
         transfer.setUserId(this.currentUser);
-        if(!transfer.getSourceAccountName().equals(transfer.getDestinationAccountName())) {
+        if (!transfer.getSourceAccountName().equals(transfer.getDestinationAccountName())) {
 
-            if(transfer.getTransferDate() == null) {
+            if (transfer.getTransferDate() == null) {
                 transfer.setTransferDate(String.valueOf(LocalDateTime.now()));
             }
             extractedTypeTransfer(transfer);
@@ -90,13 +100,13 @@ public class TransferController {
     }
 
     private static void extractedTypeTransfer(Transfer transfer) {
-        if(transfer.getDestinationAccountName().equals("Cash")) {
+        if (transfer.getDestinationAccountName().equals("Cash")) {
             transfer.setType("Withdrawal");
         }
-        if(transfer.getSourceAccountName().equals("Cash")) {
+        if (transfer.getSourceAccountName().equals("Cash")) {
             transfer.setType("Deposit");
         }
-        if(!transfer.getDestinationAccountName().equals("Cash") && !transfer.getSourceAccountName().equals("Cash")) {
+        if (!transfer.getDestinationAccountName().equals("Cash") && !transfer.getSourceAccountName().equals("Cash")) {
             transfer.setType("Transfer");
         }
     }
@@ -108,17 +118,17 @@ public class TransferController {
         transfer.setUserId(this.currentUser);
         Optional<Transfer> transferDb = this.transferService.getById(transfer.getTransferId());
 
-        if(transferDb.isPresent()) {
-            if(transfer.getTransferValue() == null) {
+        if (transferDb.isPresent()) {
+            if (transfer.getTransferValue() == null) {
                 transfer.setTransferValue(transferDb.get().getTransferValue());
             }
-            if(transfer.getTransferDate() == null) {
+            if (transfer.getTransferDate() == null) {
                 transfer.setTransferDate(transferDb.get().getTransferDate());
             }
-            if(transfer.getSourceAccountName() == null) {
+            if (transfer.getSourceAccountName() == null) {
                 transfer.setSourceAccountName(transferDb.get().getSourceAccountName());
             }
-            if(transfer.getDestinationAccountName() == null) {
+            if (transfer.getDestinationAccountName() == null) {
                 transfer.setDestinationAccountName(transferDb.get().getDestinationAccountName());
             }
             extractedTypeTransfer(transfer);
@@ -144,7 +154,7 @@ public class TransferController {
     public ResponseEntity<Void> delete(@PathVariable int transferId) {
         Optional<Transfer> transferDb = this.transferService.getById(transferId);
 
-        if(transferDb.isPresent()) {
+        if (transferDb.isPresent()) {
             String sourceAccountName = transferDb.get().getSourceAccountName();
             String destinationAccountName = transferDb.get().getDestinationAccountName();
             Double transferValue = transferDb.get().getTransferValue();

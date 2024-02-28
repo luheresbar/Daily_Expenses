@@ -4,6 +4,7 @@ import java.util.List;
 
 public record TransactionDto(
         List<TransactionDetail> transactionDetails,
-        Double totalTransactions
+        Double totalExpense,
+        Double totalIncome
 ) {
 }
