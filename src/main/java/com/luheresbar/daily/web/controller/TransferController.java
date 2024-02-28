@@ -71,7 +71,7 @@ public class TransferController {
         }
         List<TransactionDetail> transactionDetails = this.transactionService.transferToTransactionDetail(transfers);
         List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
-        return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, null));
+        return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, null, null));
 
     }
 

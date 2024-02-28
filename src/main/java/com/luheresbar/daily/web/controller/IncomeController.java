@@ -53,7 +53,7 @@ public class IncomeController {
             LocalDateTime startDate = LocalDateTime.parse(current_date, formatter);
             LocalDateTime endDate = LocalDateTime.parse(next_date, formatter);
 
-            incomes = this.incomeService.findByDateBetween( startDate, endDate, this.currentUser);
+            incomes = this.incomeService.findByDateBetween(startDate, endDate, this.currentUser);
 
 //            AccountPK accountPK = new AccountPK(account_name, this.currentUser);
 //            if (this.accountService.exists(accountPK)) {
@@ -68,20 +68,22 @@ public class IncomeController {
         } else {
             incomes = this.incomeService.getUserIncomes(this.currentUser);
         }
-            List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
-            List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
-            Double totalIncome = this.incomeService.getTotalIncome(incomes);
-            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalIncome));
+        List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
+        List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
+        Double totalIncome = this.incomeService.getTotalIncome(incomes);
+        Double totalExpense = 0.0;
+
+        return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense, totalIncome));
     }
 
-    @GetMapping("/{account}")
-    public ResponseEntity<List<Income>> getAccountIncomes(@PathVariable String account) {
-        AccountPK accountPK = new AccountPK(account, this.currentUser);
-        if (this.accountService.exists(accountPK)) {
-            return ResponseEntity.ok(this.incomeService.getAccountIncomes(account, this.currentUser));
-        }
-        return ResponseEntity.notFound().build();
-    }
+//    @GetMapping("/{account}")
+//    public ResponseEntity<List<Income>> getAccountIncomes(@PathVariable String account) {
+//        AccountPK accountPK = new AccountPK(account, this.currentUser);
+//        if (this.accountService.exists(accountPK)) {
+//            return ResponseEntity.ok(this.incomeService.getAccountIncomes(account, this.currentUser));
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
 
     @PostMapping("/create")
     public ResponseEntity<TransactionDetail> add(@RequestBody TransactionDetail transactionDetailIncome) {
@@ -101,6 +103,28 @@ public class IncomeController {
         this.accountService.updateAccountOnIncomeInsert(income.getIncome(), income.getAccountName(), this.currentUser);
 
         return new ResponseEntity<>(transactionDetails.get(0), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<TransactionDto> getMonthlyExpenseTotal(@RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
+        List<TransactionDetail> transactionDetails = new ArrayList<>();
+        System.out.println("fechasss " + current_date + " _ " + next_date); // TODO (Delete)
+
+        Double totalExpense = 0.0;
+        Double totalIncome = 0.0;
+
+
+        if (current_date != null && next_date != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            LocalDateTime startDate = LocalDateTime.parse(current_date, formatter);
+            LocalDateTime endDate = LocalDateTime.parse(next_date, formatter);
+
+            totalIncome = this.incomeService.getMonthlyIncomeTotal(startDate, endDate, this.currentUser);
+            TransactionDto transactionDto = new TransactionDto(transactionDetails, totalExpense, totalIncome);
+            return ResponseEntity.ok(transactionDto);
+        }
+        return ResponseEntity.badRequest().build();
+
     }
 
     @PutMapping("/update")

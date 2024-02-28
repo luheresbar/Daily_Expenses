@@ -49,4 +49,7 @@ public class ExpenseService {
         return totalExpense;
     }
 
+    public Double getMonthlyExpenseTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+        return this.expenseRepository.getMonthlyExpenseTotal(startDate, endDate, userId);
+    }
 }

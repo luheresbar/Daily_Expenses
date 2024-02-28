@@ -50,6 +50,11 @@ public class ExpenseEntityRepository implements IExpenseRepository {
     }
 
     @Override
+    public Double getMonthlyExpenseTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+        return this.expenseCrudRepository.getMonthlyExpenseTotal(startDate, endDate, userId);
+    }
+
+    @Override
     public Expense save(Expense expense) {
         ExpenseEntity expenseEntity = expenseMapper.toExpenseEntity(expense);
         return expenseMapper.toExpense(expenseCrudRepository.save(expenseEntity));

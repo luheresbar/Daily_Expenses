@@ -48,4 +48,8 @@ public class IncomeService {
         return totalIncome;
     }
 
+    public Double getMonthlyIncomeTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+        return this.incomeRepository.getMonthlyIncomeTotal(startDate, endDate, userId);
+    }
+
 }

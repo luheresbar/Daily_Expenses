@@ -18,4 +18,6 @@ public interface IExpenseRepository {
 
     List<Expense> getAccountExpenses(String accountName, Integer userId);
     List<Expense> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
+
+    Double getMonthlyExpenseTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId);
 }

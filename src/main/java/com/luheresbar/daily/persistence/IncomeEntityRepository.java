@@ -51,6 +51,11 @@ public class IncomeEntityRepository implements IIncomeRepository {
     }
 
     @Override
+    public Double getMonthlyIncomeTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+        return this.incomeCrudRepository.getMonthlyIncomeTotal(startDate, endDate, userId);
+    }
+
+    @Override
     public Income save(Income income) {
         IncomeEntity incomeEntity = incomeMapper.toIncomeEntity(income);
         return incomeMapper.toIncome(incomeCrudRepository.save(incomeEntity));

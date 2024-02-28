@@ -23,4 +23,10 @@ public interface IIncomeCrudRepository extends ListCrudRepository<IncomeEntity, 
             "AND i.incomeDate BETWEEN :startDate AND :endDate")
     List<IncomeEntity> findByDateBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") Integer userId);
 
+    @Query(value = "SELECT SUM(i.income) " +
+            "FROM IncomeEntity i " +
+            "WHERE i.userId = :userId " +
+            "AND i.incomeDate BETWEEN :startDate AND :endDate")
+    Double getMonthlyIncomeTotal(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") Integer userId);
+
 }

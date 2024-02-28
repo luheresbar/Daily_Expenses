@@ -23,4 +23,9 @@ public interface IExpenseCrudRepository extends ListCrudRepository<ExpenseEntity
             "AND e.expenseDate BETWEEN :startDate AND :endDate")
     List<ExpenseEntity> findByDateBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") Integer userId);
 
+    @Query(value = "SELECT SUM(e.expense) " +
+            "FROM ExpenseEntity e " +
+            "WHERE e.userId = :userId " +
+            "AND e.expenseDate BETWEEN :startDate AND :endDate")
+    Double getMonthlyExpenseTotal(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") Integer userId);
 }

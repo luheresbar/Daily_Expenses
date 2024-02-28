@@ -19,4 +19,6 @@ public interface IIncomeRepository {
     List<Income> getAccountIncomes(String accountName, Integer userId);
 
     List<Income> findByDateBetween(LocalDateTime startDate, LocalDateTime endDate, int userId);
+
+    Double getMonthlyIncomeTotal(LocalDateTime startDate, LocalDateTime endDate, Integer userId);
 }

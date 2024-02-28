@@ -4,6 +4,7 @@ import com.luheresbar.daily.domain.Expense;
 import com.luheresbar.daily.domain.Income;
 import com.luheresbar.daily.domain.Transfer;
 import com.luheresbar.daily.domain.dto.TransactionDetail;
+import com.luheresbar.daily.domain.dto.TransactionDto;
 import com.luheresbar.daily.domain.service.ExpenseService;
 import com.luheresbar.daily.domain.service.IncomeService;
 import com.luheresbar.daily.domain.service.TransactionService;
@@ -47,7 +48,7 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionDetail>> getUserTransactions(@RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
+    public ResponseEntity<TransactionDto> getUserTransactions(@RequestParam(required = false) String current_date, @RequestParam(required = false) String next_date) {
 //        System.out.println("aquiiiiiiiiiiiiiiiiiiii" + current_date); //TODO (Delete)
 //        System.out.println("aquiiiiiiiiiiiiiiiiiiii" + next_date);
         List<Expense> expenses = new ArrayList<>();
@@ -77,10 +78,13 @@ public class TransactionController {
         transactionDetails.addAll(incomesTransaction);
         transactionDetails.addAll(transfersTransaction);
 
+        Double totalIncome = this.incomeService.getTotalIncome(incomes);
+        Double totalExpense = this.expenseService.getTotalExpense(expenses);
 
         List<TransactionDetail> transactionDetailsSorted = this.transactionsService.sortTransactionsByDateDescending(transactionDetails);
 
-        return new ResponseEntity<>(transactionDetailsSorted, HttpStatus.OK);
+        return ResponseEntity.ok(new TransactionDto(transactionDetailsSorted, totalExpense, totalIncome));
+
     }
 
 }
