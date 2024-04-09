@@ -20,7 +20,8 @@ public interface IExpenseCrudRepository extends ListCrudRepository<ExpenseEntity
 
     @Query(value = "SELECT e FROM ExpenseEntity e " +
             "WHERE e.userId = :userId " +
-            "AND e.expenseDate BETWEEN :startDate AND :endDate")
+            "AND e.expenseDate BETWEEN :startDate AND :endDate " +
+            "ORDER BY expenseDate DESC")
     List<ExpenseEntity> findByDateBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") Integer userId);
 
     @Query(value = "SELECT SUM(e.expense) " +

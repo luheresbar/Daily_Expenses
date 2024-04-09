@@ -69,11 +69,10 @@ public class IncomeController {
             incomes = this.incomeService.getUserIncomes(this.currentUser);
         }
         List<TransactionDetail> transactionDetails = this.transactionService.incomeToTransactionDetail(incomes);
-        List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
         Double totalIncome = this.incomeService.getTotalIncome(incomes);
         Double totalExpense = 0.0;
 
-        return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense, totalIncome));
+        return ResponseEntity.ok(new TransactionDto(transactionDetails, totalExpense, totalIncome));
     }
 
 //    @GetMapping("/{account}")

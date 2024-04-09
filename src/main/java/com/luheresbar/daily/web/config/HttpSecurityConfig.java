@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true) // esta anotacion se usa para controlar la anotacion @Secured que esta sobre un metodo en un servicio.
-public class HttpSecurityConfig {
+public class  HttpSecurityConfig {
 
     private final JwtFilter jwtFilter;
 
