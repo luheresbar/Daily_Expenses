@@ -72,11 +72,10 @@ public class ExpenseController {
             expenses = this.expenseService.getUserExpenses(this.currentUser);
         }
             List<TransactionDetail> transactionDetails = this.transactionService.expenseToTransactionDetail(expenses);
-            List<TransactionDetail> transactionDetailsSort = this.transactionService.sortTransactionsByDateDescending(transactionDetails);
             Double totalExpense = this.expenseService.getTotalExpense(expenses);
             Double totalIncome = 0.0;
 
-            return ResponseEntity.ok(new TransactionDto(transactionDetailsSort, totalExpense, totalIncome));
+            return ResponseEntity.ok(new TransactionDto(transactionDetails, totalExpense, totalIncome));
     }
 
     @GetMapping("/total")
