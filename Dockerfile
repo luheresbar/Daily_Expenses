@@ -1,19 +1,25 @@
-FROM ubuntu:latest AS build
+# Etapa de construcción
+FROM openjdk:17-jdk-slim AS build
+WORKDIR /app
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+# Copiar archivos necesarios
 COPY . .
 
-# Cambiar los permisos de ejecución del archivo gradlew
-RUN chmod +x gradlew
+# Verificar la presencia del archivo gradlew
+RUN ls -l /app/gradlew
 
-# Ejecutar el comando Gradle
-RUN ./gradlew bootJar --no-daemon
+# Dar permisos de ejecución al archivo gradlew
+RUN chmod +x /app/gradlew
 
-FROM openjdk:17-jdk-slim
+# Ejecutar Gradle para generar el archivo JAR
+RUN /app/gradlew bootJar --no-daemon
+
+# Etapa de ejecución final
+FROM openjdk:17-alpine
+WORKDIR /app
+
+# Copiar el archivo JAR desde la etapa de construcción
+COPY --from=build /app/build/libs/*.jar app.jar
 
 EXPOSE 8081
-
-COPY --from=build /build/libs/daily-expenses-1.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
