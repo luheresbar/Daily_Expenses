@@ -45,8 +45,9 @@ public class  HttpSecurityConfig {
 //                            .requestMatchers(HttpMethod.PATCH).hasRole("ADMIN")
 //                            .requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
 //                            .requestMatchers("/api/orders/**").hasRole("ADMIN") // todos los metodos (crud) de esta direccion solo seran manipulables por el rol ADMIN.
-                            .anyRequest()
-                            .authenticated();
+                            // Permitir acceso a Swagger UI sin autenticación
+                            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                            .anyRequest().authenticated();
                 })
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Indica que estamos incluyenbdo el friltro que creamos dentro de la cadena de seguridad de spring, antes del filtro basicauth
         return http.build();
